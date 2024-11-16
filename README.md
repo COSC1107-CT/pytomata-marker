@@ -4,3 +4,10 @@ This is a re-make of the Java-based [JFLAP Automarker](https://github.com/COSC11
 
 It allows the automarking of exercises in classical Theory of Computation courses, mostly on correctness of automata and regular expressions.
 
+## SETUP
+
+```shell
+$ sudo apt install  graphviz graphviz-dev
+$ pip install -r requirements.txt
+```
+

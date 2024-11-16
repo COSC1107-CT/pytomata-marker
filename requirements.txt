@@ -1,0 +1,3 @@
+pyyaml
+graphviz
+automata-lib[visual]
