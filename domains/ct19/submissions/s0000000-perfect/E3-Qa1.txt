@@ -1,0 +1,4 @@
+abca
+abab
+caba
+caaa

@@ -1,0 +1,520 @@
+<structure>
+	<type>pda</type>
+	<automaton>
+		
+		<state id="0" name="q0">
+			<x>95.0</x>
+			<y>271.0</y>
+			<initial />
+		</state>
+		<state id="1" name="q1">
+			<x>185.0</x>
+			<y>153.0</y>
+		</state>
+		<state id="2" name="q2">
+			<x>235.0</x>
+			<y>262.0</y>
+		</state>
+		<state id="3" name="q3">
+			<x>190.0</x>
+			<y>386.0</y>
+		</state>
+		<state id="4" name="q4">
+			<x>366.0</x>
+			<y>139.0</y>
+		</state>
+		<state id="5" name="q5">
+			<x>362.0</x>
+			<y>269.0</y>
+		</state>
+		<state id="6" name="q6">
+			<x>366.0</x>
+			<y>402.0</y>
+		</state>
+		<state id="7" name="q7">
+			<x>535.0</x>
+			<y>148.0</y>
+		</state>
+		<state id="8" name="q8">
+			<x>539.0</x>
+			<y>253.0</y>
+		</state>
+		<state id="9" name="q9">
+			<x>529.0</x>
+			<y>383.0</y>
+		</state>
+		<state id="10" name="q10">
+			<x>675.0</x>
+			<y>250.0</y>
+		</state>
+		<state id="11" name="q11">
+			<x>770.0</x>
+			<y>250.0</y>
+		</state>
+		<state id="12" name="q12">
+			<x>883.0</x>
+			<y>250.0</y>
+		</state>
+		<state id="13" name="q13">
+			<x>985.0</x>
+			<y>251.0</y>
+		</state>
+		<state id="14" name="q14">
+			<x>1084.0</x>
+			<y>245.0</y>
+		</state>
+		<state id="15" name="q15">
+			<x>1202.0</x>
+			<y>248.0</y>
+			</state>
+		
+		<transition>
+			<from>6</from>
+			<to>7</to>
+			<read>555</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>10</to>
+			<read>0</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>13</to>
+			<read>#</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>9</to>
+			<read>552</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>4</to>
+			<read>94</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>3</to>
+			<read>02</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>9</from>
+			<to>10</to>
+			<read>0</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>8</to>
+			<read>528</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>7</to>
+			<read>555</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>9</to>
+			<read>552</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>0</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>1</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>2</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>3</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>4</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>5</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>6</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>7</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>11</to>
+			<read>4</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>8</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>11</to>
+			<read>5</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>12</from>
+			<to>12</to>
+			<read>9</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>11</to>
+			<read>0</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>11</to>
+			<read>1</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>11</to>
+			<read>2</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>11</to>
+			<read>3</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>15</to>
+			<read>9</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>15</to>
+			<read>8</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>9</to>
+			<read>552</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>15</to>
+			<read>7</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>15</to>
+			<read>6</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>15</to>
+			<read>5</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>3</from>
+			<to>6</to>
+			<read>94</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>8</to>
+			<read>528</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>10</to>
+			<read>0</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>7</to>
+			<read>555</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>13</from>
+			<to>14</to>
+			<read>2</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>13</from>
+			<to>14</to>
+			<read>3</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>13</from>
+			<to>14</to>
+			<read>0</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>13</from>
+			<to>14</to>
+			<read>1</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>13</from>
+			<to>14</to>
+			<read>4</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>2</to>
+			<read>03</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>14</to>
+			<read>1</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>14</to>
+			<read>0</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>14</to>
+			<read>3</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>14</to>
+			<read>2</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>15</from>
+			<to>15</to>
+			<read>5</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>14</from>
+			<to>14</to>
+			<read>4</read>
+			<pop />
+			<push>A</push>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>1</to>
+			<read />
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>5</to>
+			<read>94</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>9</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>15</from>
+			<to>15</to>
+			<read>7</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>8</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>15</from>
+			<to>15</to>
+			<read>6</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>7</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>15</from>
+			<to>15</to>
+			<read>9</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>6</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>15</from>
+			<to>15</to>
+			<read>8</read>
+			<pop>A</pop>
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>5</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>4</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>3</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>2</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>1</read>
+			<pop />
+			<push />
+		</transition>
+		<transition>
+			<from>11</from>
+			<to>12</to>
+			<read>0</read>
+			<pop />
+			<push />
+		</transition>
+	<state id="16" name="qnf"><x>1302.0</x><y>502.0</y><final /></state><transition><from>15</from><to>16</to><read /><pop>Z</pop><push /></transition></automaton>
+</structure>

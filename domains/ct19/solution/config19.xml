@@ -1,0 +1,87 @@
+<!--
+ Custom Pattern Definitions
+ wwr: w in L(R) such that ww^r in L(R)
+ wNOTwr : w in L(R) such that ww^r not in L(R)
+ -->
+<assignment name="Assignment 1">
+    <properties>
+        <solutions>solution</solutions>
+        <reports>reports</reports>
+        <assignments>submissions</assignments>
+        <timeout>500000000</timeout>
+    </properties>
+    <exercise name="Exercise 1: Regular Expressions" order="1">
+        <question order="a">
+            <part order="1" solutionFile1="E1-Qa_R_1.jff" solutionFile2="E1-Qa_R_2.jff"
+                test="in1ANDin2" ext="txt" marks="2" limit="2" />
+            <part order="2" solutionFile1="E1-Qa_R_1.jff" solutionFile2="E1-Qa_R_2.jff"
+                test="in1NOTin2" ext="txt" marks="2" limit="2" />
+            <part order="3" solutionFile1="E1-Qa_R_1.jff" solutionFile2="E1-Qa_R_2.jff"
+                test="in2NOTin1" ext="txt" marks="2" limit="2" />
+            <part order="4" solutionFile1="E1-Qa_R_1.jff" test="wwr" ext="txt" marks="1" limit="1" />
+            <part order="5" solutionFile1="E1-Qa_R_1.jff" test="wNOTwr" ext="txt" marks="1"
+                limit="1" />
+            <part order="6" solutionFile1="E1-Qa6_sol.jff" test="RECompare" ext="txt" marks="1" />
+            <part order="7" solutionFile1="E1-Qa7_INT_MIN.jff" test="RECompare" ext="txt" marks="3" />
+        </question>
+        <question order="b">
+            <part order="1" solutionFile1="E1-Qb1_sol.jff" test="RECompare" ext="txt" marks="2" />
+            <part order="2" solutionFile1="E1-Qb2_sol.jff" test="RECompare" ext="txt" marks="2" />
+            <part order="3" solutionFile1="E1-Qb3_sol.jff" test="RECompare" ext="txt" marks="2" />
+            <part order="4" solutionFile1="E1-Qb4_sol.jff" test="RECompare" ext="txt" marks="2" />
+        </question>
+    </exercise>
+
+    <exercise name="Exercise 2: Grammars (Qa4 is bonus!)" order="2">
+        <question order="a">
+            <part order="1" solutionFile1="E2-Qa1_sol.jff" test="RECompare" ext="txt" marks="3" />
+            <part order="2" solutionFile1="E2-Qa2_sol.jff" test="RECompare" ext="txt" marks="3" />
+            <part order="3" solutionFile1="E2-Qa3_sol.jff" test="RECompare" ext="txt" marks="2" />
+            <part order="4" solutionFile1="E2-Qa4_INT_MIN.jff" test="RECompare" ext="txt" marks="2" />
+        </question>
+        <question order="b">
+            <part order="1" solutionFile1="FALSE-0-MACHINE.jff" test="RECompare" ext="txt" marks="4" />
+        </question>
+        <question order="c">
+            <part order="1" solutionFile1="E2-Qc1_sol.jff" test="RECompare" ext="txt" marks="3" />
+            <part order="2" solutionFile1="E2-Qc2_sol.jff" test="RECompare" ext="txt" marks="3" />
+        </question>
+    </exercise>
+
+    <exercise name="Exercise 3: Automata" order="3">
+        <question order="a">
+            <part order="1" solutionFile1="FA-3.a.jff" test="in1" ext="txt" marks="2" limit="4"
+                length="4" />
+            <part order="2" solutionFile1="FA-3.a.jff" test="NOTin1" ext="txt" marks="2" limit="4"
+                length="4" />
+            <part order="3" solutionFile1="FA-3.a.jff" test="RECompare" ext="txt" marks="4" />
+            <part order="4" solutionFile1="FA-3.a.jff" test="FACompare" ext="jff" marks="2" />
+            <part order="5" solutionFile1="E3-Qa5_sol.jff" test="FACompare" ext="jff" marks="4" />
+        </question>
+        <question order="b">
+            <part order="1" solutionFile1="E3-Qb_M_3.jff" test="FACompare" ext="jff" marks="4" />
+            <part order="2" solutionFile1="E3-Qb_M_3.jff" test="RECompare" ext="txt" marks="3" />
+        </question>
+        <question order="c">
+            <part order="1" solutionFile1="E3-Qc_M_4.jff" test="in1" ext="txt" marks="2" limit="4"
+                length="11" />
+            <part order="2" solutionFile1="E3-Qc_M_4.jff" test="NOTin1" ext="txt" marks="2"
+                limit="4" length="11" />
+        </question>
+    </exercise>
+    <exercise name="Exercise 4: Telephone System Design" order="4">
+        <question order="a">
+            <part order="1" solutionFile1="E4-Qa_sol.jff" test="FACompare" ext="jff" marks="5" />
+        </question>
+        <question order="b">
+            <part order="1" solutionFile1="E4-Qb_sol.jff" test="PDACompare" ext="jff" marks="5" />
+        </question>
+    </exercise>
+    <exercise name="Exercise 5: (Bonus) Intersection of Regular Languages" order="5">
+        <question order="a">
+            <part order="1" solutionFile1="E5-Qa_sol_morgan.jff" test="RECompare" ext="txt"
+                marks="5" />
+        </question>
+    </exercise>
+
+</assignment>

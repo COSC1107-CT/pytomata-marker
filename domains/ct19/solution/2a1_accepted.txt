@@ -1,0 +1,10 @@
+cb
+accb
+bbbbcb
+acccacacab
+caaaaaab
+cab
+accaaaaab
+accbababacacacab
+accbababacacacaaaaaaab
+accbab
