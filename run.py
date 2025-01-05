@@ -1,5 +1,6 @@
 """
-Script for configuring questions and executing the autograder.
+Autograder invocation script.
+Also handles the output of results and feedback.
 """
 
 import argparse
@@ -7,28 +8,32 @@ import pathlib
 
 
 # TODO: Handle feedback generation and output.
-def initiate_autograding_procedure():
+def invoke_autograding_procedure():
     """ """
     args = configure_and_parse_args()
+    execute_autograder_and_construct_feedback(args)
+    handle_results_and_feedback_output(args)
 
 
-def execute_autograder_and_construct_feedback():
+def execute_autograder_and_construct_feedback(args):
     """ """
     pass
 
 
-def configure_questions():
+def handle_results_and_feedback_output(args):
     """ """
-    return []
+    pass
 
 
 # TODO: Finalise help and description strings.
 def configure_and_parse_args():
     """ """
-    parser = argparse.ArgumentParser(**{
-        "description": "",
-        "epilog": "",
-    })
+    parser = argparse.ArgumentParser(
+        **{
+            "description": "",
+            "epilog": "",
+        }
+    )
     args = {
         ("questions",): {
             "help": "path to the instructor question script or package",
@@ -44,7 +49,7 @@ def configure_and_parse_args():
             "help": "specify an output file or directory for feedback",
             "metavar": "PATH",
             "type": pathlib.Path,
-        }
+        },
     }
     for options, config in args.items():
         parser.add_argument(*options, **config)
