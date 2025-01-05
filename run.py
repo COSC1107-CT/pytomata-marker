@@ -28,25 +28,25 @@ def handle_results_and_feedback_output(args):
 # TODO: Finalise help and description strings.
 def configure_and_parse_args():
     """ """
-    parser = argparse.ArgumentParser(
-        **{
-            "description": "",
-            "epilog": "",
-        }
-    )
     args = {
-        ("questions",): {
+        "description": "",
+        "epilog": "",
+    }
+    parser = argparse.ArgumentParser(**args)
+    args = {
+        ("questions_path",): {
             "help": "path to the instructor question script or package",
-            "metavar": "QUESTIONS",
+            "metavar": "QUESTIONS_PATH",
             "type": pathlib.Path,
         },
-        ("solutions",): {
+        ("solutions_path",): {
             "help": "path to the student solution script or directory",
-            "metavar": "SOLUTIONS",
+            "metavar": "SOLUTIONS_PATH",
             "type": pathlib.Path,
         },
         ("-o", "--output"): {
             "help": "specify an output file or directory for feedback",
+            "dest": "output_path",
             "metavar": "PATH",
             "type": pathlib.Path,
         },
@@ -57,4 +57,4 @@ def configure_and_parse_args():
 
 
 if __name__ == "__main__":
-    initiate_autograding_procedure()
+    invoke_autograding_procedure()
