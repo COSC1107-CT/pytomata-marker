@@ -5,6 +5,8 @@ Also handles the output of results and feedback.
 
 import argparse
 import pathlib
+import importlib.util
+import sys
 
 
 # TODO: Handle feedback generation and output.
@@ -17,7 +19,17 @@ def invoke_autograding_procedure():
 
 def execute_autograder_and_construct_feedback(args):
     """ """
-    pass
+
+    def load_script_or_package_using_path(identifier, path):
+        """ """
+        spec = importlib.util.spec_from_file_location(identifier, args.question_path)
+        loaded = importlib.util.module_from_spec(spec)
+        sys.modules[identifier] = loaded
+        spec.loader.exec_module(loaded)
+        return loaded
+
+    questions = load_script_or_package_using_path("questions", args.question_path)
+    print(questions.exercise_1_question_a_1())
 
 
 def handle_results_and_feedback_output(args):
@@ -34,14 +46,14 @@ def configure_and_parse_args():
     }
     parser = argparse.ArgumentParser(**args)
     args = {
-        ("questions_path",): {
+        ("question_path",): {
             "help": "path to the instructor question script or package",
-            "metavar": "QUESTIONS_PATH",
+            "metavar": "QUESTION_PATH",
             "type": pathlib.Path,
         },
-        ("solutions_path",): {
+        ("solution_path",): {
             "help": "path to the student solution script or directory",
-            "metavar": "SOLUTIONS_PATH",
+            "metavar": "SOLUTION_PATH",
             "type": pathlib.Path,
         },
         ("-o", "--output"): {
