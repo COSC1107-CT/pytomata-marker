@@ -1,11 +1,7 @@
 """ """
 
 
-def execute_autograding_procedure():
+def execute_autograding_procedure(questions_path, solutions_path):
     """ """
-    return "Executing!"
-
-
-def output_autograding_results_and_feedback():
-    """ """
-    return "Outputting!"
+    print(questions_path)
+    print(solutions_path)
