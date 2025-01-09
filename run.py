@@ -32,12 +32,13 @@ def output_results_and_feedback(autograder_output, output_path=None):
         pass
 
 
+# NOTE: Incorporate any further configuration options here.
 def construct_and_parse_args():
     """ """
     # TODO: Finish.
     args = {
         "description": "",
-        "epilog": "",
+        "epilog": "feedback is printed to standard output by default",
         "allow_abbrev": False,
     }
     parser = argparse.ArgumentParser(**args)
