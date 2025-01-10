@@ -5,17 +5,23 @@ import argparse
 import autograding
 
 
-# TODO: Should path validation happen here, or inside the invocation function?
 def execute_autograding_procedure():
     """ """
     args = construct_and_parse_args()
     output_results_and_feedback(
-        autograding.execute_autograding_procedure(
+        invoke_autograder_over_solutions(
             args.questions_path,
             args.solutions_path,
         ),
         args.output_path,
     )
+
+
+def invoke_autograder_over_solutions(questions_path, solutions_path):
+    """ """
+    print(questions_path)
+    print(solutions_path)
+    return autograding.execute_autograding_procedure([])
 
 
 def output_results_and_feedback(autograder_output, output_path=None):
@@ -25,7 +31,7 @@ def output_results_and_feedback(autograder_output, output_path=None):
         # TODO: Print to standard output.
         pass
     elif output_path.is_file():
-        # TODO: All feedback to the provided file.
+        # TODO: All feedback to the provided file?
         pass
     elif output_path.is_dir():
         # TODO: One feedback file per student inside the given directory.
@@ -38,7 +44,7 @@ def construct_and_parse_args():
     # TODO: Finish.
     args = {
         "description": "",
-        "epilog": "feedback is printed to standard output by default",
+        "epilog": "",
         "allow_abbrev": False,
     }
     parser = argparse.ArgumentParser(**args)
@@ -54,7 +60,7 @@ def construct_and_parse_args():
             "metavar": "SOLUTIONS",
         },
         ("-o", "--output"): {
-            "help": "path for autograder results and feedback",
+            "help": "directory for the autograder results and feedback",
             "type": pathlib.Path,
             "metavar": "OUTPUT",
         },
