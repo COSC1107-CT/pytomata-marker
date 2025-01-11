@@ -41,7 +41,6 @@ def output_results_and_feedback(autograder_output, output_path=None):
 # NOTE: Incorporate any further configuration options here.
 def construct_and_parse_args():
     """ """
-    # TODO: Finish.
     args = {
         "description": "",
         "epilog": "",
@@ -64,6 +63,12 @@ def construct_and_parse_args():
             "type": pathlib.Path,
             "metavar": "OUTPUT",
         },
+        # TODO: Multithreading support.
+        ("-t", "--threads"): {
+            "help": "parallel thread count to distribute solutions across",
+            "type": int,
+            "metavar": "THREADS"
+        }
     }
     for values, config in args.items():
         parser.add_argument(*values, **config)
