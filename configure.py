@@ -1,5 +1,7 @@
 """ """
 
+# NOTE: All configurable values are located here.
+
 
 def construct_questions_and_solutions(questions, solutions):
     """
@@ -11,6 +13,20 @@ def construct_questions_and_solutions(questions, solutions):
     ]
     ```
     """
-    print(f"Questions: {questions}")
-    print(f"Solutions: {solutions}")
-    return []
+    return [
+        (
+            questions.exercise_1_question_a_1,
+            solutions.exercise_1_question_a_1_solution,
+            5,
+        ),
+        (
+            questions.exercise_1_question_a_2,
+            solutions.exercise_1_question_a_2_solution,
+            5,
+        ),
+        (
+            questions.exercise_1_question_a_3,
+            solutions.exercise_1_question_a_3_solution,
+            5,
+        ),
+    ]
