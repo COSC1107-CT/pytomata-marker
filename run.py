@@ -3,6 +3,7 @@
 import pathlib
 import argparse
 import autograding
+import configure
 
 
 def execute_autograding_procedure():
@@ -12,18 +13,36 @@ def execute_autograding_procedure():
         invoke_autograder_over_solutions(
             args.questions_path,
             args.solutions_path,
+            args.thread_count,
         ),
         args.output_path,
     )
 
 
-def invoke_autograder_over_solutions(questions_path, solutions_path):
+# TODO: Multithreading needs to happen here eventually.
+def invoke_autograder_over_solutions(
+    questions_path,
+    solutions_path,
+    thread_count,
+):
     """ """
     print(questions_path)
     print(solutions_path)
-    return autograding.execute_autograding_procedure([])
+    print(threads)
+    # TODO: Load scripts. Questions loaded once.
+    questions = None
+    # TODO: Create and partition solutions across threads.
+    for _ in []:
+        # TODO: Solution scripts loaded one by one.
+        solutions = None
+        results_and_feedback = autograding.execute_autograding_procedure(
+            configure.construct_questions_and_solutions(questions, solutions)
+        )
+        # TODO: Unload previous solutions?
+    return []
 
 
+# NOTE: Produce actual output structure here.
 def output_results_and_feedback(autograder_output, output_path=None):
     """ """
     print(autograder_output)
@@ -67,8 +86,9 @@ def construct_and_parse_args():
         ("-t", "--threads"): {
             "help": "parallel thread count to distribute solutions across",
             "type": int,
-            "metavar": "THREADS"
-        }
+            "dest": "thread_count",
+            "metavar": "THREADS",
+        },
     }
     for values, config in args.items():
         parser.add_argument(*values, **config)
