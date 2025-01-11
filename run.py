@@ -1,22 +1,14 @@
 """ """
 
 import multiprocessing
+import functools
 import autograding
 import configure
 import utilities
 
 
-# NOTE: Updated once questions are loaded.
-questions = None
-
-
 def handle_autograding_invocation_and_output():
     """ """
-
-    def update_questions():
-        """ """
-        global questions
-        questions = utilities.load_using_path(args.questions_file_path, "")
 
     def partition_solutions():
         """ """
@@ -27,28 +19,35 @@ def handle_autograding_invocation_and_output():
         ]
 
     args = utilities.construct_and_parse_args()
-    update_questions()
-    results = invoke_autograder(partition_solutions(), args.process_count)
+    results = invoke_autograder(
+        args.questions_file_path, partition_solutions(), args.process_count
+    )
     output_results_and_feedback(results, args.output_path)
 
 
-def invoke_autograder(solution_partitions, process_count):
+def invoke_autograder(questions_file_path, solution_partitions, process_count):
     """ """
+    invocation_function = functools.partial(
+        grade_solution_partition, questions_file_path
+    )
     with multiprocessing.Pool(process_count) as pool:
-        return pool.map(grade_solution_partition, solution_partitions)
+        return pool.map(invocation_function, solution_partitions)
 
 
-def grade_solution_partition(solution_partition):
+# TODO: Share the questions across the entire process pool?
+def grade_solution_partition(questions_file_path, solution_partition):
     """ """
 
     def grade_solution(solution_script):
         """ """
-        # TODO: Fix this!
-        solutions = utilities.load_using_path(solution_script, "")
+        solutions = utilities.load_using_path(
+            solution_script, f"solutions.{solution_script.stem}"
+        )
         return autograding.execute_autograding_procedure(
             configure.construct_questions_and_solutions(questions, solutions)
         )
 
+    questions = utilities.load_using_path(questions_file_path, "questions")
     return list(map(grade_solution, solution_partition))
 
 

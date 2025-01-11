@@ -11,6 +11,6 @@ def construct_questions_and_solutions(questions, solutions):
     ]
     ```
     """
-    print(questions)
-    print(solutions)
+    print(f"Questions: {questions}")
+    print(f"Solutions: {solutions}")
     return []
