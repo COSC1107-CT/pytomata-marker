@@ -23,7 +23,6 @@ def construct_and_parse_args():
         },
         ("solutions_directory_path",): {
             "help": "specify path to student solutions directory",
-            "nargs": "+",
             "type": pathlib.Path,
             "metavar": "SOLUTIONS",
         },

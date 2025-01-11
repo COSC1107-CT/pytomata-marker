@@ -20,9 +20,9 @@ def handle_autograding_invocation_and_output():
 
     def partition_solutions():
         """ """
-        solution_file_paths = args.solutions_directory_path.glob("*.py")
+        solution_file_paths = list(args.solutions_directory_path.glob("*.py"))
         return [
-            solution_file_paths[offset_index::args.process_count]
+            solution_file_paths[offset_index :: args.process_count]
             for offset_index in range(args.process_count)
         ]
 
@@ -35,7 +35,7 @@ def handle_autograding_invocation_and_output():
 def invoke_autograder(solution_partitions, process_count):
     """ """
     with multiprocessing.Pool(process_count) as pool:
-         return pool.map(grade_solution_partition, solution_partitions)
+        return pool.map(grade_solution_partition, solution_partitions)
 
 
 def grade_solution_partition(solution_partition):
@@ -43,6 +43,7 @@ def grade_solution_partition(solution_partition):
 
     def grade_solution(solution_script):
         """ """
+        # TODO: Fix this!
         solutions = utilities.load_using_path(solution_script, "")
         return autograding.execute_autograding_procedure(
             configure.construct_questions_and_solutions(questions, solutions)
