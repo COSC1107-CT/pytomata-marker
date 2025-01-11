@@ -1,7 +1,11 @@
 """ """
 
+import sys
 import pathlib
 import argparse
+import functools
+import multiprocessing
+import importlib.util
 import autograding
 import configure
 
@@ -9,37 +13,59 @@ import configure
 def execute_autograding_procedure():
     """ """
     args = construct_and_parse_args()
+    print(args)
     output_results_and_feedback(
-        invoke_autograder_over_solutions(
+        partition_solutions_and_invoke_autograder(
             args.questions_path,
             args.solutions_path,
-            args.thread_count,
+            args.process_count,
         ),
         args.output_path,
     )
 
 
-# TODO: Multithreading needs to happen here eventually.
-def invoke_autograder_over_solutions(
+def partition_solutions_and_invoke_autograder(
     questions_path,
     solutions_path,
-    thread_count,
+    process_count,
 ):
     """ """
-    print(questions_path)
-    print(solutions_path)
-    print(threads)
-    # TODO: Load scripts. Questions loaded once.
-    questions = None
-    # TODO: Create and partition solutions across threads.
-    for _ in []:
-        # TODO: Solution scripts loaded one by one.
-        solutions = None
-        results_and_feedback = autograding.execute_autograding_procedure(
-            configure.construct_questions_and_solutions(questions, solutions)
+
+    # TODO: Load solutions.
+    def retrieve_solution_scripts():
+        """ """
+        return []
+
+    def partition_solutions(solution_scripts):
+        """ """
+        partition_size = len(solution_scripts) // process_count
+        return [
+            solution_scripts[offset_index::partition_size]
+            for offset_index in range(partition_size)
+        ]
+
+    questions = load_using_path(questions_path, "questions")
+    # TODO: Only for processes > 1 to avoid overhead?
+    with multiprocessing.Pool(process_count) as process_pool:
+        results_and_feedback = process_pool.map(
+            functools.partial(invoke_autograder_over_solutions, questions),
+            partition_solutions(retrieve_solution_scripts()),
         )
-        # TODO: Unload previous solutions?
+        print(results_and_feedback)
+
+
+def invoke_autograder_over_solutions(questions, solutions):
+    """ """
     return []
+
+
+def load_using_path(path, identifier=""):
+    """ """
+    specification = importlib.util.spec_from_file_location(identifier, path)
+    loaded = importlib.util.module_from_spec(specification)
+    sys.modules[identifier] = loaded
+    spec.loader.exec_module(loaded)
+    return loaded
 
 
 # NOTE: Produce actual output structure here.
@@ -79,15 +105,16 @@ def construct_and_parse_args():
         },
         ("-o", "--output"): {
             "help": "directory for the autograder results and feedback",
+            "dest": "output_path",
             "type": pathlib.Path,
             "metavar": "OUTPUT",
         },
-        # TODO: Multithreading support.
-        ("-t", "--threads"): {
-            "help": "parallel thread count to distribute solutions across",
+        ("-p", "--processes"): {
+            "help": "processes to distribute solutions across",
+            "dest": "process_count",
             "type": int,
-            "dest": "thread_count",
-            "metavar": "THREADS",
+            "default": 1,
+            "metavar": "PROCESSES",
         },
     }
     for values, config in args.items():
