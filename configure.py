@@ -1,7 +1,5 @@
 """ """
 
-# NOTE: All configurable values are located here.
-
 
 def construct_questions_and_solutions(questions, solutions):
     """

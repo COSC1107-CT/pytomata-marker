@@ -1,76 +1,59 @@
 """ """
 
 import multiprocessing
-import functools
-import dataclasses
 import pathlib
 import autograding
 import configure
 import utilities
 
 
-@dataclasses.dataclass
-class ProcessContext:
-    questions_file_path: pathlib.Path
-    output_path: pathlib.Path
-
-
 # TODO: Accept individual solution scripts again.
-def handle_autograding_invocation_and_output():
+def invoke_autograder_and_output_results():
     """ """
 
-    def partition_solutions():
+    def retrieve_and_partition_solutions():
         """ """
         solution_file_paths = list(args.solutions_directory_path.glob("*.py"))
         return [
-            solution_file_paths[offset_index :: args.process_count]
-            for offset_index in range(args.process_count)
+            solution_file_paths[index :: args.process_count]
+            for index in range(args.process_count)
         ]
 
     args = utilities.construct_and_parse_args()
-    invoke_autograder(
-        partition_solutions(),
-        args.process_count,
-        ProcessContext(args.questions_file_path, args.output_path),
-    )
+    output_results(invoke_autograder(retrieve_and_partition_solutions(), args))
 
 
-def invoke_autograder(solution_partitions, process_count, process_context):
+def invoke_autograder(solution_subsets, args):
     """ """
-    with multiprocessing.Pool(process_count) as pool:
-        return pool.map(
-            # NOTE: Context contains data dispersed across all processes.
-            functools.partial(grade_solution_partition, process_context),
-            solution_partitions,
+    process_context = (args.questions_script_path, args.output_path)
+    with multiprocessing.Pool(args.process_count) as pool:
+        return pool.starmap(
+            grade_solution_subset,
+            ((process_context, subset) for subset in solution_subsets),
         )
 
 
-# TODO: Output results inside subprocesses?
-# TODO: Share the questions across the entire process pool?
-def grade_solution_partition(process_context, solution_partition):
+def grade_solution_subset(process_context, solution_subset):
     """ """
 
     def grade_solution(solution_script):
         """ """
-        solutions = utilities.load_using_path(
-            solution_script, f"solutions.{solution_script.stem}"
-        )
-        return solution_script.stem, autograding.execute_autograding_procedure(
+        student = solution_script.stem
+        solutions = utilities.load_using_path(solution_script, student)
+        return student, autograding.execute_autograding_procedure(
             configure.construct_questions_and_solutions(questions, solutions)
         )
 
-    # NOTE: Unpack any additional contextual data here.
-    questions = utilities.load_using_path(
-        process_context.questions_file_path, "questions"
-    )
-    output_results_and_feedback(map(grade_solution, solution_partition), process_context.output_path)
+    questions_script_path, output_directory_path = process_context
+    questions = utilities.load_using_path(questions_script_path, "questions")
+    return list(map(grade_solution, solution_subset))
 
 
-# TODO: Actual output should be constructed here.
-def output_results_and_feedback(autograder_results, output_path):
+# TODO: Actual output should be constructed here. Output serially?
+def output_results(student, results):
     """ """
-    print(output_path, *autograder_results)
+    print(output_directory_path, *results_and_feedback)
 
 
 if __name__ == "__main__":
-    handle_autograding_invocation_and_output()
+    invoke_autograder_and_output_results()
