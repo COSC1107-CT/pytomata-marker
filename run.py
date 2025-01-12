@@ -34,6 +34,7 @@ def invoke_autograder(questions_file_path, solution_partitions, process_count):
         return pool.map(invocation_function, solution_partitions)
 
 
+# TODO: Output results inside subprocesses?
 # TODO: Share the questions across the entire process pool?
 def grade_solution_partition(questions_file_path, solution_partition):
     """ """
@@ -54,8 +55,9 @@ def grade_solution_partition(questions_file_path, solution_partition):
 # TODO: Actual output should be constructed here.
 def output_results_and_feedback(autograder_results, output_path):
     """ """
-    print(autograder_results)
     print(output_path)
+    for result in autograder_results:
+        print(result)
 
 
 if __name__ == "__main__":

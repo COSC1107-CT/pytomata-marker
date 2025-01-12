@@ -13,6 +13,8 @@ def execute_autograding_procedure(questions_and_solutions):
     results = execute_autograding_procedure(questions_and_solutions)
     ```
     """
-    for question_function, solution_function, _ in questions_and_solutions:
-        print(question_function)
-        print(solution_function)
+    return [
+        question_function(solution_function(), question_value)
+        for question_function, solution_function, question_value
+        in questions_and_solutions
+    ]
