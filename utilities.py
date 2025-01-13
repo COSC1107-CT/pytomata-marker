@@ -11,24 +11,24 @@ def construct_and_parse_args():
     """ """
     args = {
         "description": "",
-        "epilog": "",
+        "epilog": "standard output is used for results and feedback by default",
         "allow_abbrev": False,
     }
     parser = argparse.ArgumentParser(**args)
     args = {
-        ("questions_file_path",): {
-            "help": "specify path to instructor-defined question functions",
+        ("questions_script_path",): {
+            "help": "path to script containing instructor-defined question functions",
             "type": pathlib.Path,
             "metavar": "QUESTIONS",
         },
-        ("solutions_directory_path",): {
-            "help": "specify path to student solutions directory",
+        ("solutions_paths",): {
+            "help": "paths to files and directories containing student solutions",
             "type": pathlib.Path,
             "metavar": "SOLUTIONS",
         },
         ("-o", "--output"): {
-            "help": "specify directory for the autograder results",
-            "dest": "output_path",
+            "help": "directory for saving results and feedback",
+            "dest": "output_directory_path",
             "type": pathlib.Path,
             "metavar": "OUTPUT",
         },
