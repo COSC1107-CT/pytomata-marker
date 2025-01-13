@@ -19,16 +19,19 @@ def construct_questions_and_solutions(questions, solutions):
             questions.exercise_1_question_a_1,
             solutions.exercise_1_question_a_1_solution,
             3,
+            "1.a.i",
         ),
         (
             questions.exercise_1_question_a_2,
             solutions.exercise_1_question_a_2_solution,
             4,
+            "1.a.ii",
         ),
         (
             questions.exercise_1_question_a_3,
             solutions.exercise_1_question_a_3_solution,
             5,
+            "1.a.iii",
         ),
     ]
     return [
@@ -38,6 +41,11 @@ def construct_questions_and_solutions(questions, solutions):
 
 
 # TODO: Outline results and feedback structure in docstring.
-def construct_results_output(student, student_results):
+def construct_results_output(student_results):
     """ """
-    print(student, *student_results)
+
+    def construct_feedback_for_question():
+        """ """
+        pass
+
+    print(*student_results)
