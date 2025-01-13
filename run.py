@@ -20,6 +20,10 @@ class ProcessContext:
 def invoke_autograder_and_output_results_and_feedback():
     """ """
 
+    def create_output_directory():
+        """ """
+        pass
+
     def resolve_solution_paths():
         """ """
         solution_paths = []
@@ -38,13 +42,10 @@ def invoke_autograder_and_output_results_and_feedback():
         ]
 
     args = utilities.construct_and_parse_args()
-    results_and_feedback = invoke_autograder(
+    invoke_autograder(
         partition_solution_files(resolve_solution_paths()),
         ProcessContext(args.questions_script_path, args.output_directory_path),
         args.process_count,
-    )
-    output_results_and_feedback(
-        results_and_feedback, args.output_directory_path
     )
 
 
@@ -69,22 +70,19 @@ def grade_solution_subset(process_context, solution_subset):
             configure.construct_questions_and_solutions(questions, solutions)
         )
 
-    print(process_context)
     questions = utilities.load_using_path(
         process_context.questions_script_path, "questions"
     )
-    return list(map(grade_solution, solution_subset))
+    output_results_and_feedback(
+        map(grade_solution, solution_subset),
+        process_context.output_directory_path,
+    )
 
 
 def output_results_and_feedback(results_and_feedback, output_directory_path):
     """ """
-
-    # TODO: Actual output should be constructed here.
-    def construct_results_and_feedback_output(student, results):
-        """ """
-        print(student, results)
-
-    print(output_directory_path, *results_and_feedback, sep="\n")
+    for student, student_results in results_and_feedback:
+        _ = configure.construct_results_output(student, list(enumerate(student_results, 1)))
 
 
 if __name__ == "__main__":

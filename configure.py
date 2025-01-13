@@ -3,7 +3,6 @@
 import autograding
 
 
-# TODO: Dataclass?
 def construct_questions_and_solutions(questions, solutions):
     """
     ```py
@@ -36,3 +35,9 @@ def construct_questions_and_solutions(questions, solutions):
         autograding.QuestionConfiguration(*configuration)
         for configuration in questions_and_solutions
     ]
+
+
+# TODO: Outline results and feedback structure in docstring.
+def construct_results_output(student, student_results):
+    """ """
+    print(student, *student_results)
