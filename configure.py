@@ -18,20 +18,20 @@ def construct_questions_and_solutions(questions, solutions):
         (
             questions.exercise_1_question_a_1,
             solutions.exercise_1_question_a_1_solution,
-            3,
             "1.a.i",
+            3,
         ),
         (
             questions.exercise_1_question_a_2,
             solutions.exercise_1_question_a_2_solution,
-            4,
             "1.a.ii",
+            4,
         ),
         (
             questions.exercise_1_question_a_3,
             solutions.exercise_1_question_a_3_solution,
-            5,
             "1.a.iii",
+            5,
         ),
     ]
     return [

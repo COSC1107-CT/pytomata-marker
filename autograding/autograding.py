@@ -19,6 +19,7 @@ class QuestionResult:
     """ """
 
     question_label: str
+    question_value: int
     student_result: int
     student_feedback: str
 
@@ -38,6 +39,7 @@ def execute_autograding_procedure(questions_and_solutions):
     return tuple(
         QuestionResult(
             question.question_label,
+            question.question_value,
             *question.question_function(
                 question.solution_function(), question.question_value
             ),
