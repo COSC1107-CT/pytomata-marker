@@ -21,8 +21,9 @@ def construct_and_parse_args():
             "type": pathlib.Path,
             "metavar": "QUESTIONS",
         },
-        ("solutions_paths",): {
+        ("solution_paths",): {
             "help": "paths to files and directories containing student solutions",
+            "nargs": "+",
             "type": pathlib.Path,
             "metavar": "SOLUTIONS",
         },

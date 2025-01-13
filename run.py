@@ -20,17 +20,26 @@ class ProcessContext:
 def invoke_autograder_and_output_results_and_feedback():
     """ """
 
-    def retrieve_and_partition_solutions():
+    def resolve_solution_paths():
         """ """
-        solution_file_paths = list(args.solutions_paths.glob("*.py"))
+        solution_paths = []
+        for path in args.solution_paths:
+            if path.is_file() and path.suffix == ".py":
+                solution_paths.append(path)
+            elif path.is_dir():
+                solution_paths.extend(path.glob("*.py"))
+        return solution_paths
+
+    def partition_solution_files(solution_paths):
+        """ """
         return [
-            solution_file_paths[index :: args.process_count]
-            for index in range(args.process_count)
+            solution_paths[offset :: args.process_count]
+            for offset in range(args.process_count)
         ]
 
     args = utilities.construct_and_parse_args()
     results_and_feedback = invoke_autograder(
-        retrieve_and_partition_solutions(),
+        partition_solution_files(resolve_solution_paths()),
         ProcessContext(args.questions_script_path, args.output_directory_path),
         args.process_count,
     )
@@ -60,6 +69,7 @@ def grade_solution_subset(process_context, solution_subset):
             configure.construct_questions_and_solutions(questions, solutions)
         )
 
+    print(process_context)
     questions = utilities.load_using_path(
         process_context.questions_script_path, "questions"
     )
@@ -74,7 +84,7 @@ def output_results_and_feedback(results_and_feedback, output_directory_path):
         """ """
         print(student, results)
 
-    print(output_directory_path, *results_and_feedback)
+    print(output_directory_path, *results_and_feedback, sep="\n")
 
 
 if __name__ == "__main__":
