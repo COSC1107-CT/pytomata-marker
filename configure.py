@@ -1,6 +1,9 @@
 """ """
 
+import autograding
 
+
+# TODO: Dataclass?
 def construct_questions_and_solutions(questions, solutions):
     """
     ```py
@@ -11,20 +14,25 @@ def construct_questions_and_solutions(questions, solutions):
     ]
     ```
     """
-    return [
+    # NOTE: Outline all questions and solutions here.
+    questions_and_solutions = [
         (
             questions.exercise_1_question_a_1,
             solutions.exercise_1_question_a_1_solution,
-            5,
+            3,
         ),
         (
             questions.exercise_1_question_a_2,
             solutions.exercise_1_question_a_2_solution,
-            5,
+            4,
         ),
         (
             questions.exercise_1_question_a_3,
             solutions.exercise_1_question_a_3_solution,
             5,
         ),
+    ]
+    return [
+        autograding.QuestionConfiguration(*configuration)
+        for configuration in questions_and_solutions
     ]
