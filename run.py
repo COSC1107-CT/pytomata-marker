@@ -16,6 +16,14 @@ class ProcessContext:
     output_directory_path: pathlib.Path
 
 
+@dataclass.dataclass
+class StudentResult:
+    """ """
+
+    student: str
+    student_question_results: tuple[autograding.QuestionResult]
+
+
 # TODO: Accept individual solution scripts again.
 def invoke_autograder_and_output_results_and_feedback():
     """ """
@@ -47,28 +55,32 @@ def invoke_autograder(solution_subsets, process_context, process_count):
     """ """
     with multiprocessing.Pool(process_count) as pool:
         return pool.starmap(
-            grade_solution_subset,
-            ((process_context, subset) for subset in solution_subsets),
+            invoke_autograder_over_solution_subset,
+            ((subset, process_context) for subset in solution_subsets),
         )
 
 
-# TODO: Output to files inside subprocesses?
-def grade_solution_subset(process_context, solution_subset):
+def invoke_autograder_over_solution_subset(solution_subset, process_context):
     """ """
 
-    def grade_solution(solution_script):
+    def invoke_autograder_over_solution(solution_script):
         """ """
         student = solution_script.stem
         solutions = utilities.load_using_path(solution_script, student)
-        return student, autograding.execute_autograding_procedure(
-            configure.construct_questions_and_solutions(questions, solutions)
+        return AutograderOutput(
+            student,
+            autograding.execute_autograding_procedure(
+                configure.construct_questions_and_solutions(
+                    questions, solutions
+                )
+            ),
         )
 
     questions = utilities.load_using_path(
         process_context.questions_script_path, "questions"
     )
     output_results_and_feedback(
-        map(grade_solution, solution_subset),
+        map(invoke_autograder_over_solution, solution_subset),
         process_context.output_directory_path,
     )
 
