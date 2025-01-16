@@ -1,7 +1,0 @@
-*** {{ student }} ***
-
-{% for result in student_question_results %}
-{{ result.question_label }} | {{ result.student_result }} / {{ result.question_value }}
-{{ result.student_feedback }}
-
-{% endfor %}

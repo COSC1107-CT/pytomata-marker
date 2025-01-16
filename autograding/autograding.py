@@ -1,48 +1,13 @@
 """ """
 
-import typing
-import dataclasses
 
-
-@dataclasses.dataclass
-class QuestionConfiguration:
+def grade_questions(questions_and_solutions):
     """ """
-
-    question_function: typing.Callable
-    solution_function: typing.Callable
-    question_label: str
-    question_value: int
-
-
-@dataclasses.dataclass
-class QuestionResult:
-    """ """
-
-    question_label: str
-    question_value: int
-    student_result: int
-    student_feedback: str
-
-
-@dataclasses.dataclass
-class QuestionTestCase:
-    """ """
-
-    # TODO: Update this type annotation?
-    test_case: typing.Any
-    pass_update: float
-
-
-# TODO: Finish docstring and usage directions.
-def execute_autograding_procedure(questions_and_solutions):
-    """ """
-    return tuple(
-        QuestionResult(
-            question.question_label,
-            question.question_value,
-            *question.question_function(
-                question.solution_function(), question.question_value
-            ),
+    return [
+        (
+            question_label,
+            question_value,
+            *question_function(solution_function(), question_value),
         )
-        for question in questions_and_solutions
-    )
+        for question_label, question_value, question_function, solution_function in questions_and_solutions
+    ]

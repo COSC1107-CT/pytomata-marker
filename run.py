@@ -1,34 +1,16 @@
 """ """
 
 import multiprocessing
-import pathlib
-import dataclasses
+
 import autograding
 import configure
 import utilities
 
 
-@dataclasses.dataclass
-class ProcessContext:
+def invoke_autograder_and_output_results():
     """ """
 
-    questions_script_path: pathlib.Path
-    output_directory_path: pathlib.Path
-
-
-@dataclass.dataclass
-class StudentResult:
-    """ """
-
-    student: str
-    student_question_results: tuple[autograding.QuestionResult]
-
-
-# TODO: Accept individual solution scripts again.
-def invoke_autograder_and_output_results_and_feedback():
-    """ """
-
-    def resolve_and_partition_solution_paths():
+    def partition_solution_paths():
         """ """
         solution_paths = []
         for path in args.solution_paths:
@@ -37,59 +19,55 @@ def invoke_autograder_and_output_results_and_feedback():
             elif path.is_dir():
                 solution_paths.extend(path.glob("*.py"))
         return [
-            solution_paths[offset :: args.process_count]
-            for offset in range(args.process_count)
+            solution_paths[index :: args.process_count]
+            for index in range(args.process_count)
         ]
 
     args = utilities.construct_and_parse_args()
-    if args.output_directory_path is not None:
-        args.output_directory_path.mkdir(parents=True, exist_ok=True)
-    invoke_autograder(
-        resolve_and_partition_solution_paths(),
-        ProcessContext(args.questions_script_path, args.output_directory_path),
-        args.process_count,
+    process_context = (args.questions_path, args.output_directory_path)
+    results = invoke_autograder(
+        partition_solution_paths(), process_context, args.process_count
     )
+    output_results_and_feedback(results)
 
 
-def invoke_autograder(solution_subsets, process_context, process_count):
+def invoke_autograder(solution_partitions, process_context, process_count):
     """ """
-    with multiprocessing.Pool(process_count) as pool:
-        return pool.starmap(
-            invoke_autograder_over_solution_subset,
-            ((subset, process_context) for subset in solution_subsets),
-        )
+    with multiprocessing.Pool(process_count) as process_pool:
+        return [
+            student_result
+            for partition_results in process_pool.starmap(
+                invoke_autograder_over_partition,
+                ((paths, process_context) for paths in solution_partitions),
+            )
+            for student_result in partition_results
+        ]
 
 
-def invoke_autograder_over_solution_subset(solution_subset, process_context):
+def invoke_autograder_over_partition(solution_partition, process_context):
     """ """
 
-    def invoke_autograder_over_solution(solution_script):
+    def invoke_autograder_over_solution(solution_path):
         """ """
-        student = solution_script.stem
-        solutions = utilities.load_using_path(solution_script, student)
-        return AutograderOutput(
-            student,
-            autograding.execute_autograding_procedure(
-                configure.construct_questions_and_solutions(
-                    questions, solutions
-                )
-            ),
+        student = solution_path.stem
+        solutions = utilities.load_using_path(solution_path, student)
+        return student, autograding.grade_questions(
+            configure.construct_questions_and_solutions(questions, solutions)
         )
 
-    questions = utilities.load_using_path(
-        process_context.questions_script_path, "questions"
-    )
-    output_results_and_feedback(
-        map(invoke_autograder_over_solution, solution_subset),
-        process_context.output_directory_path,
-    )
+    questions_path, _ = process_context
+    questions = utilities.load_using_path(questions_path, "questions")
+    return [
+        invoke_autograder_over_solution(solution_path)
+        for solution_path in solution_partition
+    ]
 
 
-def output_results_and_feedback(results_and_feedback, output_directory_path):
+def output_results_and_feedback(results):
     """ """
-    for student, student_results in results_and_feedback:
-        _ = configure.construct_results_output(student_results)
+    for result in results:
+        print(result)
 
 
 if __name__ == "__main__":
-    invoke_autograder_and_output_results_and_feedback()
+    invoke_autograder_and_output_results()

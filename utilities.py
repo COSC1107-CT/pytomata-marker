@@ -1,9 +1,9 @@
 """ """
 
-import sys
-import pathlib
 import argparse
 import importlib.util
+import pathlib
+import sys
 
 
 # NOTE: Incorporate any further configuration options here.
@@ -16,7 +16,7 @@ def construct_and_parse_args():
     }
     parser = argparse.ArgumentParser(**args)
     args = {
-        ("questions_script_path",): {
+        ("questions_path",): {
             "help": "path to script containing instructor-defined question functions",
             "type": pathlib.Path,
             "metavar": "QUESTIONS",
