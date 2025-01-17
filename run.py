@@ -8,7 +8,7 @@ import configure
 import utilities
 
 
-def invoke_autograder_and_output_results():
+def invoke_autograder_and_output_feedback():
     """ """
 
     def partition_solution_paths():
@@ -30,8 +30,8 @@ def invoke_autograder_and_output_results():
         partition_solution_paths(), process_context, args.process_count
     )
     if args.output_directory_path is None:
-        output = generate_results_and_feedback_output(results)
-        print("\n", "\n\n".join(output), "\n", sep="")
+        output = generate_output(results)
+        print("\n", "\n".join(output), sep="")
 
 
 def invoke_autograder(solution_partitions, process_context, process_count):
@@ -58,13 +58,9 @@ def invoke_autograder_over_partition(solution_partition, process_context):
 
     def output_results_and_feedback_to_files(results):
         """ """
-        output = zip(
-            map(lambda result: result[0], results),
-            generate_results_and_feedback_output(results),
-        )
-        for student, feedback in output:
+        for (student, _), output in zip(results, generate_output(results)):
             with open(output_directory_path / f"{student}.out", "w+") as file:
-                file.write(feedback + "\n")
+                file.write(output)
 
     questions_path, output_directory_path = process_context
     questions = utilities.load_using_path(questions_path, "questions")
@@ -74,22 +70,21 @@ def invoke_autograder_over_partition(solution_partition, process_context):
     return results
 
 
-def generate_results_and_feedback_output(results):
+def generate_output(results):
     """ """
 
-    def generate_output(result):
+    def generate_student_output(result):
         """ """
-        return "\n\n".join(
-            [f"*** {result[0]} ***", *map(generate_question_output, result[1])]
-        )
+        questions = map(generate_question_output, result[1])
+        return "\n".join([f"*** {result[0]} ***\n", *questions])
 
     def generate_question_output(result):
         """ """
         question_label, question_value, student_score, feedback = result
-        return f"{question_label} | {student_score} / {question_value}\n{feedback}"
+        return f"{question_label} | {student_score} / {question_value}\n{feedback}\n"
 
-    return list(map(generate_output, results))
+    return list(map(generate_student_output, results))
 
 
 if __name__ == "__main__":
-    invoke_autograder_and_output_results()
+    invoke_autograder_and_output_feedback()
