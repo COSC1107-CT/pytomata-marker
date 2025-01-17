@@ -1,5 +1,6 @@
 """ """
 
+import itertools
 import multiprocessing
 
 import autograding
@@ -18,30 +19,28 @@ def invoke_autograder_and_output_results():
                 solution_paths.append(path)
             elif path.is_dir():
                 solution_paths.extend(path.glob("*.py"))
-        return [
-            solution_paths[index :: args.process_count]
-            for index in range(args.process_count)
-        ]
+        for index in range(args.process_count):
+            yield solution_paths[index :: args.process_count]
 
     args = utilities.construct_and_parse_args()
     process_context = (args.questions_path, args.output_directory_path)
     results = invoke_autograder(
         partition_solution_paths(), process_context, args.process_count
     )
-    output_results_and_feedback(results)
+    if args.output_directory_path is None:
+        output = generate_results_and_feedback_output(results)
+        print("\n", "\n\n".join(output), "\n")
 
 
 def invoke_autograder(solution_partitions, process_context, process_count):
     """ """
     with multiprocessing.Pool(process_count) as process_pool:
-        return [
-            student_result
-            for partition_results in process_pool.starmap(
+        return itertools.chain.from_iterable(
+            process_pool.starmap(
                 invoke_autograder_over_partition,
                 ((paths, process_context) for paths in solution_partitions),
             )
-            for student_result in partition_results
-        ]
+        )
 
 
 def invoke_autograder_over_partition(solution_partition, process_context):
@@ -55,18 +54,33 @@ def invoke_autograder_over_partition(solution_partition, process_context):
             configure.construct_questions_and_solutions(questions, solutions)
         )
 
-    questions_path, _ = process_context
+    def output_results_and_feedback_to_files():
+        """ """
+        pass
+
+    questions_path, output_directory_path = process_context
     questions = utilities.load_using_path(questions_path, "questions")
-    return [
-        invoke_autograder_over_solution(solution_path)
-        for solution_path in solution_partition
-    ]
+    # TODO: Output to files.
+    if output_directory_path is not None:
+        pass
+    return list(map(invoke_autograder_over_solution, solution_partition))
 
 
-def output_results_and_feedback(results):
+def generate_results_and_feedback_output(results_and_feedback):
     """ """
-    for result in results:
-        print(result)
+
+    def generate_output(result):
+        """ """
+        return "\n\n".join(
+            [f"*** {result[0]} ***", *map(generate_question_output, result[1])]
+        )
+
+    def generate_question_output(result):
+        """ """
+        question_label, question_value, student_score, feedback = result
+        return f"{question_label} | {student_score} / {question_value}\n{feedback}"
+
+    return list(map(generate_output, results_and_feedback))
 
 
 if __name__ == "__main__":
