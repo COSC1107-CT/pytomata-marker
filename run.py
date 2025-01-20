@@ -30,7 +30,7 @@ def invoke_autograder_and_output_feedback():
         partition_solution_paths(), process_context, args.process_count
     )
     if args.output_directory_path is None:
-        output = generate_output(results)
+        output = configure.generate_output(results)
         print("\n", "\n".join(output), sep="")
 
 
@@ -58,7 +58,7 @@ def invoke_autograder_over_partition(solution_partition, process_context):
 
     def output_results_and_feedback_to_files(results):
         """ """
-        for (student, _), output in zip(results, generate_output(results)):
+        for (student, _), output in zip(results, configure.generate_output(results)):
             with open(output_directory_path / f"{student}.out", "w+") as file:
                 file.write(output)
 
@@ -68,22 +68,6 @@ def invoke_autograder_over_partition(solution_partition, process_context):
     if output_directory_path is not None:
         output_results_and_feedback_to_files(results)
     return results
-
-
-def generate_output(results):
-    """ """
-
-    def generate_student_output(result):
-        """ """
-        questions = map(generate_question_output, result[1])
-        return "\n".join([f"*** {result[0]} ***\n", *questions])
-
-    def generate_question_output(result):
-        """ """
-        question_label, question_value, student_score, feedback = result
-        return f"{question_label} | {student_score} / {question_value}\n{feedback}\n"
-
-    return list(map(generate_student_output, results))
 
 
 if __name__ == "__main__":
