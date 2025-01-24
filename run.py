@@ -1,11 +1,21 @@
 """ """
 
+import dataclasses
 import itertools
 import multiprocessing
+import pathlib
 
-import autograding
 import configure
+import pytomata
 import utilities
+
+
+@dataclasses.dataclass
+class ProcessContext:
+    """ """
+
+    questions_path: pathlib.Path
+    output_directory_path: pathlib.Path
 
 
 def invoke_autograder_and_output_feedback():
@@ -19,19 +29,22 @@ def invoke_autograder_and_output_feedback():
                 solution_paths.append(path)
             elif path.is_dir():
                 solution_paths.extend(path.glob("*.py"))
-        for index in range(args.process_count):
-            yield solution_paths[index :: args.process_count]
+        return [
+            solution_paths[index :: args.process_count]
+            for index in range(args.process_count)
+        ]
 
     args = utilities.construct_and_parse_args()
     if args.output_directory_path is not None:
         args.output_directory_path.mkdir(parents=True, exist_ok=True)
-    process_context = (args.questions_path, args.output_directory_path)
     results = invoke_autograder(
-        partition_solution_paths(), process_context, args.process_count
+        partition_solution_paths(),
+        ProcessContext(args.questions_path, args.output_directory_path),
+        args.process_count,
     )
     if args.output_directory_path is None:
         output = configure.generate_output(results)
-        print("\n", "\n".join(output), sep="")
+        print("\n\n".join(output))
 
 
 def invoke_autograder(solution_partitions, process_context, process_count):
@@ -48,26 +61,29 @@ def invoke_autograder(solution_partitions, process_context, process_count):
 def invoke_autograder_over_partition(solution_partition, process_context):
     """ """
 
-    def invoke_autograder_over_solution(solution_path):
+    def invoke_autograder_over_solution(student_solution_path):
         """ """
-        student = solution_path.stem
-        solutions = utilities.load_using_path(solution_path, student)
-        return student, autograding.grade_questions(
+        student = student_solution_path.stem
+        solutions = utilities.load_using_path(student_solution_path, student)
+        return student, pytomata.calculate_student_results(
             configure.construct_questions_and_solutions(questions, solutions)
         )
 
     def output_results_and_feedback_to_files(results):
         """ """
-        for (student, _), output in zip(results, configure.generate_output(results)):
-            with open(output_directory_path / f"{student}.out", "w+") as file:
+        labelled_output = zip(results, configure.generate_output(results))
+        for (student, _), output in labelled_output:
+            path = process_context.output_directory_path / f"{student}.out"
+            with open(path, "w+") as file:
                 file.write(output)
 
-    questions_path, output_directory_path = process_context
-    questions = utilities.load_using_path(questions_path, "questions")
-    results = list(map(invoke_autograder_over_solution, solution_partition))
-    if output_directory_path is not None:
-        output_results_and_feedback_to_files(results)
-    return results
+    questions = utilities.load_using_path(
+        process_context.questions_path, "questions"
+    )
+    all_results = list(map(invoke_autograder_over_solution, solution_partition))
+    if process_context.output_directory_path is not None:
+        output_results_and_feedback_to_files(all_results)
+    return all_results
 
 
 if __name__ == "__main__":

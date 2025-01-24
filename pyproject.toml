@@ -1,5 +1,5 @@
 [project]
-name = "python-autograder"
+name = "pytomata-marker"
 version = "0.1.0"
 description = ""
 readme = "README.md"
