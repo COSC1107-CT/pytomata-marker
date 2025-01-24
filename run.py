@@ -9,6 +9,8 @@ import configure
 import pytomata
 import utilities
 
+# TODO: Use generator to yield and output student solutions!
+
 
 @dataclasses.dataclass
 class ProcessContext:
