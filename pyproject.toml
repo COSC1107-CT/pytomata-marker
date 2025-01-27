@@ -8,9 +8,6 @@ dependencies = [
     "ruff>=0.8.6",
 ]
 
-[tool.ruff]
-line-length = 79
-
 [tool.ruff.format]
 docstring-code-format = true
 docstring-code-line-length = 79
