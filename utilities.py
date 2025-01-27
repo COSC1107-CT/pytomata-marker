@@ -16,13 +16,13 @@ def construct_and_parse_args():
     }
     parser = argparse.ArgumentParser(**args)
     args = {
-        ("questions_path",): {
+        ("questions_script_path",): {
             "help": "path to script containing instructor-defined question functions",
             "type": pathlib.Path,
             "metavar": "QUESTIONS",
         },
-        ("solution_paths",): {
-            "help": "paths to files and directories containing student solutions",
+        ("student_solution_paths",): {
+            "help": "paths to scripts and directories containing student solutions",
             "nargs": "+",
             "type": pathlib.Path,
             "metavar": "SOLUTIONS",
