@@ -53,7 +53,7 @@ def exercise_1_question_a_2_solution():
     return {}
 ```
 
-Each function returns the student's solution to the corresponding question.
+Each function returns the student's solution to the corresponding [question](#questions).
 
 ### Configuration
 
