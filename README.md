@@ -123,7 +123,7 @@ uv run execute.py questions.py student_solutions --processes 3
 
 #### Manual Project Configuration
 
-If you would prefer to avoid using [uv](tps://docs.astral.sh/uv/), first create a `.venv` virtual environment:
+If you would prefer to avoid using [uv](tps://docs.astral.sh/uv/), create a new virtual environment:
 
 ```
 python3 -m venv .venv
@@ -138,7 +138,7 @@ source .venv/bin/activate
 > Use the correct shell-specific `activate` script:
 `activate.fish` for [fish](https://fishshell.com), `activate.ps1` for PowerShell, etc.
 
-And install the dependencies:
+And install the required dependencies:
 
 ```
 pip install -r requirements.txt
