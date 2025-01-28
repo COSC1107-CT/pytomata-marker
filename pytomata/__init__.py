@@ -1,5 +1,3 @@
 from .pytomata import (
-    QuestionConfiguration as QuestionConfiguration,
-    MarkingResult as MarkingResult,
-    calculate_student_results as calculate_student_results,
+    calculate_student_results_and_feedback as calculate_student_results_and_feedback,
 )

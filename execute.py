@@ -1,5 +1,8 @@
 """ """
 
+import multiprocessing
+
+import pytomata
 import utilities
 
 
@@ -22,27 +25,39 @@ def calculate_and_output_student_results():
 
     args = utilities.construct_and_parse_args()
     student_solution_partitions = derive_and_partition_student_solution_files()
-    print(student_solution_partitions)
+    process_context = (args.questions_script_path, args.output_directory_path)
+    with multiprocessing.Pool(args.process_count) as process_pool:
+        process_pool.starmap(
+            calculate_and_output_results_for_student_solution_partition,
+            zip(student_solution_partitions, [process_context] * args.process_count),
+        )
 
 
-def calculate_and_output_results_for_student_solution_partition():
+def calculate_and_output_results_for_student_solution_partition(student_solution_partition, process_context):
     """ """
 
-    # TODO: Generator.
     def calculate_results_for_student_solution_partition():
         """ """
-        pass
+        for student_solution_path in student_solution_partition:
+            solutions = utilities.load_using_path(student_solution_path)
+            student_id = student_solution_path.stem
+            student_results = pytomata.calculate_student_results_and_feedback(
+                questions.construct_questions_and_solutions(solutions)
+            )
+            yield student_id, student_results
 
     # TODO: File and standard output. Exclusion lock for standard output.
     def output_individual_student_results():
         """ """
-        pass
+        print(identifier, results)
 
-    for _ in calculate_results_for_student_solution_partition():
-        pass
+    questions_script_path, output_directory_path = process_context
+    questions = utilities.load_using_path(questions_script_path)
+    for identifier, results in calculate_results_for_student_solution_partition():
+        output_individual_student_results()
 
 
-# TODO: Lock should be here.
+# TODO: Lock should be used here.
 def print_individual_student_results_to_standard_output():
     """ """
     pass
