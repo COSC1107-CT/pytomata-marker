@@ -12,7 +12,7 @@
         - [Execution](#execution)
             - [Options](#options)
             - [Manual Project Configuration](#manual-project-configuration)
-    - [Development]
+    - [Development](#development)
 
 ## Technologies
 
