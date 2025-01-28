@@ -78,8 +78,8 @@ def construct_questions_and_solutions(solutions):
         (
             "1.a.i",
             2,
-            exercise_1_question_a_1,
-            solutions.exercise_1_question_a_1_solution,
+            exercise_1_question_a_2,
+            solutions.exercise_1_question_a_2_solution,
         ),
     ]
 ```
