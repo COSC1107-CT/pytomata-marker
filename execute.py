@@ -24,6 +24,8 @@ def calculate_and_output_student_results():
         return student_solution_partitions
 
     args = utilities.construct_and_parse_args()
+    if args.output_directory_path is not None:
+        args.output_directory_path.mkdir(parents=True, exist_ok=True)
     student_solution_partitions = derive_and_partition_student_solution_files()
     process_context = (args.questions_script_path, args.output_directory_path)
     with multiprocessing.Pool(args.process_count) as process_pool:
@@ -33,10 +35,13 @@ def calculate_and_output_student_results():
         )
 
 
-def calculate_and_output_results_for_student_solution_partition(student_solution_partition, process_context):
+def calculate_and_output_results_for_student_solution_partition(
+    student_solution_partition,
+    process_context,
+):
     """ """
 
-    def calculate_results_for_student_solution_partition():
+    def calculate_results_for_solution_partition():
         """ """
         for student_solution_path in student_solution_partition:
             solutions = utilities.load_using_path(student_solution_path)
@@ -46,21 +51,32 @@ def calculate_and_output_results_for_student_solution_partition(student_solution
             )
             yield student_id, student_results
 
-    # TODO: File and standard output. Exclusion lock for standard output.
     def output_individual_student_results():
         """ """
-        print(identifier, results)
+        student_output = generate_student_output(student_id, student_results)
+        if output_directory_path is None:
+            # TODO: Mutex!
+            print("\n", student_output, "\n")
+        else:
+            with open(output_directory_path / f"{student_id}.out", "w+") as output_file:
+                output_file.write(student_output + "\n")
 
     questions_script_path, output_directory_path = process_context
     questions = utilities.load_using_path(questions_script_path)
-    for identifier, results in calculate_results_for_student_solution_partition():
+    for student_id, student_results in calculate_results_for_solution_partition():
         output_individual_student_results()
 
 
-# TODO: Lock should be used here.
-def print_individual_student_results_to_standard_output():
+def generate_student_output(student_id, student_results):
     """ """
-    pass
+
+    def generate_question_output(question_result):
+        """ """
+        label, value, student_score, student_feedback = question_result
+        return f"{label} | {student_score} / {value}\n{student_feedback}"
+
+    question_output = map(generate_question_output, student_results)
+    return "\n\n".join([f"*** {student_id} ***", *question_output])
 
 
 if __name__ == "__main__":
