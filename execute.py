@@ -28,11 +28,20 @@ def calculate_and_output_student_results():
         args.output_directory_path.mkdir(parents=True, exist_ok=True)
     student_solution_partitions = derive_and_partition_student_solution_files()
     process_context = (args.questions_script_path, args.output_directory_path)
-    with multiprocessing.Pool(args.process_count) as process_pool:
+    lock = multiprocessing.Lock()
+    with multiprocessing.Pool(
+        args.process_count, initialise_shared_process_resources, (lock,)
+    ) as process_pool:
         process_pool.starmap(
             calculate_and_output_results_for_student_solution_partition,
             zip(student_solution_partitions, [process_context] * args.process_count),
         )
+
+
+def initialise_shared_process_resources(lock):
+    """ """
+    global shared_exclusion_lock
+    shared_exclusion_lock = lock
 
 
 def calculate_and_output_results_for_student_solution_partition(
@@ -55,8 +64,11 @@ def calculate_and_output_results_for_student_solution_partition(
         """ """
         student_output = generate_student_output(student_id, student_results)
         if output_directory_path is None:
-            # TODO: Mutex!
-            print("\n", student_output, "\n")
+            shared_exclusion_lock.acquire()
+            try:
+                print("\n", student_output, "\n")
+            finally:
+                shared_exclusion_lock.release()
         else:
             with open(output_directory_path / f"{student_id}.out", "w+") as output_file:
                 output_file.write(student_output + "\n")
