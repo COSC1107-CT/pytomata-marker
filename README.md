@@ -19,13 +19,13 @@
 | Technology                                       | Usage |
 |:------------------------------------------------:|:------|
 | [Automata](https://caleb531.github.io/automata/) |       |
-| [`uv`](https://docs.astral.sh/uv/)               |       |
+| [uv](https://docs.astral.sh/uv/)                 |       |
 
 ## Usage
 
-This project has been configured using [`uv`](https://docs.astral.sh/uv/) to handle dependencies, etc.
-Manual project configuration, without `uv`, can still be done using [`venv`](https://docs.python.org/3/library/venv.html).
-Refer [here](#manual-project-configuration) for details.
+This project has been configured using uv to handle dependencies, etc.
+Manual project configuration, without uv, can still be done using [venv](https://docs.python.org/3/library/venv.html);
+refer [here](#manual-project-configuration) for details.
 
 ### Questions
 
@@ -104,6 +104,7 @@ uv run execute.py questions.py student_solutions extra_student_1.py extra_studen
 ```
 
 By default, all results are printed to standard output.
+If you did not install [uv](tps://docs.astral.sh/uv/), use `python` instead of `uv run`.
 
 #### Options
 
@@ -122,7 +123,7 @@ uv run execute.py questions.py student_solutions --processes 3
 
 #### Manual Project Configuration
 
-If you would prefer to avoid using [`uv`](tps://docs.astral.sh/uv/), first create a `.venv` virtual environment:
+If you would prefer to avoid using [uv](tps://docs.astral.sh/uv/), first create a `.venv` virtual environment:
 
 ```
 python3 -m venv .venv
@@ -134,8 +135,8 @@ Make sure it is active:
 source .venv/bin/activate
 ```
 
-> Make sure to use the correct shell-specific `activate` script:
-`activate.fish` for the [`fish`](https://fishshell.com) shell, `activate.ps1` for PowerShell, etc.
+> Use the correct shell-specific `activate` script:
+`activate.fish` for [fish](https://fishshell.com), `activate.ps1` for PowerShell, etc.
 
 And install the dependencies:
 
@@ -143,7 +144,7 @@ And install the dependencies:
 pip install -r requirements.txt
 ```
 
-Once finished, use `python` instead of `uv run` in the [execution instructions](#execution):
+Once finished, use `python` instead of `uv run` in the [execution instructions](#execution).
 
 ## Development
 
