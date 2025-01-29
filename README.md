@@ -215,3 +215,12 @@ Marks can be adjusted using [additional test cases](#additional-test-cases), if 
 
 If library functions depend on internal auxiliary functions,
 these auxiliaries should be prefixed by `_` and left out of `lib/__init__.py`.
+
+```python
+def library_function(*args, question_value, incorrect_penalty):
+    _ = _auxiliary_library_function()
+    return student_result, student_feedback
+
+def _auxiliary_library_function():
+    pass
+```
