@@ -31,6 +31,8 @@ This project has been configured using uv to handle dependencies, etc.
 Manual project configuration, without uv, can still be done using [venv](https://docs.python.org/3/library/venv.html);
 refer [here](#manual-project-configuration) for details.
 
+Regardless, ensure [Graphviz](https://graphviz.org/download/) is installed before proceeding.
+
 ### Questions
 
 Questions are defined using functions:
