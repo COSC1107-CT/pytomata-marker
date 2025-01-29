@@ -1,1 +1,1 @@
-from .regex import *
+from .regular_expressions import test_regex_library_function as test_regex_library_function

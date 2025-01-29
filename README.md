@@ -16,6 +16,7 @@
     - [Development](#development)
         - [Adding Library Functions](#adding-library-functions)
             - [Configuring Default Penalties](#configuring-default-penalties)
+        - [Style Considerations](#style-considerations)
 
 ## Technologies
 
@@ -160,7 +161,7 @@ This section is intended for contributors.
 <!-- TODO: Additional test cases intended behaviour? -->
 
 Library functions should all define a `question_value` and `incorrect_penalty` to denote the percentage deduction for incorrect solutions.
-Defining `additional_test_cases` is optional.
+Defining `additional_test_cases` is not necessary; if it is defined, it should be optional.
 These should always be [keyword-only arguments](https://peps.python.org/pep-3102/).
 
 ```python
@@ -170,6 +171,7 @@ def another_library_function(*args, question_value, incorrect_penalty, additiona
 ```
 
 Every library function returns the student's result and any feedback, in that order.
+Once defined, import the function in the `lib/__init__.py` script.
 
 #### Configuring Default Penalties
 
@@ -206,3 +208,10 @@ def exercise_1_question_a_1():
 ```
 
 Marks can be adjusted using [additional test cases](#additional-test-cases), if they are defined.
+
+### Style Considerations
+
+<!-- TODO: Ruff stuff. -->
+
+If library functions depend on internal auxiliary functions,
+these auxiliaries should be prefixed by `_` and left out of `lib/__init__.py`.
