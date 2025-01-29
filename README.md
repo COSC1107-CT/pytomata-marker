@@ -7,12 +7,15 @@
     - [Usage](#usage)
         - [Questions](#questions)
             - [Library Functions](#library-functions)
+            - [Additional Test Cases](#additional-test-cases)
         - [Solutions](#solutions)
         - [Configuration](#configuration)
         - [Execution](#execution)
             - [Options](#options)
             - [Manual Project Configuration](#manual-project-configuration)
     - [Development](#development)
+        - [Adding Library Functions](#adding-library-functions)
+            - [Configuring Default Penalties](#configuring-default-penalties)
 
 ## Technologies
 
@@ -46,6 +49,8 @@ All question functions should return the student's result and any feedback, as a
 
 <!-- TODO: Overview. Table, eventually? -->
 
+#### Additional Test Cases
+
 ### Solutions
 
 Student solutions are also represented using functions:
@@ -76,7 +81,7 @@ def construct_questions_and_solutions(solutions):
             solutions.exercise_1_question_a_1_solution,
         ),
         (
-            "1.a.i",
+            "1.a.ii",
             2,
             exercise_1_question_a_2,
             solutions.exercise_1_question_a_2_solution,
@@ -148,4 +153,56 @@ Once finished, use `python` instead of `uv run` in the [execution instructions](
 
 ## Development
 
-<!-- TODO -->
+This section is intended for contributors.
+
+### Adding Library Functions
+
+<!-- TODO: Additional test cases intended behaviour? -->
+
+Library functions should all define a `question_value` and `incorrect_penalty` to denote the percentage deduction for incorrect solutions.
+Defining `additional_test_cases` is optional.
+These should always be [keyword-only arguments](https://peps.python.org/pep-3102/).
+
+```python
+def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
+    # ...
+    return student_result, student_feedback
+```
+
+Every library function returns the student's result and any feedback, in that order.
+
+#### Configuring Default Penalties
+
+Default incorrectness penalties are applied using the `apply_penalty_values` decorator:
+
+```python
+import .configuration
+
+@configuration.apply_penalty_values()
+def another_library_function(*args, incorrect_penalty, additional_test_cases=None):
+    pass
+```
+
+> Ensure the `apply_penalty_values` function is always **invoked** using parentheses. This returns the actual decorator function.
+
+This returns a [partial object](https://docs.python.org/3/library/functools.html#partial-objects) with the `incorrect_penalty` supplied.
+A 100% penalty is applied by default. To configure:
+
+```python
+@configuration.apply_penalty_values(default_incorrect_penalty=0.8)
+def another_library_function(*args, incorrect_penalty, additional_test_cases=None):
+    pass
+```
+
+This applies a default 80% incorrectness penalty for the given library function.
+Instructor-defined question functions can override these defaults if necessary:
+
+```python
+def exercise_1_question_a_1():
+    # ...
+    student_result, student_feedback = pytomata.lib.another_library_function(
+        question_value=5, incorrect_penalty=0.6
+    )
+```
+
+Marks can be adjusted using [additional test cases](#additional-test-cases), if they are defined.
