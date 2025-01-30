@@ -3,33 +3,78 @@
 <!-- TODO: Overview. -->
 
 - [Pytomata Marker](#pytomata-marker)
-  - [Technologies](#technologies)
+  - [Install \& setup](#install--setup)
+      - [Manual Project Configuration](#manual-project-configuration)
   - [Usage](#usage)
+  - [Design and configuration of assessment](#design-and-configuration-of-assessment)
     - [Questions](#questions)
       - [Library Functions](#library-functions)
       - [Additional Test Cases](#additional-test-cases)
     - [Solutions](#solutions)
     - [Configuration](#configuration)
-    - [Execution](#execution)
-      - [Options](#options)
-      - [Manual Project Configuration](#manual-project-configuration)
+    - [Options](#options)
   - [Development](#development)
     - [Adding Library Functions](#adding-library-functions)
       - [Configuring Default Penalties](#configuring-default-penalties)
     - [Style Considerations](#style-considerations)
 
-## Technologies
+## Install & setup
 
 | Technology                                       | Usage |
 |:------------------------------------------------:|:------|
-| [Automata](https://caleb531.github.io/automata/) |       |
-| [uv](https://docs.astral.sh/uv/)                 |       |
+| [Automata](https://caleb531.github.io/automata/) | automata library      |
+| [uv](https://docs.astral.sh/uv/)                 | project dependencies      |
+
+This project has been configured using uv to handle dependencies, etc. Executing `uv run` downloads the dependencies in `pyproject.toml` and the correct Python version if necessary before running the script 🤗
+
+#### Manual Project Configuration
+
+Manual project configuration, without `uv`, can still be done using [venv](https://docs.python.org/3/library/venv.html).
+
+If you would prefer to avoid using [uv](tps://docs.astral.sh/uv/), create first a new virtual environment (here at `~/.pyauto`) if you don't have one that want to use:
+
+```shell
+$ python3 -m venv ~/.pyauto
+```
+
+Make sure it is active:
+
+```shell
+$ source ~..pyauto/bin/activate
+```
+
+> [!WARNING]
+> Use the correct shell-specific `activate` script:
+>
+> `activate.fish` for [fish](https://fishshell.com), `activate.ps1` for PowerShell, etc.
+
+Install the required dependencies:
+
+```shell
+$ pip install -r requirements.txt
+```
+
+Once finished, use `python` instead of `uv run` in the [execution instructions](#execution).
 
 ## Usage
 
-This project has been configured using uv to handle dependencies, etc.
-Manual project configuration, without uv, can still be done using [venv](https://docs.python.org/3/library/venv.html);
-refer [here](#manual-project-configuration) for details.
+Once [configuration](#configuration) is finished, invoke the `execute.py` script with the file containing the instructor-defined [question](#questions) and [configuration](#configuration) functions, and directory containing the students' [solution](#solutions) scripts:
+
+```shell
+$ uv run execute.py questions.py student_solutions_dir
+```
+
+Student solution scripts can also be specified individually, interspersed with directories:
+
+```shell
+$ uv run execute.py questions.py student_solutions extra_student_1.py extra_student_2.py
+```
+
+By default, all results are printed to standard output.
+
+If you did not install [uv](tps://docs.astral.sh/uv/), use `python` instead of `uv run`.
+
+## Design and configuration of assessment
 
 ### Questions
 
@@ -93,64 +138,20 @@ def construct_questions_and_solutions(solutions):
 This function returns a sequence of tuples specifying the label, total value, question and solution functions for each question.
 The functions should correspond to those defined by the [questions](#questions) and [solutions](#solutions) scripts, respectively.
 
-### Execution
-
-Once [configuration](#configuration) is finished, invoke the `execute.py` script.
-Here, `questions.py` contains the instructor-defined [question](#questions) and [configuration](#configuration) functions,
-and `student_solutions` is a directory containing the students' [solution](#solutions) scripts:
-
-```
-uv run execute.py questions.py student_solutions
-```
-
-Student solution scripts can also be specified individually, interspersed with directories:
-
-```
-uv run execute.py questions.py student_solutions extra_student_1.py extra_student_2.py
-```
-
-By default, all results are printed to standard output.
-If you did not install [uv](tps://docs.astral.sh/uv/), use `python` instead of `uv run`.
-
-#### Options
+### Options
 
 To save each student's result to an individal file, use the `--output` or `-o` flag:
 
-```
-uv run execute.py questions.py student_solutions --output output_directory
+```shell
+$ uv run execute.py questions.py student_solutions --output output_directory
 ```
 
 Marking in parallel is also supported though the `--processes` or `-p` flag;
 this distributes the student solutions evenly across three processes:
 
+```shell
+$ uv run execute.py questions.py student_solutions --processes 3
 ```
-uv run execute.py questions.py student_solutions --processes 3
-```
-
-#### Manual Project Configuration
-
-If you would prefer to avoid using [uv](tps://docs.astral.sh/uv/), create a new virtual environment:
-
-```
-python3 -m venv .venv
-```
-
-Make sure it is active:
-
-```
-source .venv/bin/activate
-```
-
-> Use the correct shell-specific `activate` script:
-`activate.fish` for [fish](https://fishshell.com), `activate.ps1` for PowerShell, etc.
-
-And install the required dependencies:
-
-```
-pip install -r requirements.txt
-```
-
-Once finished, use `python` instead of `uv run` in the [execution instructions](#execution).
 
 ## Development
 
