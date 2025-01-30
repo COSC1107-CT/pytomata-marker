@@ -3,10 +3,10 @@
 <!-- TODO: Overview. -->
 
 - [Pytomata Marker](#pytomata-marker)
-  - [Install \& setup](#install--setup)
+  - [Installation \& Setup](#installation--setup)
       - [Manual Project Configuration](#manual-project-configuration)
   - [Usage](#usage)
-  - [Design and configuration of assessment](#design-and-configuration-of-assessment)
+  - [Assessment Design \& Configuration](#assessment-design--configuration)
     - [Questions](#questions)
       - [Library Functions](#library-functions)
       - [Additional Test Cases](#additional-test-cases)
@@ -18,45 +18,55 @@
       - [Configuring Default Penalties](#configuring-default-penalties)
     - [Style Considerations](#style-considerations)
 
-## Install & setup
+## Installation & Setup
 
-| Technology                                       | Usage |
-|:------------------------------------------------:|:------|
-| [Automata](https://caleb531.github.io/automata/) | automata library      |
-| [uv](https://docs.astral.sh/uv/)                 | project dependencies      |
+<!-- TODO: Add Graphviz? -->
 
-This project has been configured using uv to handle dependencies, etc. Executing `uv run` downloads the dependencies in `pyproject.toml` and the correct Python version if necessary before running the script 🤗
+| Technology                                       | Usage                                          |
+|:------------------------------------------------:|:-----------------------------------------------|
+| [Automata](https://caleb531.github.io/automata/) | Provides regular expression and automata APIs  |
+| [uv](https://docs.astral.sh/uv/)                 | Manages project dependencies and configuration |
+| [Ruff](https://docs.astral.sh/ruff/)             | Source code linting and formatting             |
 
-#### Manual Project Configuration
+This project has been configured using uv to handle dependencies, etc.
+To use uv, ensure it is [installed](https://docs.astral.sh/uv/getting-started/installation/), and proceed to [usage](#usage).
+Otherwise, proceed to the next section.
 
-Manual project configuration, without `uv`, can still be done using [venv](https://docs.python.org/3/library/venv.html).
+### Manual Project Configuration
 
-If you would prefer to avoid using [uv](tps://docs.astral.sh/uv/), create first a new virtual environment (here at `~/.pyauto`) if you don't have one that want to use:
+If you would prefer to avoid using uv, project configuration can still be done using [venv](https://docs.python.org/3/library/venv.html).
+If you don't already have a virtual environment to use, create one like this:
 
 ```shell
 $ python3 -m venv ~/.pyauto
 ```
 
-Make sure it is active:
+> [!NOTE]
+> You can create your virtual environment under any directory.
+> Here, the location is `~/.pyauto`; an alternative could be `.venv`.
+
+Once created, make sure the virtual environment is active;
+replace `~/.pyauto` with the location of your virtual environment:
 
 ```shell
-$ source ~..pyauto/bin/activate
+$ source ~/.pyauto/bin/activate
 ```
 
 > [!WARNING]
 > Use the correct shell-specific `activate` script:
->
 > `activate.fish` for [fish](https://fishshell.com), `activate.ps1` for PowerShell, etc.
 
-Install the required dependencies:
+Once activated, install the required dependencies:
 
 ```shell
 $ pip install -r requirements.txt
 ```
 
-Once finished, use `python` instead of `uv run` in the [execution instructions](#execution).
+Then, use `python` instead of `uv run` when following the [execution instructions](#execution).
 
 ## Usage
+
+<!-- Executing `uv run` downloads the dependencies in `pyproject.toml`, and the correct Python version, if necessary, before running the script. -->
 
 Once [configuration](#configuration) is finished, invoke the `execute.py` script with:
 
@@ -66,7 +76,7 @@ Once [configuration](#configuration) is finished, invoke the `execute.py` script
 For example, to run a single submission:
 
 ```shell
-$ uv run execute.py tests/questions.py tests/s0000000.py                                          ✔ 
+$ uv run execute.py tests/questions.py tests/s0000000.py
 Using CPython 3.13.1
 Creating virtual environment at: .venv
 Installed 6 packages in 4ms
@@ -78,7 +88,8 @@ Correct!
 ```
 
 > [!NOTE]
-> Note how `uv` created and downloaded the required dependencies the first time.
+> Notice that `uv run` identified an already-installed interpreter, identified and downloaded the required dependencies before running the `execute.py` script.
+> Refer to the [uv docs](https://docs.astral.sh/uv/) for details.
 
 To mark all the students in a submission folder:
 
@@ -95,7 +106,6 @@ Correct!
 
 1.a.i | 0 / 100
 Rejected: cba
-You failed!
 
 
 *** s0000000 ***
@@ -106,9 +116,9 @@ Correct!
 
 By default, all results are printed to standard output.
 
-If you did not install [uv](tps://docs.astral.sh/uv/), use `python` instead of `uv run`.
+## Assessment Design & Configuration
 
-## Design and configuration of assessment
+<!-- TODO: Overview. -->
 
 ### Questions
 
@@ -123,13 +133,13 @@ def exercise_1_question_a_1(student_solution, question_value):
 
 All question functions should return the student's result and any feedback, as above.
 
-<!-- TODO: Additional test cases. -->
-
 #### Library Functions
 
 <!-- TODO: Overview. Table, eventually? -->
 
 #### Additional Test Cases
+
+<!-- TODO: Additional test cases. -->
 
 ### Solutions
 
