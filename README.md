@@ -58,16 +58,50 @@ Once finished, use `python` instead of `uv run` in the [execution instructions](
 
 ## Usage
 
-Once [configuration](#configuration) is finished, invoke the `execute.py` script with the file containing the instructor-defined [question](#questions) and [configuration](#configuration) functions, and directory containing the students' [solution](#solutions) scripts:
+Once [configuration](#configuration) is finished, invoke the `execute.py` script with:
+
+1. the file containing the instructor-defined [question](#questions) and [configuration](#configuration) functions;
+2. a list of directories/files containing students' [solution](#solutions) scripts.
+
+For example, to run a single submission:
 
 ```shell
-$ uv run execute.py questions.py student_solutions_dir
+$ uv run execute.py tests/questions.py tests/s0000000.py                                          ✔ 
+Using CPython 3.13.1
+Creating virtual environment at: .venv
+Installed 6 packages in 4ms
+
+*** s0000000 ***
+
+1.a.i | 100 / 100
+Correct!
 ```
 
-Student solution scripts can also be specified individually, interspersed with directories:
+> [!NOTE]
+> Note how `uv` created and downloaded the required dependencies the first time.
+
+To mark all the students in a submission folder:
 
 ```shell
-$ uv run execute.py questions.py student_solutions extra_student_1.py extra_student_2.py
+$ uv run execute.py tests/questions.py tests/submissions
+
+*** s0000002 ***
+
+1.a.i | 100 / 100
+Correct!
+
+
+*** s0000001 ***
+
+1.a.i | 0 / 100
+Rejected: cba
+You failed!
+
+
+*** s0000000 ***
+
+1.a.i | 100 / 100
+Correct!
 ```
 
 By default, all results are printed to standard output.
