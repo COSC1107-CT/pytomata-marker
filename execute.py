@@ -5,6 +5,8 @@ import multiprocessing
 import pytomata
 import utilities
 
+# TODO: Script invocation option?
+
 
 def calculate_and_output_student_results():
     """ """
@@ -66,7 +68,7 @@ def calculate_and_output_results_for_student_solution_partition(
         if output_directory_path is None:
             shared_exclusion_lock.acquire()
             try:
-                print("\n", student_output, "\n")
+                print("\n", student_output, "\n", sep="")
             finally:
                 shared_exclusion_lock.release()
         else:
@@ -85,6 +87,8 @@ def generate_student_output(student_id, student_results):
     def generate_question_output(question_result):
         """ """
         label, value, student_score, student_feedback = question_result
+        if isinstance(student_feedback, list):
+            student_feedback = "\n".join(student_feedback)
         return f"{label} | {student_score} / {value}\n{student_feedback}"
 
     question_output = map(generate_question_output, student_results)
