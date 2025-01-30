@@ -62,17 +62,20 @@ def check_words_are_subset_of_regex_language(
 @configuration.apply_penalty_values()
 def check_words_are_subset_of_regex_language_intersection(
     words,
-    regex,
-    *other_regexes,
+    regex_1,
+    regex_2,
+    *extra_regexes,
     question_value,
     incorrect_penalty,
     regex_input_symbols=None,
 ):
     """ """
-    intersection_nfa = nfa.NFA.from_regex(regex, input_symbols=regex_input_symbols)
-    for other_regex in other_regexes:
-        other_nfa = nfa.NFA.from_regex(other_regex, input_symbols=regex_input_symbols)
-        intersection_nfa = intersection_nfa.intersection(other_nfa)
+    nfa_1 = nfa.NFA.from_regex(regex_1, input_symbols=regex_input_symbols)
+    nfa_2 = nfa.NFA.from_regex(regex_2, input_symbols=regex_input_symbols)
+    intersection_nfa = nfa_1.intersection(nfa_2)
+    for extra_regex in extra_regexes:
+        extra_nfa = nfa.NFA.from_regex(extra_regex, input_symbols=regex_input_symbols)
+        intersection_nfa = intersection_nfa.intersection(extra_nfa)
     student_score, student_feedback = _check_words_are_subset_of_automaton_language(
         words, intersection_nfa, question_value, incorrect_penalty
     )
