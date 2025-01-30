@@ -36,14 +36,3 @@ def run_additional_test_cases(
         if test_case_feedback:
             test_cases_feedback.append(test_case_feedback)
     return student_score, test_cases_feedback
-
-
-def get_test_case_failure_feedback(test_case_feedback, test_case_value):
-    """ """
-    if test_case_value > 0:
-        return test_case_feedback
-
-
-def get_test_case_success_feedback(test_case_feedback, test_case_value):
-    if test_case_value < 0:
-        return test_case_feedback

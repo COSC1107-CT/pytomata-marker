@@ -29,18 +29,19 @@ def check_words_are_subset_of_regex_language(
 
     def check_words_are_subset_of_test_case_language(test_case, words):
         """ """
+        feedback = None
         test_case_regex, test_case_value, test_case_feedback = test_case
         test_case_nfa = nfa.NFA.from_regex(
             test_case_regex, input_symbols=regex_input_symbols
         )
         for word in words:
             if not test_case_nfa.accepts_input(word):
-                return 0, base.get_test_case_failure_feedback(
-                    test_case_feedback, test_case_value
-                )
-        return test_case_value, base.get_test_case_success_feedback(
-            test_case_feedback, test_case_value
-        )
+                if test_case_value > 0:
+                    feedback = test_case_feedback
+                return 0, feedback
+        if test_case_value < 0:
+            feedback = test_case_feedback
+        return test_case_value, feedback
 
     solution_nfa = nfa.NFA.from_regex(regex, input_symbols=regex_input_symbols)
     student_score, student_feedback = _check_words_are_subset_of_automaton_language(
@@ -54,9 +55,8 @@ def check_words_are_subset_of_regex_language(
         words,
     )
     student_feedback.extend(test_case_feedback)
-    return base.calculate_final_score(
-        student_score, question_value
-    ), student_feedback or "Correct!"
+    student_feedback = student_feedback or "Correct!"
+    return base.calculate_final_score(student_score, question_value), student_feedback
 
 
 @configuration.apply_penalty_values()
