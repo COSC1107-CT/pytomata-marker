@@ -36,3 +36,9 @@ def run_additional_test_cases(
         if test_case_feedback:
             test_cases_feedback.append(test_case_feedback)
     return student_score, test_cases_feedback
+
+
+def get_feedback(test_case_value, test_case_feedback, success=True):
+    """ """
+    if (success and test_case_value < 0) or ((not success) and test_case_value > 0):
+        return test_case_feedback
