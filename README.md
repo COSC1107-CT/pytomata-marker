@@ -254,6 +254,9 @@ def exercise_1_question_a_2_solution():
     return {}
 ```
 
+> [!WARNING]
+> Student should **never alter** the function signature.
+
 Each function returns the student's solution to the corresponding [question](#questions).
 
 ### Configuration
@@ -281,6 +284,8 @@ def construct_questions_and_solutions(solutions):
 This function returns a sequence of tuples specifying the label, total value, question and solution functions for each question.
 The functions should correspond to those defined by the [questions](#questions) and [solutions](#solutions) scripts, respectively.
 
+Once this function is defined, refer to the [execution instructions](#usage).
+
 ## Development
 
 This section is intended for contributors.
@@ -289,13 +294,13 @@ This section is intended for contributors.
 
 <!-- TODO: Additional test cases intended behaviour? -->
 
-Library functions adhere to a shared interface, so their usage and behaviour are consistent.
+Library functions adhere to a shared interface, so their usage and behaviour are consistent. They should:
 
-<!--
-Library functions should all define a `question_value` and `incorrect_penalty` to denote the percentage deduction for incorrect solutions.
-Defining `additional_test_cases` is not necessary; if it is defined, it should be optional.
+- Accept a `question_value`;
+- Optionally accept an `incorrect_penalty` to denote the percentage deduction for incorrect solutions;
+- Optionally define `additional_test_cases` is not necessary; if it is defined, it should be optional.
+
 These should always be [keyword-only arguments](https://peps.python.org/pep-3102/).
--->
 
 ```python
 def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
@@ -318,7 +323,9 @@ def another_library_function(*args, incorrect_penalty, additional_test_cases=Non
     pass
 ```
 
-> Ensure the `apply_penalty_values` function is always **invoked** using parentheses. This returns the actual decorator function.
+> [!WARNING]
+> Ensure the `apply_penalty_values` function is always **invoked** using parentheses.
+> This returns the actual decorator function.
 
 This returns a [partial object](https://docs.python.org/3/library/functools.html#partial-objects) with the `incorrect_penalty` supplied.
 A 100% penalty is applied by default. To configure:
