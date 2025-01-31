@@ -201,7 +201,7 @@ student_result, student_feedback = pytomata.lib.library_function(
 > The `incorrect_penalty` value must fall between 0 and 1, inclusive.
 
 This denotes the percentage deduction to the `question_value` when the student's submission is incorrect.
-The default `incorrect_penalty` is one, indicating a 100% deduction.
+The default `incorrect_penalty` is 1, indicating a 100% deduction.
 
 #### Defining Additional Test Cases
 
