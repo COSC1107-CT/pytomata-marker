@@ -6,13 +6,13 @@
   - [Installation \& Setup](#installation--setup)
       - [Manual Project Configuration](#manual-project-configuration)
   - [Usage](#usage)
+      - [Execution Options](#execution-options)
   - [Assessment Design \& Configuration](#assessment-design--configuration)
     - [Questions](#questions)
       - [Library Functions](#library-functions)
       - [Additional Test Cases](#additional-test-cases)
     - [Solutions](#solutions)
     - [Configuration](#configuration)
-    - [Options](#options)
   - [Development](#development)
     - [Adding Library Functions](#adding-library-functions)
       - [Configuring Default Penalties](#configuring-default-penalties)
@@ -29,8 +29,8 @@
 | [Ruff](https://docs.astral.sh/ruff/)             | Source code linting and formatting             |
 
 This project has been configured using uv to handle dependencies, etc.
-To use uv, ensure it is [installed](https://docs.astral.sh/uv/getting-started/installation/), and proceed to [usage](#usage).
-Otherwise, proceed to the next section.
+To use uv, ensure it is [installed](https://docs.astral.sh/uv/getting-started/installation/), clone this repository, and proceed through the [usage instructions](#usage).
+Otherwise, proceed through the next section.
 
 ### Manual Project Configuration
 
@@ -45,8 +45,7 @@ $ python3 -m venv ~/.pyauto
 > You can create your virtual environment under any directory.
 > Here, the location is `~/.pyauto`; an alternative could be `.venv`.
 
-Once created, make sure the virtual environment is active;
-replace `~/.pyauto` with the location of your virtual environment:
+Then, ensure the virtual environment is active; replace `~/.pyauto` with the location of your virtual environment:
 
 ```shell
 $ source ~/.pyauto/bin/activate
@@ -62,18 +61,34 @@ Once activated, install the required dependencies:
 $ pip install -r requirements.txt
 ```
 
-Then, use `python` instead of `uv run` when following the [execution instructions](#execution).
+Then, use `python` instead of `uv run` in the [execution instructions](#execution).
 
 ## Usage
 
+This section details executing the marking procedure.
+For explanations of the different files involved, refer to the [assessment design and configuration](#assessment-design--configuration) section.
+Here, we use example files located in the `tests` directory:
+
+```shell
+$ tree tests --gitignore
+tests
+├── questions.py
+└── submissions
+    ├── s0000000.py
+    ├── s0000001.py
+    └── s0000002.py
+```
+
 <!-- Executing `uv run` downloads the dependencies in `pyproject.toml`, and the correct Python version, if necessary, before running the script. -->
 
-Once [configuration](#configuration) is finished, invoke the `execute.py` script with:
+The procedure is run by the `execute.py` script, which accepts:
 
-1. the file containing the instructor-defined [question](#questions) and [configuration](#configuration) functions;
-2. a list of directories/files containing students' [solution](#solutions) scripts.
+1. A Python script containing the instructor-defined [question](#questions) and [configuration](#configuration) functions;
+2. An arbitrary list of Python scripts and directories containing students' [solutions](#solutions).
 
-For example, to run a single submission:
+> For assistance, use `uv run execute.py -h`.
+
+Therefore, to process an individual submission:
 
 ```shell
 $ uv run execute.py tests/questions.py tests/s0000000.py
@@ -89,9 +104,9 @@ Correct!
 
 > [!NOTE]
 > Notice that `uv run` identified an already-installed interpreter, identified and downloaded the required dependencies before running the `execute.py` script.
-> Refer to the [uv docs](https://docs.astral.sh/uv/) for details.
+> This output will only occur once, upon first invoking a script; refer to the [uv docs](https://docs.astral.sh/uv/) for details.
 
-To mark all the students in a submission folder:
+When a directory is supplied, all Python scripts inside that directory (non-recursively) are treated as student submissions:
 
 ```shell
 $ uv run execute.py tests/questions.py tests/submissions
@@ -115,6 +130,21 @@ Correct!
 ```
 
 By default, all results are printed to standard output.
+
+### Execution Options
+
+To save each student's result to an individal file instead of printing to standard output, use the `--output` or `-o` flag:
+
+```shell
+$ uv run execute.py tests/questions.py tests/submissions --output output_directory
+```
+
+Marking in parallel is also supported though the `--processes` or `-p` flag;
+this distributes the student solutions evenly across three processes:
+
+```shell
+$ uv run execute.py tests/questions.py tests/submissions --processes 3
+```
 
 ## Assessment Design & Configuration
 
@@ -182,21 +212,6 @@ def construct_questions_and_solutions(solutions):
 This function returns a sequence of tuples specifying the label, total value, question and solution functions for each question.
 The functions should correspond to those defined by the [questions](#questions) and [solutions](#solutions) scripts, respectively.
 
-### Options
-
-To save each student's result to an individal file, use the `--output` or `-o` flag:
-
-```shell
-$ uv run execute.py questions.py student_solutions --output output_directory
-```
-
-Marking in parallel is also supported though the `--processes` or `-p` flag;
-this distributes the student solutions evenly across three processes:
-
-```shell
-$ uv run execute.py questions.py student_solutions --processes 3
-```
-
 ## Development
 
 This section is intended for contributors.
@@ -263,7 +278,8 @@ these auxiliaries should be prefixed by `_` and left out of `lib/__init__.py`.
 
 ```python
 def library_function(*args, question_value, incorrect_penalty):
-    _ = _auxiliary_library_function()
+    student_result, student_feedback = _auxiliary_library_function()
+    # ...
     return student_result, student_feedback
 
 def _auxiliary_library_function():
