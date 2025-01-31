@@ -90,8 +90,10 @@ The procedure is run by the `execute.py` script, which accepts:
 
 Therefore, to process an individual submission:
 
-```plaintext
+```shell
 $ uv run execute.py tests/questions.py tests/s0000000.py
+```
+```plaintext
 Using CPython 3.13.1
 Creating virtual environment at: .venv
 Installed 6 packages in 4ms
@@ -108,9 +110,10 @@ Correct!
 
 When a directory is supplied, all Python scripts inside that directory (non-recursively) are treated as student submissions:
 
-```plaintext
+```shell
 $ uv run execute.py tests/questions.py tests/submissions
-
+```
+```plaintext
 *** s0000002 ***
 
 1.a.i | 100 / 100
@@ -135,14 +138,14 @@ By default, all results are printed to standard output.
 
 To save each student's result to an individal file instead of printing to standard output, use the `--output` or `-o` flag:
 
-```plaintext
+```shell
 $ uv run execute.py tests/questions.py tests/submissions --output output_directory
 ```
 
 Marking in parallel is also supported though the `--processes` or `-p` flag;
 this distributes the student solutions evenly across three processes:
 
-```plaintext
+```shell
 $ uv run execute.py tests/questions.py tests/submissions --processes 3
 ```
 
