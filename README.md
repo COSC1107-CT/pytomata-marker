@@ -210,7 +210,7 @@ Each test case represents an alternate (usually partially correct or incorrect) 
 has an associated value and optional feedback.
 The value denotes a percentage of the total `question_value`.
 
-```
+```python
 def exercise_1_question_a_1(student_solution, question_value):
     actual_solution = "abcd"
     additional_test_cases = [
