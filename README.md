@@ -93,6 +93,7 @@ Therefore, to process an individual submission:
 ```shell
 $ uv run execute.py tests/questions.py tests/s0000000.py
 ```
+
 ```plaintext
 Using CPython 3.13.1
 Creating virtual environment at: .venv
@@ -113,6 +114,7 @@ When a directory is supplied, all Python scripts inside that directory (non-recu
 ```shell
 $ uv run execute.py tests/questions.py tests/submissions
 ```
+
 ```plaintext
 *** s0000002 ***
 
