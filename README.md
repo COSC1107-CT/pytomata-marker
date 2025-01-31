@@ -69,7 +69,7 @@ This section details executing the marking procedure.
 For explanations of the different files involved, refer to the [assessment design and configuration](#assessment-design--configuration) section.
 Here, we use example files located in the `tests` directory:
 
-```shell
+```plaintext
 $ tree tests --gitignore
 tests
 ├── questions.py
@@ -90,7 +90,7 @@ The procedure is run by the `execute.py` script, which accepts:
 
 Therefore, to process an individual submission:
 
-```shell
+```plaintext
 $ uv run execute.py tests/questions.py tests/s0000000.py
 Using CPython 3.13.1
 Creating virtual environment at: .venv
@@ -108,7 +108,7 @@ Correct!
 
 When a directory is supplied, all Python scripts inside that directory (non-recursively) are treated as student submissions:
 
-```shell
+```plaintext
 $ uv run execute.py tests/questions.py tests/submissions
 
 *** s0000002 ***
@@ -135,14 +135,14 @@ By default, all results are printed to standard output.
 
 To save each student's result to an individal file instead of printing to standard output, use the `--output` or `-o` flag:
 
-```shell
+```plaintext
 $ uv run execute.py tests/questions.py tests/submissions --output output_directory
 ```
 
 Marking in parallel is also supported though the `--processes` or `-p` flag;
 this distributes the student solutions evenly across three processes:
 
-```shell
+```plaintext
 $ uv run execute.py tests/questions.py tests/submissions --processes 3
 ```
 
