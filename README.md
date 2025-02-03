@@ -247,17 +247,18 @@ import automata
 
 def exercise_1_question_a_1_solution():
     """ """
-    return "abc"
+    pass
 
 def exercise_1_question_a_2_solution():
     """ """
-    return {}
+    pass
 ```
 
 > [!WARNING]
-> Student should **never alter** the function signature.
+> Students should **never alter** the function signature.
 
 Each function returns the student's solution to the corresponding [question](#questions).
+All students should be distributed identical scripts containing pre-defined, empty functions as above.
 
 ### Configuration
 
