@@ -281,6 +281,11 @@ def construct_questions_and_solutions(solutions):
     ]
 ```
 
+> [!WARNING]
+> This function must be called `construct_questions_and_solutions` and define one parameter,
+> used internally to pass an individual student module.
+> This facilitates pairing each student's submissions against the same respective marking functions.
+
 This function returns a sequence of tuples specifying the label, total value, question and solution functions for each question.
 The functions should correspond to those defined by the [questions](#questions) and [solutions](#solutions) scripts, respectively.
 
