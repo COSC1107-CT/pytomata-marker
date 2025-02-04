@@ -13,11 +13,11 @@
       - [Defining Additional Test Cases](#defining-additional-test-cases)
     - [Solutions](#solutions)
     - [Configuration](#configuration)
+  - [Library Function Catalogue](#library-function-catalogue)
   - [Development](#development)
     - [Writing Library Functions](#writing-library-functions)
       - [Configuring Default Penalties](#configuring-default-penalties)
     - [Style Considerations](#style-considerations)
-  - [Library Function Catalogue](#library-function-catalogue)
 
 ## Installation & Setup
 
@@ -204,6 +204,8 @@ student_result, student_feedback = pytomata.lib.library_function(
 This denotes the percentage deduction from the `question_value` when the student's submission is incorrect.
 The default `incorrect_penalty` is 1, indicating a 100% deduction; the example above specifies an 80% deduction.
 
+Refer to the [library function catalogue](#library-function-catalogue) for an overview of available functions.
+
 #### Defining Additional Test Cases
 
 Certain library functions also accept additional test cases.
@@ -293,6 +295,10 @@ The functions should correspond to those defined by the [questions](#questions) 
 
 Once this function is defined, refer to the [execution instructions](#usage).
 
+## Library Function Catalogue
+
+<!-- TODO: Table containing all available functions and their behaviour. -->
+
 ## Development
 
 This section is intended for contributors.
@@ -372,7 +378,3 @@ def library_function(*args, question_value, incorrect_penalty):
 def _auxiliary_library_function():
     pass
 ```
-
-## Library Function Catalogue
-
-<!-- TODO: Table containing all available functions and their behaviour. -->
