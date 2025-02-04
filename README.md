@@ -17,6 +17,7 @@
     - [Writing Library Functions](#writing-library-functions)
       - [Configuring Default Penalties](#configuring-default-penalties)
     - [Style Considerations](#style-considerations)
+  - [Library Function Catalogue](#library-function-catalogue)
 
 ## Installation & Setup
 
@@ -136,7 +137,7 @@ By default, all results are printed to standard output.
 
 ### Execution Options
 
-To save each student's result to an individal file instead of printing to standard output, use the `--output` or `-o` flag:
+To save each student's result to an individual file instead of printing to standard output, use the `--output` or `-o` flag:
 
 ```shell
 $ uv run execute.py tests/questions.py tests/submissions --output output_directory
@@ -165,7 +166,7 @@ import automata
 
 def exercise_1_question_a_1(student_solution, question_value):
     actual_solution = {}
-    # Invoke library function.
+    # Invoke library function here.
     return student_result, student_feedback
 ```
 
@@ -200,8 +201,8 @@ student_result, student_feedback = pytomata.lib.library_function(
 > [!WARNING]
 > The `incorrect_penalty` value must fall between 0 and 1, inclusive.
 
-This denotes the percentage deduction to the `question_value` when the student's submission is incorrect.
-The default `incorrect_penalty` is 1, indicating a 100% deduction.
+This denotes the percentage deduction from the `question_value` when the student's submission is incorrect.
+The default `incorrect_penalty` is 1, indicating a 100% deduction; the example above specifies an 80% deduction.
 
 #### Defining Additional Test Cases
 
@@ -371,3 +372,7 @@ def library_function(*args, question_value, incorrect_penalty):
 def _auxiliary_library_function():
     pass
 ```
+
+## Library Function Catalogue
+
+<!-- TODO: Table containing all available functions and their behaviour. -->
