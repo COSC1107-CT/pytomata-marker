@@ -35,12 +35,16 @@ def check_words_are_subset_of_regex_language(
         )
         for word in words:
             if not test_nfa.accepts_input(word):
-                return 0, base.get_feedback(test_value, test_feedback, success=False)
+                return 0, base.get_feedback(
+                    test_value, test_feedback, success=False
+                )
         return test_value, base.get_feedback(test_value, test_feedback)
 
     solution_nfa = nfa.NFA.from_regex(regex, input_symbols=regex_input_symbols)
-    student_score, student_feedback = _check_words_are_subset_of_automaton_language(
-        words, solution_nfa, question_value, incorrect_penalty
+    student_score, student_feedback = (
+        _check_words_are_subset_of_automaton_language(
+            words, solution_nfa, question_value, incorrect_penalty
+        )
     )
     student_score, test_case_feedback = base.run_additional_test_cases(
         additional_test_cases,
@@ -51,7 +55,9 @@ def check_words_are_subset_of_regex_language(
     )
     student_feedback.extend(test_case_feedback)
     student_feedback = student_feedback or "Correct!"
-    return base.calculate_final_score(student_score, question_value), student_feedback
+    return base.calculate_final_score(
+        student_score, question_value
+    ), student_feedback
 
 
 @configuration.apply_penalty_values()
@@ -69,10 +75,14 @@ def check_words_are_subset_of_regex_language_intersection(
     nfa_2 = nfa.NFA.from_regex(regex_2, input_symbols=regex_input_symbols)
     intersection_nfa = nfa_1.intersection(nfa_2)
     for extra_regex in extra_regexes:
-        extra_nfa = nfa.NFA.from_regex(extra_regex, input_symbols=regex_input_symbols)
+        extra_nfa = nfa.NFA.from_regex(
+            extra_regex, input_symbols=regex_input_symbols
+        )
         intersection_nfa = intersection_nfa.intersection(extra_nfa)
-    student_score, student_feedback = _check_words_are_subset_of_automaton_language(
-        words, intersection_nfa, question_value, incorrect_penalty
+    student_score, student_feedback = (
+        _check_words_are_subset_of_automaton_language(
+            words, intersection_nfa, question_value, incorrect_penalty
+        )
     )
     return base.calculate_final_score(
         student_score, question_value

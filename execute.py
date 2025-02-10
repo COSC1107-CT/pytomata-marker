@@ -21,8 +21,12 @@ def calculate_and_output_student_results():
                 partition_index = (partition_index + 1) % args.process_count
             elif path.is_dir():
                 for script_path in path.glob("*.py"):
-                    student_solution_partitions[partition_index].append(script_path)
-                    partition_index = (partition_index + 1) % args.process_count
+                    student_solution_partitions[partition_index].append(
+                        script_path
+                    )
+                    partition_index = (
+                        partition_index + 1
+                    ) % args.process_count
         return student_solution_partitions
 
     args = utilities.construct_and_parse_args()
@@ -36,7 +40,10 @@ def calculate_and_output_student_results():
     ) as process_pool:
         process_pool.starmap(
             calculate_and_output_results_for_student_solution_partition,
-            zip(student_solution_partitions, [process_context] * args.process_count),
+            zip(
+                student_solution_partitions,
+                [process_context] * args.process_count,
+            ),
         )
 
 
@@ -72,12 +79,16 @@ def calculate_and_output_results_for_student_solution_partition(
             finally:
                 shared_exclusion_lock.release()
         else:
-            with open(output_directory_path / f"{student_id}.out", "w+") as output_file:
+            output_path = output_directory_path / f"{student_id}.out"
+            with open(output_path, "w+") as output_file:
                 output_file.write(student_output + "\n")
 
     questions_script_path, output_directory_path = process_context
     questions = utilities.load_using_path(questions_script_path)
-    for student_id, student_results in calculate_results_for_solution_partition():
+    for (
+        student_id,
+        student_results,
+    ) in calculate_results_for_solution_partition():
         output_individual_student_results()
 
 

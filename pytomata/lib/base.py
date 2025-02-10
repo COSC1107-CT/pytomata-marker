@@ -9,7 +9,9 @@ def penalise_score(question_value, incorrect_penalty):
 
 def update_score(current_student_score, question_value, update_value):
     """ """
-    assert -1 <= update_value <= 1, "update values should fall between -1 and 1"
+    assert -1 <= update_value <= 1, (
+        "update values should fall between -1 and 1"
+    )
     return current_student_score + (question_value * update_value)
 
 
@@ -32,7 +34,9 @@ def run_additional_test_cases(
         test_case_update, test_case_feedback = test_case_function(
             test_case, *test_case_args, **test_case_kwargs
         )
-        student_score = update_score(student_score, question_value, test_case_update)
+        student_score = update_score(
+            student_score, question_value, test_case_update
+        )
         if test_case_feedback:
             test_cases_feedback.append(test_case_feedback)
     return student_score, test_cases_feedback
@@ -40,5 +44,7 @@ def run_additional_test_cases(
 
 def get_feedback(test_case_value, test_case_feedback, success=True):
     """ """
-    if (success and test_case_value < 0) or ((not success) and test_case_value > 0):
+    if (success and test_case_value < 0) or (
+        (not success) and test_case_value > 0
+    ):
         return test_case_feedback
