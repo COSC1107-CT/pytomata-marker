@@ -15,6 +15,7 @@
     - [Configuration](#configuration)
   - [Library Function Catalogue](#library-function-catalogue)
   - [Development](#development)
+    - [Adding Dependencies](#adding-dependencies)
     - [Writing Library Functions](#writing-library-functions)
       - [Configuring Default Penalties](#configuring-default-penalties)
     - [Style Considerations](#style-considerations)
@@ -302,6 +303,15 @@ Once this function is defined, refer to the [execution instructions](#usage).
 ## Development
 
 This section is intended for contributors.
+
+### Adding Dependencies
+
+To add an additional dependency, use [`uv add`](https://docs.astral.sh/uv/concepts/projects/dependencies/).
+Once added, ensure the dependency is also listed by `requirements.txt`:
+
+```shell
+uv pip compile pyproject.toml -o requirements.txt
+```
 
 ### Writing Library Functions
 
