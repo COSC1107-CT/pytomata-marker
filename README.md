@@ -428,7 +428,11 @@ The `run_additional_test_cases` function executes another function over each ind
 handling the corresponding updates to the student’s result and the collection of feedback for each test.
 To utilise this function:
 
-<!-- TODO: Procedure. -->
+1. Define a function that checks the student’s solution against an arbitrary test case;
+the test case should be the first parameter. This function should return `True` if the test case is passed, or `False` otherwise.
+2. Invoke `run_additional_test_cases`, passing the test cases, handler function, the student’s current score, and total question value.
+This returns the student’s updated result and any feedback for individual test cases.
+3. Incorporate the test case feedback.
 
 ```python
 def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
@@ -450,6 +454,31 @@ def another_library_function(*args, question_value, incorrect_penalty, additiona
             question_value,
         )
         student_feedback.extend(test_case_feedback)
+```
+
+> [!NOTE]
+> The `test_case_handler_function` is an inner function out of convenience, for access to values in the enclosing scope.
+
+If the `test_case_handler_function` defines additional parameters,
+these should be passed as further positional and keyword arguments to `run_additional_test_cases` as follows:
+
+```python
+def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
+    # ...
+    if additional_test_cases:
+        student_result, test_case_feedback = base.run_additional_test_cases(
+            additional_test_cases,
+            test_case_handler_function,
+            student_result,
+            question_value,
+            arg_1,
+            arg_2,
+            keyword_para=arg_3,
+        )
+
+
+def test_case_handler_function(test_case, para_1, para_2, *, keyword_para):
+    # ...
 ```
 
 #### Documenting Library Functions
