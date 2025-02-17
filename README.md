@@ -511,17 +511,41 @@ This function is only applicable when all test cases are evaluated identically.
 
 #### Documenting Library Functions
 
-All library functions should include documentation including:
+All library functions should have docstrings including:
 
 1. A description of the intended use case and behaviour;
 2. A breakdown of parameters, including the structure of solutions and test cases (if applicable);
 3. A maximally-detailed usage example, structured as though invoked through the CLI REPL.
 
 ```python
-def another_library_function(arg_1, arg_2, *, question_value, incorrect_penalty, additional_test_cases=None):
-    """ """
+def another_library_function(para_1, para_2, *, question_value, incorrect_penalty, additional_test_cases=None):
+    """
+    Checks that the language accepted by `para_1` is a subset of the language accepted by `para_2`.
+    If additional test cases are specified, checks that `para_1` is a subset of each test case language.
+
+    Args:
+        `para_1`: arbitrary regular expression;
+        `para_2`: regular expression, expected to denote a superset of the `para_1` language;
+        `additional_test_cases`: optional list of regular expressions; test cases succeed if `para_1` denotes a subset language.
+
+    Raises:
+        `ErrorType`: if the function raises an unhandled exception, detail this here.
+
+    ```python
+    >>> arg_1 = "ab*c*"
+    >>> arg_2 = "a*b*c*d*"
+    >>> test_cases = [
+        ("a*b*d*c*", 0.1, None),
+        ("a+b+c+d+", 0.2, None),
+    ]
+    >>> another_library_function(arg_1, arg_2, question_value=10, additional_test_cases=test_cases)
+    ```
+    """
     pass
 ```
+
+The docstring style follows the [Google convention](https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings), with some modifications.
+The return values do not need to be specified, since they are uniform across all library functions.
 
 ### Style Considerations
 
