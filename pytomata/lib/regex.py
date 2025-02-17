@@ -44,12 +44,13 @@ def check_words_are_subset_of_regex_language(
             words, solution_nfa, question_value, incorrect_penalty
         )
     )
-    student_result, test_case_feedback = base.run_additional_test_cases(
-        additional_test_cases,
-        check_words_are_subset_of_test_case_language,
-        student_result,
-        question_value,
-    )
+    if additional_test_cases:
+        student_result, test_case_feedback = base.run_additional_test_cases(
+            additional_test_cases,
+            check_words_are_subset_of_test_case_language,
+            student_result,
+            question_value,
+        )
     student_feedback.extend(test_case_feedback)
     student_feedback = student_feedback or "Correct!"
     return base.calculate_final_score(
