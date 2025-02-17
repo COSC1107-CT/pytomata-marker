@@ -511,11 +511,17 @@ This function is only applicable when all test cases are evaluated identically.
 
 #### Documenting Library Functions
 
-All library functions should include documentation describing the:
+All library functions should include documentation including:
 
-<!-- TODO: Finish and provide an e.g. including test cases. -->
-1. Intended use case and behaviour;
-2.
+1. A description of the intended use case and behaviour;
+2. A breakdown of parameters, including the structure of solutions and test cases (if applicable);
+3. A maximally-detailed usage example, structured as though invoked through the CLI REPL.
+
+```python
+def another_library_function(arg_1, arg_2, *, question_value, incorrect_penalty, additional_test_cases=None):
+    """ """
+    pass
+```
 
 ### Style Considerations
 
