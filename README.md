@@ -15,10 +15,15 @@
     - [Configuration](#configuration)
   - [Library Function Catalogue](#library-function-catalogue)
   - [Development](#development)
-    - [Adding Dependencies](#adding-dependencies)
+    - [Adding Project Dependencies](#adding-project-dependencies)
     - [Writing Library Functions](#writing-library-functions)
       - [Configuring Default Penalties](#configuring-default-penalties)
+      - [Penalising \& Updating Scores](#penalising--updating-scores)
+      - [Handling Additional Test Cases](#handling-additional-test-cases)
+      - [Documenting Library Functions](#documenting-library-functions)
     - [Style Considerations](#style-considerations)
+      - [Linting \& Formatting](#linting--formatting)
+      - [Library Function Auxiliaries](#library-function-auxiliaries)
 
 ## Installation & Setup
 
@@ -37,7 +42,7 @@ Otherwise, proceed through the next section.
 ### Manual Project Configuration
 
 If you would prefer to avoid using uv, project configuration can still be done using [venv](https://docs.python.org/3/library/venv.html).
-If you don't already have a virtual environment to use, create one like this:
+If you don’t already have a virtual environment to use, create one like this:
 
 ```shell
 $ python3 -m venv ~/.pyauto
@@ -84,7 +89,7 @@ tests
 The procedure is run by the `execute.py` script, which accepts:
 
 1. A Python script containing the instructor-defined [question](#questions) and [configuration](#configuration) functions;
-2. An arbitrary list of Python scripts and directories containing students' [solutions](#solutions).
+2. An arbitrary list of Python scripts and directories containing students’ [solutions](#solutions).
 
 > For assistance, use `uv run execute.py -h`.
 
@@ -138,7 +143,7 @@ By default, all results are printed to standard output.
 
 ### Execution Options
 
-To save each student's result to an individual file instead of printing to standard output, use the `--output` or `-o` flag:
+To save each student’s result to an individual file instead of printing to standard output, use the `--output` or `-o` flag:
 
 ```shell
 $ uv run execute.py tests/questions.py tests/submissions --output output_directory
@@ -171,8 +176,8 @@ def exercise_1_question_a_1(student_solution, question_value):
     return student_result, student_feedback
 ```
 
-Each question is a single function that accepts a student's solution and the total allocated marks,
-then returns the student's result and any feedback, in that order.
+Each question is a single function that accepts a student’s solution and the total allocated marks,
+then returns the student’s result and any feedback, in that order.
 
 #### Using Library Functions
 
@@ -202,7 +207,7 @@ student_result, student_feedback = pytomata.lib.library_function(
 > [!WARNING]
 > The `incorrect_penalty` value must fall between 0 and 1, inclusive.
 
-This denotes the percentage deduction from the `question_value` when the student's submission is incorrect.
+This denotes the percentage deduction from the `question_value` when the student’s submission is incorrect.
 The default `incorrect_penalty` is 1, indicating a 100% deduction; the example above specifies an 80% deduction.
 
 Refer to the [library function catalogue](#library-function-catalogue) for an overview of available functions.
@@ -210,9 +215,11 @@ Refer to the [library function catalogue](#library-function-catalogue) for an ov
 #### Defining Additional Test Cases
 
 Certain library functions also accept additional test cases.
-Each test case represents an alternate (usually partially correct or incorrect) solution,
-has an associated value and optional feedback.
-The value denotes a percentage of the total `question_value`.
+Each test case represents an alternate (usually partially correct or incorrect) solution, containing:
+
+1. A arbitrary value denoting the test case itself;
+2. A value denoting a percentage of the total `question_value`;
+3. Optional feedback for the test case.
 
 ```python
 def exercise_1_question_a_1(student_solution, question_value):
@@ -230,11 +237,8 @@ def exercise_1_question_a_1(student_solution, question_value):
     return student_result, student_feedback
 ```
 
-> [!WARNING]
-> Additional test case values must fall between -1 and 1, inclusive.
-
-After the student's submission is marked against the actual solution, it is checked against each test case.
-If passed, the percentage allocated to that test case is added to the student's result.
+After the student’s submission is marked against the actual solution, it is checked against each test case.
+If passed, the percentage allocated to that test case is added to the student’s result.
 For example, in a question worth 5 marks, a successful test case worth `0.2` will allocate 1 mark.
 The test case value can also be negative, so that passing the test case deducts marks.
 
@@ -259,9 +263,9 @@ def exercise_1_question_a_2_solution():
 ```
 
 > [!WARNING]
-> Students should **never alter** the function signature.
+> Students **should not alter** the function signature.
 
-Each function returns the student's solution to the corresponding [question](#questions).
+Each function returns the student’s solution to the corresponding [question](#questions).
 All students should be distributed identical scripts containing pre-defined, empty functions as above.
 
 ### Configuration
@@ -289,7 +293,7 @@ def construct_questions_and_solutions(solutions):
 > [!WARNING]
 > This function must be called `construct_questions_and_solutions` and define one parameter,
 > used internally to pass an individual student module.
-> This facilitates pairing each student's submissions against the same respective marking functions.
+> This facilitates pairing each student’s submissions against the same respective marking functions.
 
 This function returns a sequence of tuples specifying the label, total value, question and solution functions for each question.
 The functions should correspond to those defined by the [questions](#questions) and [solutions](#solutions) scripts, respectively.
@@ -303,8 +307,9 @@ Once this function is defined, refer to the [execution instructions](#usage).
 ## Development
 
 This section is intended for contributors.
+Please ensure you have read and understood this section before contributing.
 
-### Adding Dependencies
+### Adding Project Dependencies
 
 To add an additional dependency, use [`uv add`](https://docs.astral.sh/uv/concepts/projects/dependencies/).
 Once added, ensure the dependency is also listed by `requirements.txt`:
@@ -313,17 +318,18 @@ Once added, ensure the dependency is also listed by `requirements.txt`:
 uv pip compile pyproject.toml -o requirements.txt
 ```
 
-### Writing Library Functions
+This ensures the project can be [configured manually](#manual-project-configuration).
 
-<!-- TODO: Additional test cases intended behaviour? -->
+### Writing Library Functions
 
 Library functions adhere to a shared interface, so their usage and behaviour are consistent. They should:
 
 - Accept a `question_value`;
 - Optionally accept an `incorrect_penalty` to denote the percentage deduction for incorrect solutions;
-- Optionally define `additional_test_cases` is not necessary; if it is defined, it should be optional.
+- Optionally accept `additional_test_cases`, if applicable; if defined, test cases should always be optional.
 
 These should always be [keyword-only arguments](https://peps.python.org/pep-3102/).
+Provided these conventions are observed, additional parameters may be defined on a per-function basis.
 
 ```python
 def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
@@ -331,8 +337,13 @@ def another_library_function(*args, question_value, incorrect_penalty, additiona
     return student_result, student_feedback
 ```
 
-Every library function returns the student's result and any feedback, in that order.
-Once defined, import the function in the `lib/__init__.py` script.
+The body of every library function should:
+
+1. Check the student’s answer against the specified solution, and [deduct points](#penalising--updating-scores) if not;
+2. If [additional test cases](#handling-additional-test-cases) are accepted, check the student’s answer against each test case.
+3. Return the student’s result and feedback, in that order.
+
+Once defined, import the function in the `lib/__init__.py` script, and add a corresponding entry to the [library function catalogue](#library-function-catalogue).
 
 #### Configuring Default Penalties
 
@@ -372,9 +383,99 @@ def exercise_1_question_a_1():
 
 Marks can be adjusted using [additional test cases](#additional-test-cases), if they are defined.
 
+#### Penalising & Updating Scores
+
+The `lib/base.py` script contains auxiliary functions to ensure consistent marking behaviour across all library functions.
+Utilising these auxiliaries in library functions is **mandatory** for their respective operations.
+
+To deduct the [configured incorrectness penalty](#configuring-default-penalties) for an incorrect answer,
+use the `penalise_score` function.
+
+```python
+import base
+
+def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
+    student_result = question_value
+    solution_is_correct = True
+    # ...
+    if not solution_is_correct:
+        student_result = base.penalise_score(question_value, incorrect_penalty)
+```
+
+<!-- TODO: Handling additional test cases. -->
+See [the following section](#handling-additional-test-cases) for further usage details.
+
+Finally, once the solution and test cases have been checked, use `calculate_final_score` to finalise the student’s result:
+
+```python
+import base
+
+def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
+    student_result = question_value
+    # ...
+    return base.calculate_final_score(student_result, question_value), student_feedback
+```
+
+This rounds the result to the nearest integer between zero and the `question_value`.
+
+#### Handling Additional Test Cases
+
+Auxiliaries are also provided for handling additional test cases.
+Unlike the [marking auxiliaries](#penalising--updating-scores), utilising these functions is optional.
+Refer [here](#defining-additional-test-cases) for an explanation of additional test case behaviour.
+
+The `run_additional_test_cases` function executes another function over each individual test case,
+handling the corresponding updates to the student’s result and the collection of feedback for each test.
+To utilise this function:
+
+<!-- TODO: Procedure. -->
+
+```python
+def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
+
+    def test_case_handler_function(test_case):
+        # ...
+        if test_case_passed:
+            return True
+        return False
+
+    student_result = question_value
+    student_feedback = []
+    # ...
+    if additional_test_cases:
+        student_result, test_case_feedback = base.run_additional_test_cases(
+            additional_test_cases,
+            test_case_handler_function,
+            student_result,
+            question_value,
+        )
+        student_feedback.extend(test_case_feedback)
+```
+
+#### Documenting Library Functions
+
+All library functions should include a docstring describing the:
+
+<!-- TODO: Finish and provide an e.g. including test cases. -->
+
 ### Style Considerations
 
-<!-- TODO: Ruff stuff. -->
+#### Linting & Formatting
+
+All source code should be linted and formatted using [Ruff](https://docs.astral.sh/ruff/):
+
+```shell
+uv run ruff check
+```
+
+```shell
+$ uv run ruff format
+```
+
+This tool is installed as a project dependency; if you aren’t using uv, omit `uv run`.
+The `pyproject.toml` file contains additional [configuration](https://docs.astral.sh/ruff/configuration/).
+
+#### Library Function Auxiliaries
 
 If library functions depend on internal auxiliary functions,
 these auxiliaries should be prefixed by `_` and left out of `lib/__init__.py`.
