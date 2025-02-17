@@ -27,7 +27,7 @@ def check_words_are_subset_of_regex_language(
     ```
     """
 
-    def check_words_are_subset_of_test_case_language(test_case, words):
+    def check_words_are_subset_of_test_case_language(test_case):
         """ """
         test_regex, test_value, test_feedback = test_case
         test_nfa = nfa.NFA.from_regex(
@@ -35,28 +35,25 @@ def check_words_are_subset_of_regex_language(
         )
         for word in words:
             if not test_nfa.accepts_input(word):
-                return 0, base.get_feedback(
-                    test_value, test_feedback, success=False
-                )
-        return test_value, base.get_feedback(test_value, test_feedback)
+                return False
+        return True
 
     solution_nfa = nfa.NFA.from_regex(regex, input_symbols=regex_input_symbols)
-    student_score, student_feedback = (
+    student_result, student_feedback = (
         _check_words_are_subset_of_automaton_language(
             words, solution_nfa, question_value, incorrect_penalty
         )
     )
-    student_score, test_case_feedback = base.run_additional_test_cases(
+    student_result, test_case_feedback = base.run_additional_test_cases(
         additional_test_cases,
         check_words_are_subset_of_test_case_language,
-        student_score,
+        student_result,
         question_value,
-        words,
     )
     student_feedback.extend(test_case_feedback)
     student_feedback = student_feedback or "Correct!"
     return base.calculate_final_score(
-        student_score, question_value
+        student_result, question_value
     ), student_feedback
 
 
@@ -79,13 +76,13 @@ def check_words_are_subset_of_regex_language_intersection(
             extra_regex, input_symbols=regex_input_symbols
         )
         intersection_nfa = intersection_nfa.intersection(extra_nfa)
-    student_score, student_feedback = (
+    student_result, student_feedback = (
         _check_words_are_subset_of_automaton_language(
             words, intersection_nfa, question_value, incorrect_penalty
         )
     )
     return base.calculate_final_score(
-        student_score, question_value
+        student_result, question_value
     ), student_feedback or "Correct!"
 
 
@@ -117,7 +114,7 @@ def _check_words_are_subset_of_automaton_language(
         if not automaton.accepts_input(word):
             passed = False
             student_feedback.append(f"Rejected: {word}")
-    student_score = question_value
+    student_result = question_value
     if not passed:
-        student_score = base.penalise_score(question_value, incorrect_penalty)
-    return student_score, student_feedback
+        student_result = base.penalise_score(question_value, incorrect_penalty)
+    return student_result, student_feedback

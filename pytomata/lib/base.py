@@ -31,20 +31,23 @@ def run_additional_test_cases(
     """ """
     test_cases_feedback = []
     for test_case in test_cases:
-        test_case_update, test_case_feedback = test_case_function(
+        _, test_case_value, test_case_feedback = test_case
+        test_case_passed = test_case_function(
             test_case, *test_case_args, **test_case_kwargs
         )
-        student_score = update_score(
-            student_score, question_value, test_case_update
+        if test_case_passed:
+            student_score = update_score(
+                student_score, question_value, test_case_value
+            )
+        test_case_feedback = get_feedback(
+            test_case_value, test_case_feedback, test_case_passed
         )
         if test_case_feedback:
             test_cases_feedback.append(test_case_feedback)
     return student_score, test_cases_feedback
 
 
-def get_feedback(test_case_value, test_case_feedback, success=True):
+def get_feedback(test_value, test_case_feedback, success=True):
     """ """
-    if (success and test_case_value < 0) or (
-        (not success) and test_case_value > 0
-    ):
+    if (success and test_value < 0) or ((not success) and test_value > 0):
         return test_case_feedback
