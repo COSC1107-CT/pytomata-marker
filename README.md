@@ -459,7 +459,7 @@ def another_library_function(*args, question_value, incorrect_penalty, additiona
 > [!NOTE]
 > The `test_case_handler_function` is an inner function out of convenience, for access to values in the enclosing scope.
 
-If the `test_case_handler_function` defines additional parameters,
+If the test case handler function defines additional parameters,
 these should be passed as further positional and keyword arguments to `run_additional_test_cases` as follows:
 
 ```python
@@ -473,11 +473,11 @@ def another_library_function(*args, question_value, incorrect_penalty, additiona
             question_value,
             arg_1,
             arg_2,
-            keyword_para=arg_3,
+            key_value=key_arg,
         )
 
 
-def test_case_handler_function(test_case, para_1, para_2, *, keyword_para):
+def test_case_handler_function(test_case, value_1, value_2, *, key_value):
     # ...
 ```
 
