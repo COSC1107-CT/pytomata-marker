@@ -333,7 +333,7 @@ Provided these conventions are observed, additional parameters may be defined on
 
 ```python
 def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
-    # ...
+    # …
     return student_result, student_feedback
 ```
 
@@ -375,7 +375,7 @@ Instructor-defined question functions can override these defaults if necessary:
 
 ```python
 def exercise_1_question_a_1():
-    # ...
+    # …
     student_result, student_feedback = pytomata.lib.another_library_function(
         question_value=5, incorrect_penalty=0.6
     )
@@ -397,13 +397,40 @@ import base
 def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
     student_result = question_value
     solution_is_correct = True
-    # ...
+    # …
     if not solution_is_correct:
         student_result = base.penalise_score(question_value, incorrect_penalty)
 ```
 
-<!-- TODO: Handling additional test cases. -->
-See [the following section](#handling-additional-test-cases) for further usage details.
+
+If you are not using the [test case auxiliaries](#handling-additional-test-cases), use:
+
+1. The `update_score` function to alter the student’s score based on the test case, and;
+2. The `get_feedback` function to return test case feedback under the correct circumstances.
+
+```python
+import base
+
+def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
+
+    def test_case_handler(test_case):
+        test_case_passed = True
+        _, test_case_value, test_case_feedback = test_case
+        # …
+        if test_case_passed:
+            student_result = base.update_score(student_result, question_value, test_case_value)
+        feedback = base.get_feedback(test_case_value, test_case_feedback, test_case_passed)
+        if feedback:
+            student_feedback.append(feedback)
+
+
+    student_result = question_value
+    student_feedback = []
+    # …
+    if additional_test_cases is not None:
+        for test_case in additional_test_cases:
+            test_case_handler(test_case)
+```
 
 Finally, once the solution and test cases have been checked, use `calculate_final_score` to finalise the student’s result:
 
@@ -412,7 +439,7 @@ import base
 
 def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
     student_result = question_value
-    # ...
+    # …
     return base.calculate_final_score(student_result, question_value), student_feedback
 ```
 
@@ -438,15 +465,14 @@ This returns the student’s updated result and any feedback for individual test
 def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
 
     def test_case_handler_function(test_case):
-        # ...
-        if test_case_passed:
-            return True
-        return False
+        test_case_passed = True
+        # …
+        return test_case_passed
 
     student_result = question_value
     student_feedback = []
-    # ...
-    if additional_test_cases:
+    # …
+    if additional_test_cases is not None:
         student_result, test_case_feedback = base.run_additional_test_cases(
             additional_test_cases,
             test_case_handler_function,
@@ -464,8 +490,8 @@ these should be passed as further positional and keyword arguments to `run_addit
 
 ```python
 def another_library_function(*args, question_value, incorrect_penalty, additional_test_cases=None):
-    # ...
-    if additional_test_cases:
+    # …
+    if additional_test_cases is not None:
         student_result, test_case_feedback = base.run_additional_test_cases(
             additional_test_cases,
             test_case_handler_function,
@@ -478,14 +504,18 @@ def another_library_function(*args, question_value, incorrect_penalty, additiona
 
 
 def test_case_handler_function(test_case, value_1, value_2, *, key_value):
-    # ...
+    # …
 ```
+
+This function is only applicable when all test cases are evaluated identically.
 
 #### Documenting Library Functions
 
-All library functions should include a docstring describing the:
+All library functions should include documentation describing the:
 
 <!-- TODO: Finish and provide an e.g. including test cases. -->
+1. Intended use case and behaviour;
+2.
 
 ### Style Considerations
 
@@ -512,7 +542,7 @@ these auxiliaries should be prefixed by `_` and left out of `lib/__init__.py`.
 ```python
 def library_function(*args, question_value, incorrect_penalty):
     student_result, student_feedback = _auxiliary_library_function()
-    # ...
+    # …
     return student_result, student_feedback
 
 def _auxiliary_library_function():
