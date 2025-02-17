@@ -545,7 +545,7 @@ def another_library_function(para_1, para_2, *, question_value, incorrect_penalt
 ```
 
 The docstring style follows the [Google convention](https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings), with some modifications.
-The return values do not need to be specified, since they are uniform across all library functions.
+The return values do not need to be specified, since they are [uniform across all library functions](#writing-library-functions).
 
 ### Style Considerations
 
