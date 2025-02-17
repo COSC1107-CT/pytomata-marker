@@ -44,7 +44,7 @@ def check_words_are_subset_of_regex_language(
             words, solution_nfa, question_value, incorrect_penalty
         )
     )
-    if additional_test_cases:
+    if additional_test_cases is not None:
         student_result, test_case_feedback = base.run_additional_test_cases(
             additional_test_cases,
             check_words_are_subset_of_test_case_language,
