@@ -304,6 +304,12 @@ Once this function is defined, refer to the [execution instructions](#usage).
 
 <!-- TODO: Table containing all available functions and their behaviour. -->
 
+| Function                                                | Behaviour                                                                                              |
+|:--------------------------------------------------------|:-------------------------------------------------------------------------------------------------------|
+| `check_words_are_subset_of_regex_language`              | Checks that a set of words constitute a subset a regular expression language                           |
+| `check_words_are_subset_of_regex_language_intersection` | Checks that a set of words is a subset of the intersection of two or more regular expression languages |
+| `check_words_are_subset_of_regex_language_difference`   | Checks that a set of words is a subset of the difference of two or more regular expression languages   |
+
 ## Development
 
 This section is intended for contributors.
