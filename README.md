@@ -560,7 +560,7 @@ The return values do not need to be specified, since they are [uniform across al
 All source code should be linted and formatted using [Ruff](https://docs.astral.sh/ruff/):
 
 ```shell
-uv run ruff check
+$ uv run ruff check
 ```
 
 ```shell
