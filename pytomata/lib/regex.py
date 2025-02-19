@@ -27,10 +27,7 @@ def check_words_are_subset_of_regex_language(
     Args:
         `words`: set of strings denoting words in a language;
         `regex`: string denoting a regular expression that encodes a language;
-        `additional_test_cases`: additional string regular expressions;
-
-    Raises:
-        `InvalidSymbolError`: reserved characters used as input symbols.
+        `additional_test_cases`: additional string regular expressions.
 
     ```python
     >>> words = {"a", "ab", "bcc", "abccc"}
@@ -85,14 +82,22 @@ def check_words_are_subset_of_regex_language_intersection(
 
     Args:
         `words`: set of strings denoting words in a language;
-        `regex_1`: …;
-        `regex_2`: …;
-        `extra_regexes`: …
-
-    Raises:
-        `InvalidSymbolError`: reserved characters used as input symbols.
+        `regex_1`: regular expression string encoding the first intersection language;
+        `regex_2`: regular expression string encoding the second intersection language;
+        `extra_regexes`: arbitrary sequence of regular expressions encoding further intersection languages.
 
     ```python
+    >>> words = {"de", "e"}
+    >>> regex_1 = "a*b*c*d*e*"
+    >>> regex_2 = "c*d*e*f*g*"
+    >>> regex_3 = "d*e+f*"
+    >>> check_words_are_subset_of_regex_language_intersection(
+        words,
+        regex_1,
+        regex_2,
+        regex_3,
+        question_value=6,
+    )
     ```
     """
     intersection_nfa = functools.reduce(
@@ -127,14 +132,20 @@ def check_words_are_subset_of_language_difference(
 
     Args:
         `words`: set of strings denoting words in a language;
-        `regex_1`: …;
-        `regex_2`: …;
-        `extra_regexes`: …
-
-    Raises:
-        `InvalidSymbolError`: reserved characters used as input symbols.
+        `regex_1`: regular expression string encoding the first difference language operand;
+        `regex_2`: regular expression string encoding the second difference language operand;
+        `extra_regexes`: arbitrary sequence of regular expressions encoding subsequent difference languages.
 
     ```python
+    >>> words = {"abc", "bcde"}
+    >>> regex_1 = "a*b*c*d*e*"
+    >>> regex_2 = "c*d*e*"
+    >>> check_words_are_subset_of_regex_language_intersection(
+        words,
+        regex_1,
+        regex_2,
+        question_value=6,
+    )
     ```
     """
     difference_nfa = functools.reduce(
@@ -159,7 +170,25 @@ def _check_words_are_subset_of_automaton_language(
     question_value,
     incorrect_penalty,
 ):
-    """ """
+    """
+    Checks that a set of words is a subset of the language encoded by an automaton.
+    Handles feedback and the penalisation of the student score for incorrect answers.
+
+    Args:
+        `words`: set of strings denoting words in a language;
+        `automaton`: automaton encoding the superset language;
+        `question_value`: total question value;
+        `incorrect_penalty`: penalty to the student’s score for an incorrect answer.
+
+    Returns:
+        The student score and feedback.
+
+    ```python
+    >>> words = {"aba", "abc"}
+    >>> nfa = nfa.NFA.from_regex("a*b*a*c*")
+    >>> _check_words_are_subset_of_automaton_language(words, nfa, 5, 1)
+    ```
+    """
     student_feedback = []
     passed = True
     for word in words:
