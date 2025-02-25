@@ -1,12 +1,14 @@
 # Pytomata Marker
 
-<!-- TODO: Overview. -->
+This is an automarker developed to support assignments in theory of computation courses @ RMIT University. It is a re-development of the [JFLAP Automarker](https://github.com/COSC1107-CT/jflap-ct-automarker) system, but done in Python.
+
+Official GitHub repo: https://github.com/COSC1107-CT/pytomata-marker
 
 - [Pytomata Marker](#pytomata-marker)
   - [Installation \& Setup](#installation--setup)
-      - [Manual Project Configuration](#manual-project-configuration)
+    - [Manual Project Configuration](#manual-project-configuration)
   - [Usage](#usage)
-      - [Execution Options](#execution-options)
+    - [Execution Options](#execution-options)
   - [Assessment Design \& Configuration](#assessment-design--configuration)
     - [Questions](#questions)
       - [Using Library Functions](#using-library-functions)
@@ -24,6 +26,7 @@
     - [Style Considerations](#style-considerations)
       - [Linting \& Formatting](#linting--formatting)
       - [Library Function Auxiliaries](#library-function-auxiliaries)
+  - [Contributors](#contributors)
 
 ## Installation & Setup
 
@@ -585,3 +588,9 @@ def library_function(*args, question_value, incorrect_penalty):
 def _auxiliary_library_function():
     pass
 ```
+
+## Contributors
+
+The pytomata automarker was developed by Harry Porter and Sebastian Sardina in 2025, based on the [JFLAP Automarker](https://github.com/COSC1107-CT/jflap-ct-automarker) system.
+
+**Contact:** Prof. Sebastian Sardina (ssardina@gmail.com)
