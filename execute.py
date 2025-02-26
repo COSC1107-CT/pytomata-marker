@@ -1,11 +1,18 @@
 """ """
 
+import dataclasses
 import multiprocessing
+import pathlib
 
 import pytomata
 import utilities
 
-# TODO: Script invocation option?
+
+@dataclasses.dataclass
+class ProcessContext:
+    """ """
+    questions_script_path: pathlib.Path
+    output_directory_path: pathlib.Path
 
 
 def calculate_and_output_student_results():
@@ -24,42 +31,41 @@ def calculate_and_output_student_results():
                     student_solution_partitions[partition_index].append(
                         script_path
                     )
-                    partition_index = (
-                        partition_index + 1
-                    ) % args.process_count
+                    partition_index += 1
+                    partition_index %= args.process_count
         return student_solution_partitions
 
     args = utilities.construct_and_parse_args()
     if args.output_directory_path is not None:
         args.output_directory_path.mkdir(parents=True, exist_ok=True)
-    student_solution_partitions = derive_and_partition_student_solution_files()
-    process_context = (args.questions_script_path, args.output_directory_path)
-    lock = multiprocessing.Lock()
+    process_context = ProcessContext(
+        args.questions_script_path, args.output_directory_path
+    )
+    shared_lock = multiprocessing.Lock()
     with multiprocessing.Pool(
-        args.process_count, initialise_shared_process_resources, (lock,)
+        args.process_count, initialise_exclusion_lock, (shared_lock,)
     ) as process_pool:
         process_pool.starmap(
-            calculate_and_output_results_for_student_solution_partition,
+            calculate_and_output_student_solution_partition_results,
             zip(
-                student_solution_partitions,
+                derive_and_partition_student_solution_files(),
                 [process_context] * args.process_count,
             ),
         )
 
 
-def initialise_shared_process_resources(lock):
-    """ """
+def initialise_exclusion_lock(lock):
     global shared_exclusion_lock
     shared_exclusion_lock = lock
 
 
-def calculate_and_output_results_for_student_solution_partition(
-    student_solution_partition,
-    process_context,
+def calculate_and_output_student_solution_partition_results(
+    student_solution_partition, process_context
 ):
     """ """
 
-    def calculate_results_for_solution_partition():
+    # TODO: Dataclass representing student results.
+    def calculate_partition_results():
         """ """
         for student_solution_path in student_solution_partition:
             solutions = utilities.load_using_path(student_solution_path)
@@ -69,27 +75,23 @@ def calculate_and_output_results_for_student_solution_partition(
             )
             yield student_id, student_results
 
-    def output_individual_student_results():
+    def output_student_results():
         """ """
         student_output = generate_student_output(student_id, student_results)
-        if output_directory_path is None:
+        if process_context.output_directory_path is None:
             shared_exclusion_lock.acquire()
             try:
                 print("\n", student_output, "\n", sep="")
             finally:
                 shared_exclusion_lock.release()
         else:
-            output_path = output_directory_path / f"{student_id}.out"
+            output_path = process_context.output_directory_path / f"{student_id}.out"
             with open(output_path, "w+") as output_file:
                 output_file.write(student_output + "\n")
 
-    questions_script_path, output_directory_path = process_context
-    questions = utilities.load_using_path(questions_script_path)
-    for (
-        student_id,
-        student_results,
-    ) in calculate_results_for_solution_partition():
-        output_individual_student_results()
+    questions = utilities.load_using_path(process_context.questions_script_path)
+    for student_id, student_results in calculate_partition_results():
+        output_student_results()
 
 
 def generate_student_output(student_id, student_results):
@@ -108,3 +110,4 @@ def generate_student_output(student_id, student_results):
 
 if __name__ == "__main__":
     calculate_and_output_student_results()
+gourdoni
