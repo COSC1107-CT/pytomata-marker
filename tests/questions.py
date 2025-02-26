@@ -15,8 +15,8 @@ def construct_questions_and_solutions(solutions):
     ]
 
 
-def exercise_1_question_a_1(solution, question_value):
-    """ """
+def exercise_1_question_a_1(student_answer, question_value):
+    """Definition of E1.(a).1 """
     language_regex = "abc"
     additional_test_cases = [
         ("a*b*c*", 0.2, "You failed!"),
@@ -24,7 +24,7 @@ def exercise_1_question_a_1(solution, question_value):
     ]
     student_result, student_feedback = (
         pytomata.lib.check_words_are_subset_of_regex_language(
-            solution,
+            student_answer,
             language_regex,
             question_value=question_value,
             additional_test_cases=additional_test_cases,

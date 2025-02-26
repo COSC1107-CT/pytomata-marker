@@ -30,14 +30,14 @@ def check_words_are_subset_of_regex_language(
         `additional_test_cases`: additional string regular expressions.
 
     ```python
-    >>> words = {"a", "ab", "bcc", "abccc"}
+    >>> answers = {"a", "ab", "bcc", "abccc"}
     >>> solution_regex = "a*b*c*"
     >>> test_cases = [
         ("a*b*c?", 0.1, None),
         ("a*b*c+", 0.2, None),
     ]
     >>> check_words_are_subset_of_language(
-        words,
+        answers,
         solution_regex,
         question_value=10,
         additional_test_cases=test_cases,
@@ -49,6 +49,7 @@ def check_words_are_subset_of_regex_language(
         test_nfa = nfa.NFA.from_regex(test_case[0])
         return all(map(lambda word: test_nfa.accepts_input(word), words))
 
+    # construct the NFA for the regex
     solution_nfa = nfa.NFA.from_regex(regex)
     student_result, student_feedback = (
         _check_words_are_subset_of_automaton_language(
