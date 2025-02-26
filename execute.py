@@ -110,4 +110,3 @@ def generate_student_output(student_id, student_results):
 
 if __name__ == "__main__":
     calculate_and_output_student_results()
-gourdoni
