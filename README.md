@@ -99,10 +99,7 @@ The procedure is run by the `execute.py` script, which accepts:
 Therefore, to process an individual submission:
 
 ```shell
-$ uv run execute.py tests/questions.py tests/s0000000.py
-```
-
-```plaintext
+$ uv run execute.py tests/questions.py tests/submissions/s0000000.py
 Using CPython 3.13.1
 Creating virtual environment at: .venv
 Installed 6 packages in 4ms
@@ -121,9 +118,6 @@ When a directory is supplied, all Python scripts inside that directory (non-recu
 
 ```shell
 $ uv run execute.py tests/questions.py tests/submissions
-```
-
-```plaintext
 *** s0000002 ***
 
 1.a.i | 100 / 100
@@ -168,24 +162,28 @@ Both question and submission functions are intended to make heavy use of the [Au
 
 ### Questions
 
-Questions are defined using functions:
+Questions are defined using _functions_.
+
+Each question is a single function that accepts a student’s answer to the question and the total allocated points for the question, and then returns the student’s result (points attracted) and any feedback, in that order.
 
 ```python
 import automata
 
 def exercise_1_question_a_1(student_solution, question_value):
-    actual_solution = {}
-    # Invoke library function here.
+    """Check student answer for the question; calculate points attracted and feedback
+
+        student_solution: the student's submission answer for this question
+        question_value: how many points this question is worth
+    """
+
+    # Invoke automarker library function here to check student solution.
+
     return student_result, student_feedback
 ```
 
-Each question is a single function that accepts a student’s solution and the total allocated marks,
-then returns the student’s result and any feedback, in that order.
-
 #### Using Library Functions
 
-Library functions are provided to handle certain archetypal questions.
-These functions all return the student result and feedback, just like question functions; the result is always rounded to the nearest integer.
+Library functions are provided to handle certain archetypal questions. These functions all return the student result (points achieved) and feedback, just like question functions; the result is always rounded to the nearest integer.
 
 ```python
 import pytomata.lib
@@ -196,22 +194,19 @@ student_result, student_feedback = pytomata.lib.library_function(
 ```
 
 The `question_value` is a required keyword argument.
-An `incorrect_penalty` can also be optionally supplied:
+An `incorrect_penalty` can also be optionally supplied, which denotes the percentage deduction from the `question_value` when the student’s submission is incorrect:
 
 ```python
 student_result, student_feedback = pytomata.lib.library_function(
     student_solution,
     actual_solution,
     question_value=question_value,
-    incorrect_penalty=0.8,
+    incorrect_penalty=0.8,  # should be between 0 and 1 - defaults to 1
 )
 ```
 
 > [!WARNING]
-> The `incorrect_penalty` value must fall between 0 and 1, inclusive.
-
-This denotes the percentage deduction from the `question_value` when the student’s submission is incorrect.
-The default `incorrect_penalty` is 1, indicating a 100% deduction; the example above specifies an 80% deduction.
+> The `incorrect_penalty` value must fall between 0 and 1, inclusive. The default `incorrect_penalty` is 1, indicating a 100% deduction; the example above specifies an 80% deduction.
 
 Refer to the [library function catalogue](#library-function-catalogue) for an overview of available functions.
 
