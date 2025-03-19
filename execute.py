@@ -1,14 +1,34 @@
 """ """
 
+import dataclasses
 import multiprocessing
+import pathlib
+import typing
 
 import pytomata
 import utilities
 
-# TODO: Script invocation option?
+
+@dataclasses.dataclass
+class ProcessContext:
+    questions_script_path: pathlib.Path
+    output_directory_path: pathlib.Path
 
 
-def calculate_and_output_student_results():
+# NOTE: Build out the CLI entry point here.
+def handle_script_invocation():
+    """ """
+    pass
+
+
+# TODO: Use this as the shared entry point for package and CLI invocations.
+def calculate_and_output_student_results(
+    questions_script_path: pathlib.Path,
+    output_directory_path: pathlib.Path,
+    student_solution_paths: typing.Sequence[pathlib.Path],
+    *,
+    process_count: int,
+):
     """ """
 
     def derive_and_partition_student_solution_files():
