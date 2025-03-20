@@ -10,11 +10,11 @@ dependencies = [
 ]
 
 [tool.ruff]
-line-length = 79
+line-length = 89
 
 [tool.ruff.format]
 docstring-code-format = true
-docstring-code-line-length = 79
+docstring-code-line-length = 89
 
 [tool.ruff.lint]
 extend-select = ["I"]
