@@ -15,10 +15,15 @@ class ProcessContext:
     output_directory_path: pathlib.Path
 
 
-# NOTE: Build out the CLI entry point here.
 def handle_script_invocation():
     """ """
-    pass
+    args = utilities.construct_and_parse_args()
+    return calculate_and_output_student_results(
+        args.questions_script_path,
+        args.output_directory_path,
+        args.student_solution_paths,
+        process_count=args.process_count,
+    )
 
 
 # TODO: Use this as the shared entry point for package and CLI invocations.
@@ -33,41 +38,34 @@ def calculate_and_output_student_results(
 
     def derive_and_partition_student_solution_files():
         """ """
-        student_solution_partitions = [[] for _ in range(args.process_count)]
-        partition_index = 0
-        for path in args.student_solution_paths:
+        student_solution_partitions = [[] for _ in range(process_count)]
+        part_index = 0
+        for path in student_solution_paths:
             if path.is_file() and path.suffix == ".py":
                 student_solution_partitions[partition_index].append(path)
-                partition_index = (partition_index + 1) % args.process_count
+                part_index = (part_index + 1) % process_count
             elif path.is_dir():
                 for script_path in path.glob("*.py"):
-                    student_solution_partitions[partition_index].append(
-                        script_path
-                    )
-                    partition_index = (
-                        partition_index + 1
-                    ) % args.process_count
+                    student_solution_partitions[part_index].append(script_path)
+                    part_index = (part_index + 1) % process_count
         return student_solution_partitions
 
-    args = utilities.construct_and_parse_args()
-    if args.output_directory_path is not None:
-        args.output_directory_path.mkdir(parents=True, exist_ok=True)
+    if output_directory_path is not None:
+        output_directory_path.mkdir(parents=True, exist_ok=True)
     student_solution_partitions = derive_and_partition_student_solution_files()
-    process_context = (args.questions_script_path, args.output_directory_path)
+    process_context = (questions_script_path, output_directory_path)
     lock = multiprocessing.Lock()
-    with multiprocessing.Pool(
-        args.process_count, initialise_shared_process_resources, (lock,)
-    ) as process_pool:
-        process_pool.starmap(
+    with multiprocessing.Pool(process_count, initialise_process, (lock,)) as pool:
+        pool.starmap(
             calculate_and_output_results_for_student_solution_partition,
             zip(
                 student_solution_partitions,
-                [process_context] * args.process_count,
+                [process_context] * process_count,
             ),
         )
 
 
-def initialise_shared_process_resources(lock):
+def initialise_process(lock):
     """ """
     global shared_exclusion_lock
     shared_exclusion_lock = lock
@@ -127,4 +125,4 @@ def generate_student_output(student_id, student_results):
 
 
 if __name__ == "__main__":
-    calculate_and_output_student_results()
+    handle_script_invocation()
