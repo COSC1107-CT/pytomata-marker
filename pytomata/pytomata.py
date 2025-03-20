@@ -11,8 +11,28 @@ import typing
 
 @dataclasses.dataclass(frozen=True)
 class ProcessContext:
+    """ """
+
     questions_script_path: pathlib.Path
     output_directory_path: pathlib.Path
+
+
+@dataclasses.dataclass(frozen=True)
+class StudentResults:
+    """ """
+
+    student_id: str
+    results: typing.Sequence[MarkedQuestionResponse]
+
+
+@dataclasses.dataclass(frozen=True)
+class MarkedQuestionResponse:
+    """ """
+
+    question_label: str
+    question_value: float
+    student_result: float
+    student_feedback: str
 
 
 def handle_script_invocation():
@@ -79,14 +99,19 @@ def calculate_and_output_results_for_student_solution_partition(
         for student_solution_path in student_solution_partition:
             solutions = utilities.load_using_path(student_solution_path)
             student_id = student_solution_path.stem
-            student_results = calculate_student_results_and_feedback(
-                questions.construct_questions_and_solutions(solutions)
-            )
-            yield student_id, student_results
+            yield StudentResults(student_id, calculate_student_results_and_feedback())
+
+    def calculate_student_results_and_feedback(solutions):
+        """ """
+        return [
+            MarkedQuestionResponse(label, value, *question(solution(), value))
+            for label, value, question, solution
+            in questions.construct_questions_and_solutions(solutions)
+        ]
 
     def output_individual_student_results():
         """ """
-        student_output = generate_student_output(student_id, student_results)
+        student_output = generate_student_output(student_results)
         if output_directory_path is None:
             shared_exclusion_lock.acquire()
             try:
@@ -94,28 +119,28 @@ def calculate_and_output_results_for_student_solution_partition(
             finally:
                 shared_exclusion_lock.release()
         else:
-            output_path = output_directory_path / f"{student_id}.out"
+            output_path = output_directory_path / f"{student_results.student_id}.out"
             with open(output_path, "w+") as output_file:
                 output_file.write(student_output + "\n")
 
     questions_script_path, output_directory_path = process_context
     questions = utilities.load_using_path(questions_script_path)
-    for (student_id, student_results) in calculate_results_for_solution_partition():
+    for student_results in calculate_results_for_solution_partition():
         output_individual_student_results()
 
 
-def generate_student_output(student_id, student_results):
+def generate_student_output(student_results):
     """ """
 
-    def generate_question_output(question_result):
+    def generate_question_output(result):
         """ """
-        label, value, student_score, student_feedback = question_result
-        if isinstance(student_feedback, list):
-            student_feedback = "\n".join(student_feedback)
-        return f"{label} | {student_score} / {value}\n{student_feedback}"
+        feedback = result.student_feedback
+        if isinstance(feedback, list):
+            feedback = "\n".join(feedback)
+        return f"{result.label} | {result.student_score} / {result.question_value}\n{feedback}"
 
-    question_output = map(generate_question_output, student_results)
-    return "\n\n".join([f"*** {student_id} ***", *question_output])
+    question_output = map(generate_question_output, student_results.results)
+    return "\n\n".join([f"*** {student_results.student_id} ***", *question_output])
 
 
 def load_using_path(path, identifier=""):
