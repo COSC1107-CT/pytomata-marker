@@ -9,7 +9,7 @@ import pytomata
 import utilities
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class ProcessContext:
     questions_script_path: pathlib.Path
     output_directory_path: pathlib.Path
@@ -53,15 +53,12 @@ def calculate_and_output_student_results(
     if output_directory_path is not None:
         output_directory_path.mkdir(parents=True, exist_ok=True)
     student_solution_partitions = derive_and_partition_student_solution_files()
-    process_context = (questions_script_path, output_directory_path)
+    process_context = ProcessContext(questions_script_path, output_directory_path)
     lock = multiprocessing.Lock()
     with multiprocessing.Pool(process_count, initialise_process, (lock,)) as pool:
         pool.starmap(
             calculate_and_output_results_for_student_solution_partition,
-            zip(
-                student_solution_partitions,
-                [process_context] * process_count,
-            ),
+            zip(student_solution_partitions, [process_context] * process_count),
         )
 
 
