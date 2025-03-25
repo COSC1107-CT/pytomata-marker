@@ -1,6 +1,5 @@
 """ """
 
-import argparse
 import dataclasses
 import importlib.util
 import multiprocessing
@@ -33,17 +32,6 @@ class MarkedQuestionResponse:
     question_value: float
     student_result: float
     student_feedback: str
-
-
-def handle_script_invocation():
-    """ """
-    args = construct_and_parse_args()
-    return calculate_and_output_student_results(
-        args.questions_script_path,
-        args.output_directory_path,
-        args.student_solution_paths,
-        process_count=args.process_count,
-    )
 
 
 # TODO: Use this as the shared entry point for package and CLI invocations.
@@ -150,46 +138,3 @@ def load_using_path(path, identifier=""):
     sys.modules[identifier] = module
     specification.loader.exec_module(module)
     return module
-
-
-def construct_and_parse_args():
-    """ """
-    args = {
-        "description": "",
-        "epilog": "standard output is used for results and feedback by default",
-        "allow_abbrev": False,
-    }
-    parser = argparse.ArgumentParser(**args)
-    args = {
-        ("questions_script_path",): {
-            "help": "path to script containing instructor-defined question functions",
-            "type": pathlib.Path,
-            "metavar": "QUESTIONS",
-        },
-        ("student_solution_paths",): {
-            "help": "paths to scripts and directories containing student solutions",
-            "nargs": "+",
-            "type": pathlib.Path,
-            "metavar": "SOLUTIONS",
-        },
-        ("-o", "--output"): {
-            "help": "directory for saving results and feedback",
-            "dest": "output_directory_path",
-            "type": pathlib.Path,
-            "metavar": "OUTPUT",
-        },
-        ("-p", "--processes"): {
-            "help": "specify processes to distribute solutions across",
-            "dest": "process_count",
-            "type": int,
-            "default": 1,
-            "metavar": "PROCESSES",
-        },
-    }
-    for values, config in args.items():
-        parser.add_argument(*values, **config)
-    return parser.parse_args()
-
-
-if __name__ == "__main__":
-    handle_script_invocation()
