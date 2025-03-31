@@ -1,5 +1,5 @@
 def exercise_1_question_a_part_i_solution():
-    return "", ""
+    return "aaaabcccbbbb", "aaaabxccbbbb"
 
 
 def exercise_1_question_a_part_ii_solution():
