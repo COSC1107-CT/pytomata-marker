@@ -19,7 +19,7 @@ def generic_regex_procedure(
 ):
     """ """
     if re.isequal(correct_regex, student_regex):
-        return question_value, "Equivalent!"
+        return question_value, ""
     question_value *= non_equivalence_deduction
     return generic.check_against_acceptance_and_rejection_sets(
         nfa.NFA.from_regex(student_regex),
@@ -33,14 +33,14 @@ def check_regex_acceptance(regex, student_inputs, *, question_value):
     """ """
     regex_nfa = nfa.from_regex(regex)
     accepted = len(list(filter(regex_nfa.accepts_input, student_inputs)))
-    return question_value * (accepted / len(student_inputs))
+    return question_value * (accepted / len(student_inputs)), ""
 
 
 def check_regex_intersection_acceptance(regexes, student_inputs, *, question_value):
     """ """
     intersection_nfa = nfa.NFA.from_regex("&".join(regexes))
     accepted = len(list(filter(intersection_nfa.accepts_input, student_inputs)))
-    return question_value * (accepted / len(student_inputs))
+    return question_value * (accepted / len(student_inputs)), ""
 
 
 def check_regex_difference_acceptance(regexes, student_inputs, *, question_value):
@@ -56,4 +56,4 @@ def check_regex_difference_acceptance(regexes, student_inputs, *, question_value
         convert_regex_into_dfa(regex),
     )
     accepted = len(list(filter(difference_dfa.accepts_input, student_inputs)))
-    return question_value * (accepted / len(student_inputs))
+    return question_value * (accepted / len(student_inputs)), ""

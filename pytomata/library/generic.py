@@ -29,5 +29,5 @@ def check_against_acceptance_and_rejection_sets(
         feedback += ["Rejected:", *incorrectly_rejected]
     incorrectly_accepted = reject_set.difference(rejected)
     if incorrectly_accepted:
-        reject_report = ["Accepted:", *incorrectly_accepted]
-    return question_value * proportion, "\n".join(accept_report + reject_report)
+        feedback += ["Accepted:", *incorrectly_accepted]
+    return question_value * proportion, "\n".join(feedback)

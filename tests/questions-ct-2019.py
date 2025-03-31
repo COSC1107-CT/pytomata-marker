@@ -1,8 +1,6 @@
 import automata.fa.nfa as nfa
 import pytomata.library
 
-# TODO: Regex stuff should return feedback.
-
 
 def construct_questions_and_solutions(solutions):
     return [
@@ -48,94 +46,212 @@ def construct_questions_and_solutions(solutions):
             exercise_1_question_a_part_vii,
             solutions.exercise_1_question_a_part_vii_solution,
         ),
+        (
+            "1.b.i",
+            2.0,
+            exercise_1_question_b_part_i,
+            solutions.exercise_2_question_b_part_i_solution,
+        ),
+        (
+            "1.b.ii",
+            2.0,
+            exercise_1_question_b_part_ii,
+            solutions.exercise_2_question_b_part_ii_solution,
+        ),
     ]
 
 
 exercise_1_regex_1 = "(a+b*)cc*a*(c+b*)*"
 exercise_1_regex_2 = "(a+b)*c*c(a*+b)*"
 
+exercise_1_language_1_regex = "a(aa)*bbb(bbbb)*"
 
-def exercise_1_question_a_part_i(student_solutions, question_value):
+
+def exercise_1_question_a_part_i(student_inputs, question_value):
     conditions = (
-        len(student_solutions) == 2,
-        all(map(bool, student_solutions)),
+        len(student_inputs) == 2,
+        all(map(bool, student_inputs)),
     )
     if not all(conditions):
         return 0, "Invalid response!"
     regexes = [exercise_1_regex_1, exercise_1_regex_2]
-    student_result = pytomata.library.check_regex_intersection_acceptance(
-        regexes, student_solutions, question_value=question_value
+    student_result, _ = pytomata.library.check_regex_intersection_acceptance(
+        regexes, student_inputs, question_value=question_value
     )
-    return student_result, "Feedback!"
+    return student_result, ""
 
 
-def exercise_1_question_a_part_ii(student_solutions, question_value):
+def exercise_1_question_a_part_ii(student_inputs, question_value):
     conditions = (
-        len(student_solutions) == 2,
-        all(map(bool, student_solutions)),
+        len(student_inputs) == 2,
+        all(map(bool, student_inputs)),
     )
     if not all(conditions):
         return 0.0, "Invalid response!"
     regexes = [exercise_1_regex_1, exercise_1_regex_2]
-    student_result = pytomata.library.check_regex_difference_acceptance(
-        regexes, student_solutions, question_value=question_value
+    student_result, _ = pytomata.library.check_regex_difference_acceptance(
+        regexes, student_inputs, question_value=question_value
     )
-    return student_result, "Feedback!"
+    return student_result, ""
 
 
-def exercise_1_question_a_part_iii(student_solutions, question_value):
+def exercise_1_question_a_part_iii(student_inputs, question_value):
     conditions = (
-        len(student_solutions) == 2,
-        all(map(bool, student_solutions)),
+        len(student_inputs) == 2,
+        all(map(bool, student_inputs)),
     )
     if not all(conditions):
         return 0.0, "Invalid response!"
     regexes = [exercise_1_regex_2, exercise_1_regex_1]
-    student_result = pytomata.library.check_regex_difference_acceptance(
-        regexes, student_solutions, question_value=question_value
+    student_result, _ = pytomata.library.check_regex_difference_acceptance(
+        regexes, student_inputs, question_value=question_value
     )
-    return student_result, "Feedback!"
+    return student_result, ""
 
 
-def exercise_1_question_a_part_iv(student_solution, question_value):
-    if not isinstance(student_solution, str) and student_solution:
+def exercise_1_question_a_part_iv(student_input, question_value):
+    if not isinstance(student_input, str) and student_input:
         return 0.0, "Invalid response!"
-    student_solution_2 = student_solution + student_solution[::-1]
     regex_nfa = nfa.NFA.from_regex(exercise_1_regex_1)
-    if regex_nfa.accepts_input(student_solution) and regex_nfa.accepts_input(
-        student_solution_2
-    ):
-        return question_value, "Correct!"
-    return 0.0, "Incorrect!"
+    input_plus_reverse = student_input + student_input[::-1]
+    correct = regex_nfa.accepts_input(student_input)
+    correct = correct and regex_nfa.accepts_input(input_plus_reverse)
+    if correct:
+        return question_value, ""
+    return 0.0, ""
 
 
-def exercise_1_question_a_part_v(student_solution, question_value):
-    if not isinstance(student_solution, str) and student_solution:
+def exercise_1_question_a_part_v(student_input, question_value):
+    if not isinstance(student_input, str) and student_input:
         return 0.0, "Invalid response!"
-    student_solution_2 = student_solution + student_solution[::-1]
     regex_nfa = nfa.NFA.from_regex(exercise_1_regex_1)
-    if regex_nfa.accepts_input(student_solution) and not regex_nfa.accepts_input(
-        student_solution_2
-    ):
-        return question_value, "Correct!"
-    return 0.0, "Incorrect!"
+    input_plus = student_input + student_input[::-1]
+    correct = regex_nfa.accepts_input(student_input)
+    correct = correct and not regex_nfa.accepts_input(input_plus)
+    if correct:
+        return question_value, ""
+    return 0.0, ""
 
 
-def exercise_1_question_a_part_vi(student_solution, question_value):
+def exercise_1_question_a_part_vi(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
         f"({exercise_1_regex_1})|({exercise_1_regex_2})",
-        student_solution,
-        accept_set={"abc"},  # TODO: Build lists for testing.
+        student_regex,
+        accept_set={
+            "aaaacaaaacccbccc",
+            "acacbcccbccbb",
+            "cbaabbabb",
+            "abccbcccbcbc",
+            "aaabcbaabbbbb",
+            "aaabccccbbbbaab",
+            "acacbcbbcbcb",
+            "ababaaaabccbbb",
+            "abbcaaccbcccbb",
+            "aacaacbbbcbbcb",
+            "aaccacccbb",
+            "ababccabbaab",
+            "aaccbbccc",
+            "aaaccccccbcccccb",
+            "abbccbccbb",
+        },
         reject_set=set(),
         question_value=question_value,
     )
 
 
-def exercise_1_question_a_part_vii(student_solution, question_value):
+def exercise_1_question_a_part_vii(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
-        f"({exercise_1_regex_1})|({exercise_1_regex_2})",
-        student_solution,
-        accept_set={"cba"},  # TODO: Build lists for testing.
+        f"({exercise_1_regex_1})&({exercise_1_regex_2})",
+        student_regex,
+        accept_set={
+            "abccccccb",
+            "aaaabccccccccc",
+            "aabccccccccccccb",
+            "aaaaaaaabcc",
+            "aabcccccccccb",
+            "aaaaabcc",
+            "aaaabcccc",
+            "aaaaabccb",
+            "aaabccbbbbb",
+            "aaabccbbb",
+            "aaaaaabccc",
+            "abccccccbbbb",
+            "aaaaaabcccbbbbbb",
+            "abccccccccbbb",
+            "aaabccccbbbbbb",
+        },
+        reject_set=set(),
+        question_value=question_value,
+    )
+
+
+def exercise_1_question_b_part_i(student_regex, question_value):
+    return pytomata.library.generic_regex_procedure(
+        exercise_1_language_1_regex,
+        student_regex,
+        accept_set={
+            "aaaaaaaaaaabbbbbbb",
+            "aaabbbbbbbbbbbbbbb",
+            "aaaaaaaaaaabbbbbbb",
+            "aaaaaaaaaaaaaaabbb",
+            "aaaaaaaaaaabbbbbbb",
+            "aaaaaaaaaaabbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaaaaaabbbbbbb",
+            "aaaaaaaaaaabbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaaaaaaaaaabbb",
+            "aaaaaaaaaaabbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaaaaaabbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+            "aaaaaaaaaaaaaaabbb",
+            "aaabbbbbbbbbbbbbbb",
+            "aaabbbbbbbbbbbbbbb",
+            "aaaaaaabbbbbbbbbbb",
+        },
+        reject_set=set(),
+        question_value=question_value,
+    )
+
+
+def exercise_1_question_b_part_ii(student_regex, question_value):
+    return pytomata.library.generic_regex_procedure(
+        exercise_1_language_1_regex,
+        student_regex,
+        accept_set={
+            "bbaabbabbbabbbbbaabbaaa",
+            "baaabbbaabbaaaaabbabbbaa",
+            "ababaaabababbabbbabbbb",
+            "abaabbbbaababbbbba",
+            "abaababbaaabbabbb",
+            "abaaabbbaaabababa",
+            "baabbaabbaaaabaaaab",
+            "ababbabbabaabbaaaaa",
+            "baabbbaaaaaababbbbabbba",
+            "abaababbaaababbaaaa",
+            "bbbababab",
+            "babbaaabbabaaaabba",
+            "aabaababaababaaaaaaa",
+            "abaaaaab",
+            "aabbabababbabaab",
+            "bbbaabbbbabbabbbabaab",
+            "ababbbbaaa",
+            "aabbabbbbabaabaaaaaa",
+            "abbabbabbbbabb",
+            "bababbbbaaababb",
+            "aaabaaaabbbaa",
+            "bbabaaaabbaababbbbabba",
+            "bbbbababab",
+            "abaabbaabbaa",
+            "abbbaababb",
+        },
         reject_set=set(),
         question_value=question_value,
     )

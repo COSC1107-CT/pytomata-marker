@@ -14,7 +14,7 @@ def generic_fsa_procedure(
 ):
     """ """
     if student_fsa.issubset(correct_fsa) and student_fsa.issuperset(correct_fsa):
-        return question_value, "Equivalent!"
+        return question_value, ""
     question_value *= non_equivalence_deduction
     return generic.check_against_acceptance_and_rejection_sets(
         student_fsa,

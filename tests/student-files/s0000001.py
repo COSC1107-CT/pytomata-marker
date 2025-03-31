@@ -11,16 +11,24 @@ def exercise_1_question_a_part_iii_solution():
 
 
 def exercise_1_question_a_part_iv_solution():
-    return ""
+    return "aaaacccccccc"
 
 
 def exercise_1_question_a_part_v_solution():
-    return ""
+    return "aabccbbccbbcbccccb"
 
 
 def exercise_1_question_a_part_vi_solution():
-    return ""
+    return "(a(ba|a)*(b|b))?c*(c?c((ab|b)|(a?|a))*((ab|b)|(ab|b))|c?c)|(aa*b*b?cc*c?a*a?cc*(b?cc*|b)*(b?|b?)|aa*b*b?cc*c?a*a?)"
 
 
 def exercise_1_question_a_part_vii_solution():
-    return ""
+    return "()"
+
+
+def exercise_2_question_b_part_i_solution():
+    return "a(aa)*(aa)?bbb(bbbb)*(bbbb)?"
+
+
+def exercise_2_question_b_part_ii_solution():
+    return "(aa)*(ab(bbbb)*((bbba|(b(ba|a)|a))(a|b)*|(bbb|b?))|(b(a|b)*|a?))"
