@@ -25,25 +25,25 @@ def construct_questions_and_solutions(solutions):
         ),
         (
             "1.a.iv",
-            2.0,
+            1.0,
             exercise_1_question_a_part_iv,
             solutions.exercise_1_question_a_part_iv_solution
         ),
         (
             "1.a.v",
-            2.0,
+            1.0,
             exercise_1_question_a_part_v,
             solutions.exercise_1_question_a_part_v_solution
         ),
         (
             "1.a.vi",
-            2.0,
+            1.0,
             exercise_1_question_a_part_vi,
             solutions.exercise_1_question_a_part_vi_solution
         ),
         (
             "1.a.vii",
-            2.0,
+            3.0,
             exercise_1_question_a_part_vii,
             solutions.exercise_1_question_a_part_vii_solution
         ),
@@ -97,9 +97,9 @@ def exercise_1_question_a_part_iii(student_solutions, question_value):
 
 
 def exercise_1_question_a_part_iv(student_solution, question_value):
-    if not isinstance(str, student_solution) and student_solution:
+    if not isinstance(student_solution, str) and student_solution:
         return 0.0, "Invalid response!"
-    student_solution_2 = student_solution + reversed(student_solution)
+    student_solution_2 = student_solution + student_solution[::-1]
     regex_nfa = nfa.NFA.from_regex(exercise_1_regex_1)
     if regex_nfa.accepts_input(student_solution) and regex_nfa.accepts_input(student_solution_2):
         return question_value, "Correct!"
@@ -107,9 +107,9 @@ def exercise_1_question_a_part_iv(student_solution, question_value):
 
 
 def exercise_1_question_a_part_v(student_solution, question_value):
-    if not isinstance(str, student_solution) and student_solution:
+    if not isinstance(student_solution, str) and student_solution:
         return 0.0, "Invalid response!"
-    student_solution_2 = student_solution + reversed(student_solution)
+    student_solution_2 = student_solution + student_solution[::-1]
     regex_nfa = nfa.NFA.from_regex(exercise_1_regex_1)
     if regex_nfa.accepts_input(student_solution) and not regex_nfa.accepts_input(student_solution_2):
         return question_value, "Correct!"
@@ -126,7 +126,7 @@ def exercise_1_question_a_part_vii(student_solution, question_value):
     if re.isequal(student_solution, f"({exercise_1_regex_1})&({exercise_1_regex_2})"):
         return question_value, "Correct!"
     # TODO: Apply NFA-style grading here.
-    return 0.0, "Feedback!"
+    return 0.0, "Incorrect!"
 
 
 if __name__ == "__main__":
