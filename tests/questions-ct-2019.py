@@ -1,4 +1,4 @@
-import automaton.fa.nfa as nfa
+import pytomata.library
 
 
 def construct_questions_and_solutions(solutions):
@@ -49,19 +49,49 @@ def construct_questions_and_solutions(solutions):
 
 
 exercise_1_regex_1 = "(a+b*)cc*a*(c+b*)*"
-exercise_2_regex_2 = "(a+b)*c*c(a*+b)*"
+exercise_1_regex_2 = "(a+b)*c*c(a*+b)*"
 
 
-def exercise_1_question_a_part_i(student_solution, question_value):
-    return 0, ""
+def exercise_1_question_a_part_i(student_solutions, question_value):
+    conditions = (
+        len(student_solutions) == 2,
+        all(map(bool, student_solutions)),
+    )
+    if not all(conditions):
+        return 0, "Invalid response!"
+    regexes = [exercise_1_regex_1, exercise_1_regex_2]
+    student_result = pytomata.library.check_regex_intersection_acceptance(
+        regexes, student_solutions, question_value=question_value
+    )
+    return student_result, "Feedback!"
 
 
 def exercise_1_question_a_part_ii(student_solution, question_value):
-    return 0, ""
+    conditions = (
+        len(student_solutions) == 2,
+        all(map(bool, student_solutions)),
+    )
+    if not all(conditions):
+        return 0, "Invalid response!"
+    regexes = [exercise_1_regex_1, exercise_1_regex_2]
+    student_result = pytomata.library.check_regex_difference_acceptance(
+        regexes, student_solutions, question_value=question_value
+    )
+    return student_result, "Feedback!"
 
 
 def exercise_1_question_a_part_iii(student_solution, question_value):
-    return 0, ""
+    conditions = (
+        len(student_solutions) == 2,
+        all(map(bool, student_solutions)),
+    )
+    if not all(conditions):
+        return 0, "Invalid response!"
+    regexes = [exercise_1_regex_2, exercise_1_regex_1]
+    student_result = pytomata.library.check_regex_difference_acceptance(
+        regexes, student_solutions, question_value=question_value
+    )
+    return student_result, "Feedback!"
 
 
 def exercise_1_question_a_part_iv(student_solution, question_value):
