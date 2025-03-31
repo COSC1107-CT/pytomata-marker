@@ -61,6 +61,8 @@ def calculate_and_output_student_results(
 
     if output_directory_path is not None:
         output_directory_path.mkdir(parents=True, exist_ok=True)
+    else:
+        print()  # Spacing for CLI results output.
     process_context = ProcessContext(questions_script_path, output_directory_path)
     lock = multiprocessing.Lock()
     with multiprocessing.Pool(process_count, initialise_process, (lock,)) as pool:
@@ -109,7 +111,7 @@ def calculate_and_output_results_for_student_solution_partition(
         if process_context.output_directory_path is None:
             shared_exclusion_lock.acquire()
             try:
-                print(student_output)
+                print(student_output, "\n")
             finally:
                 shared_exclusion_lock.release()
         else:
