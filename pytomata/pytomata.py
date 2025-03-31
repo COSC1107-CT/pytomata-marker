@@ -47,15 +47,15 @@ def calculate_and_output_student_results(
     def derive_and_partition_student_solution_files():
         """ """
         student_solution_partitions = [[] for _ in range(process_count)]
-        part_index = 0
+        partition_index = 0
         for path in student_solution_paths:
             if path.is_file() and path.suffix == ".py":
                 student_solution_partitions[partition_index].append(path)
-                part_index = (part_index + 1) % process_count
+                partition_index = (partition_index + 1) % process_count
             elif path.is_dir():
                 for script_path in path.glob("*.py"):
-                    student_solution_partitions[part_index].append(script_path)
-                    part_index = (part_index + 1) % process_count
+                    student_solution_partitions[partition_index].append(script_path)
+                    partition_index = (partition_index + 1) % process_count
         return student_solution_partitions
 
     if output_directory_path is not None:
@@ -85,16 +85,19 @@ def calculate_and_output_results_for_student_solution_partition(
     def calculate_results_for_solution_partition():
         """ """
         for student_solution_path in student_solution_partition:
-            solutions = utilities.load_using_path(student_solution_path)
+            solutions = load_using_path(student_solution_path)
             student_id = student_solution_path.stem
-            yield StudentResults(student_id, calculate_student_results_and_feedback())
+            yield StudentResults(
+                student_id, calculate_student_results_and_feedback(solutions)
+            )
 
     def calculate_student_results_and_feedback(solutions):
         """ """
         return [
             MarkedQuestionResponse(label, value, *question(solution(), value))
-            for label, value, question, solution
-            in questions.construct_questions_and_solutions(solutions)
+            for label, value, question, solution in questions.construct_questions_and_solutions(
+                solutions
+            )
         ]
 
     def output_individual_student_results():
@@ -112,7 +115,7 @@ def calculate_and_output_results_for_student_solution_partition(
                 output_file.write(student_output + "\n")
 
     questions_script_path, output_directory_path = process_context
-    questions = utilities.load_using_path(questions_script_path)
+    questions = load_using_path(questions_script_path)
     for student_results in calculate_results_for_solution_partition():
         output_individual_student_results()
 
