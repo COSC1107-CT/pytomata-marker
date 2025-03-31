@@ -113,7 +113,10 @@ def calculate_and_output_results_for_student_solution_partition(
             finally:
                 shared_exclusion_lock.release()
         else:
-            output_path = process_context.output_directory_path / f"{student_results.student_id}.out"
+            output_path = (
+                process_context.output_directory_path
+                / f"{student_results.student_id}.out"
+            )
             with open(output_path, "w+") as output_file:
                 output_file.write(student_output + "\n")
 
@@ -130,13 +133,13 @@ def generate_student_output(student_results):
         feedback = result.student_feedback
         if isinstance(feedback, list):
             feedback = "\n".join(feedback)
-        display_text = f"{result.question_label:10} [{result.student_result}/{result.question_value}]"
+        display_text = f"{result.question_label:10} [{result.student_result:.2f}/{result.question_value:.2f}]"
         if feedback:
             display_text += f"\n{feedback}"
         return display_text
 
     question_output = map(generate_question_output, student_results.results)
-    return "\n".join([f"*** {student_results.student_id} ***\n", *question_output])
+    return "\n".join([f"{student_results.student_id}", *question_output])
 
 
 def load_using_path(path, identifier=""):
