@@ -1,6 +1,7 @@
 """ """
 
 import dataclasses
+import functools
 import importlib.util
 import multiprocessing
 import pathlib
@@ -60,13 +61,15 @@ def calculate_and_output_student_results(
 
     if output_directory_path is not None:
         output_directory_path.mkdir(parents=True, exist_ok=True)
-    student_solution_partitions = derive_and_partition_student_solution_files()
     process_context = ProcessContext(questions_script_path, output_directory_path)
     lock = multiprocessing.Lock()
     with multiprocessing.Pool(process_count, initialise_process, (lock,)) as pool:
-        pool.starmap(
-            calculate_and_output_results_for_student_solution_partition,
-            zip(student_solution_partitions, [process_context] * process_count),
+        pool.map(
+            functools.partial(
+                calculate_and_output_results_for_student_solution_partition,
+                process_context,
+            ),
+            derive_and_partition_student_solution_files(),
         )
 
 
@@ -77,8 +80,8 @@ def initialise_process(lock):
 
 
 def calculate_and_output_results_for_student_solution_partition(
-    student_solution_partition,
     process_context,
+    student_solution_partition,
 ):
     """ """
 
@@ -103,19 +106,18 @@ def calculate_and_output_results_for_student_solution_partition(
     def output_individual_student_results():
         """ """
         student_output = generate_student_output(student_results)
-        if output_directory_path is None:
+        if process_context.output_directory_path is None:
             shared_exclusion_lock.acquire()
             try:
-                print("\n", student_output, "\n", sep="")
+                print("\n", student_output, sep="")
             finally:
                 shared_exclusion_lock.release()
         else:
-            output_path = output_directory_path / f"{student_results.student_id}.out"
+            output_path = process_context.output_directory_path / f"{student_results.student_id}.out"
             with open(output_path, "w+") as output_file:
                 output_file.write(student_output + "\n")
 
-    questions_script_path, output_directory_path = process_context
-    questions = load_using_path(questions_script_path)
+    questions = load_using_path(process_context.questions_script_path)
     for student_results in calculate_results_for_solution_partition():
         output_individual_student_results()
 
@@ -128,10 +130,13 @@ def generate_student_output(student_results):
         feedback = result.student_feedback
         if isinstance(feedback, list):
             feedback = "\n".join(feedback)
-        return f"{result.label} | {result.student_score} / {result.question_value}\n{feedback}"
+        display_text = f"{result.question_label:10} [{result.student_result}/{result.question_value}]"
+        if feedback:
+            display_text += f"\n{feedback}"
+        return display_text
 
     question_output = map(generate_question_output, student_results.results)
-    return "\n\n".join([f"*** {student_results.student_id} ***", *question_output])
+    return "\n".join([f"*** {student_results.student_id} ***\n", *question_output])
 
 
 def load_using_path(path, identifier=""):
