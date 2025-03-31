@@ -18,7 +18,7 @@ def generic_fsa_procedure(
     question_value *= non_equivalence_deduction
     return generic.generic_accept_reject_procedure(
         student_fsa,
-        accept_list=accept_list,
-        reject_list=reject_list,
+        accept_set=accept_set,
+        reject_set=reject_set,
         question_value=question_value,
     )
