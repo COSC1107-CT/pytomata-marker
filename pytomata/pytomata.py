@@ -109,7 +109,7 @@ def calculate_and_output_results_for_student_solution_partition(
         if process_context.output_directory_path is None:
             shared_exclusion_lock.acquire()
             try:
-                print("\n", student_output, sep="")
+                print(student_output)
             finally:
                 shared_exclusion_lock.release()
         else:
