@@ -3,11 +3,11 @@ def exercise_1_question_a_part_i_solution():
 
 
 def exercise_1_question_a_part_ii_solution():
-    return "", ""
+    return "aacaacbccb", "abbbbbccbb"
 
 
 def exercise_1_question_a_part_iii_solution():
-    return "", ""
+    return "caaabbab", "ccccaabaaabaabbb"
 
 
 def exercise_1_question_a_part_iv_solution():
