@@ -14,12 +14,7 @@ def check_regex_acceptance(regex, student_inputs, *, question_value):
 
 def check_regex_intersection_acceptance(regexes, student_inputs, *, question_value):
     """ """
-    regex, regexes = regexes[0], regexes[1:]
-    intersection_nfa = functools.reduce(
-        lambda nfa_1, nfa_2: nfa_1.intersection(nfa_2),
-        map(nfa.NFA.from_regex, regexes),
-        nfa.NFA.from_regex(regex),
-    )
+    intersection_nfa = nfa.NFA.from_regex("&".join(regexes))
     accepted = len(list(filter(intersection_nfa.accepts_input, student_inputs)))
     return question_value * (accepted / len(student_inputs))
 
