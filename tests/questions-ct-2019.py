@@ -1,3 +1,6 @@
+import automaton.fa.nfa as nfa
+
+
 def construct_questions_and_solutions(solutions):
     return [
         (
