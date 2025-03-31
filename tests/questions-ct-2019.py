@@ -1,3 +1,5 @@
+import automata.fa.nfa as nfa
+import automata.regex.regex as re
 import pytomata.library
 
 
@@ -95,18 +97,35 @@ def exercise_1_question_a_part_iii(student_solutions, question_value):
 
 
 def exercise_1_question_a_part_iv(student_solution, question_value):
-    return 0.0, "Feedback!"
+    if not isinstance(str, student_solution) and student_solution:
+        return 0.0, "Invalid response!"
+    student_solution_2 = student_solution + reversed(student_solution)
+    regex_nfa = nfa.NFA.from_regex(exercise_1_regex_1)
+    if regex_nfa.accepts_input(student_solution) and regex_nfa.accepts_input(student_solution_2):
+        return question_value, "Correct!"
+    return 0.0, "Incorrect!"
 
 
 def exercise_1_question_a_part_v(student_solution, question_value):
-    return 0.0, "Feedback!"
+    if not isinstance(str, student_solution) and student_solution:
+        return 0.0, "Invalid response!"
+    student_solution_2 = student_solution + reversed(student_solution)
+    regex_nfa = nfa.NFA.from_regex(exercise_1_regex_1)
+    if regex_nfa.accepts_input(student_solution) and not regex_nfa.accepts_input(student_solution_2):
+        return question_value, "Correct!"
+    return 0.0, "Incorrect!"
 
 
 def exercise_1_question_a_part_vi(student_solution, question_value):
-    return 0.0, "Feedback!"
+    if re.isequal(student_solution, f"({exercise_1_regex_1})|({exercise_1_regex_2})"):
+        return question_value, "Correct!"
+    return 0.0, "Incorrect!"
 
 
 def exercise_1_question_a_part_vii(student_solution, question_value):
+    if re.isequal(student_solution, f"({exercise_1_regex_1})&({exercise_1_regex_2})"):
+        return question_value, "Correct!"
+    # TODO: Apply NFA-style grading here.
     return 0.0, "Feedback!"
 
 
