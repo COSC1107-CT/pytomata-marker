@@ -5,7 +5,7 @@ import functools
 import automata.fa.dfa as dfa
 import automata.fa.nfa as nfa
 import automata.regex.regex as re
-import generic
+import pytomata.library.generic as generic
 
 
 def generic_regex_procedure(
@@ -21,7 +21,7 @@ def generic_regex_procedure(
     if re.isequal(correct_regex, student_regex):
         return question_value, "Equivalent!"
     question_value *= non_equivalence_deduction
-    return generic.generic_accept_reject_procedure(
+    return generic.check_against_acceptance_and_rejection_sets(
         nfa.NFA.from_regex(student_regex),
         accept_set=accept_set,
         reject_set=reject_set,

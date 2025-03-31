@@ -1,7 +1,7 @@
 """ """
 
 
-def generic_accept_reject_procedure(
+def check_against_acceptance_and_rejection_sets(
     student_auto,
     *,
     accept_set,
@@ -17,11 +17,17 @@ def generic_accept_reject_procedure(
     ```python
     ```
     """
+    assert len(accept_set) + len(reject_set) > 0
     accepted = set(filter(student_auto.accepts_input, accept_set))
     rejected = reject_set.difference(filter(student_auto.accepts_input, reject_set))
     proportion = (len(accepted) + len(rejected)) / (len(accept_set) + len(reject_set))
     if proportion < 0.5:
         return 0.0, "Incorrect!"
-    accept_report = ["Rejected:", *accept_set.difference(accepted)]
-    reject_report = ["Accepted:", *reject_set.difference(rejected)]
+    feedback = []
+    incorrectly_rejected = accept_set.difference(accepted)
+    if incorrectly_rejected:
+        feedback += ["Rejected:", *incorrectly_rejected]
+    incorrectly_accepted = reject_set.difference(rejected)
+    if incorrectly_accepted:
+        reject_report = ["Accepted:", *incorrectly_accepted]
     return question_value * proportion, "\n".join(accept_report + reject_report)

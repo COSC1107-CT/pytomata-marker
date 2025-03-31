@@ -1,6 +1,6 @@
 """ """
 
-import generic
+import pytomata.library.generic as generic
 
 
 def generic_fsa_procedure(
@@ -16,7 +16,7 @@ def generic_fsa_procedure(
     if student_fsa.issubset(correct_fsa) and student_fsa.issuperset(correct_fsa):
         return question_value, "Equivalent!"
     question_value *= non_equivalence_deduction
-    return generic.generic_accept_reject_procedure(
+    return generic.check_against_acceptance_and_rejection_sets(
         student_fsa,
         accept_set=accept_set,
         reject_set=reject_set,

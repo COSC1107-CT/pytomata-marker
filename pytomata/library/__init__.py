@@ -1,8 +1,8 @@
-from .finite_state import (
+from .fsa import (
     generic_fsa_procedure as generic_fsa_procedure,
 )
 from .generic import (
-    generic_accept_reject_procedure as generic_accept_reject_procedure,
+    check_against_acceptance_and_rejection_sets as check_against_acceptance_and_rejection_sets,
 )
 from .regex import (
     check_regex_acceptance as check_regex_acceptance,
