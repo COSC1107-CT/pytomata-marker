@@ -17,14 +17,6 @@ class ProcessContext:
 
 
 @dataclasses.dataclass(frozen=True)
-class StudentResults:
-    """ """
-
-    student_id: str
-    results: typing.Sequence[MarkedQuestionResponse]
-
-
-@dataclasses.dataclass(frozen=True)
 class MarkedQuestionResponse:
     """ """
 
@@ -32,6 +24,14 @@ class MarkedQuestionResponse:
     question_value: float
     student_result: float
     student_feedback: str
+
+
+@dataclasses.dataclass(frozen=True)
+class StudentResults:
+    """ """
+
+    student_id: str
+    results: typing.Sequence[MarkedQuestionResponse]
 
 
 # TODO: Use this as the shared entry point for package and CLI invocations.
