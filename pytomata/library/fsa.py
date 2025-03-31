@@ -1,0 +1,24 @@
+""" """
+
+import generic
+
+
+def generic_fsa_procedure(
+    correct_fsa,
+    student_fsa,
+    *,
+    accept_set,
+    reject_set,
+    question_value,
+    non_equivalence_deduction=0.35,
+):
+    """ """
+    if student_fsa.issubset(correct_fsa) and student_fsa.issuperset(correct_fsa):
+        return question_value, "Equivalent!"
+    question_value *= non_equivalence_deduction
+    return generic.generic_accept_reject_procedure(
+        student_fsa,
+        accept_list=accept_list,
+        reject_list=reject_list,
+        question_value=question_value,
+    )

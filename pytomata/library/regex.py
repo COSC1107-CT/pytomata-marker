@@ -4,6 +4,29 @@ import functools
 
 import automata.fa.dfa as dfa
 import automata.fa.nfa as nfa
+import automata.regex.regex as re
+import generic
+
+
+def generic_regex_procedure(
+    correct_regex,
+    student_regex,
+    *,
+    accept_set,
+    reject_set,
+    question_value,
+    non_equivalence_deduction=0.35,
+):
+    """ """
+    if re.isequal(correct_regex, student_regex):
+        return question_value, "Equivalent!"
+    question_value *= non_equivalence_deduction
+    return generic.generic_accept_reject_procedure(
+        nfa.NFA.from_regex(student_regex),
+        accept_set=accept_set,
+        reject_set=reject_set,
+        question_value=question_value,
+    )
 
 
 def check_regex_acceptance(regex, student_inputs, *, question_value):
