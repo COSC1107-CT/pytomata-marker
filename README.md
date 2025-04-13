@@ -10,11 +10,11 @@ Official GitHub repo: https://github.com/COSC1107-CT/pytomata-marker
   - [Usage](#usage)
     - [Execution Options](#execution-options)
   - [Assessment Design \& Configuration](#assessment-design--configuration)
-    - [Questions](#questions)
+    - [Main configuration](#main-configuration)
+    - [Question functions](#question-functions)
       - [Using Library Functions](#using-library-functions)
       - [Defining Additional Test Cases](#defining-additional-test-cases)
     - [Solutions](#solutions)
-    - [Configuration](#configuration)
   - [Library Function Catalogue](#library-function-catalogue)
   - [Development](#development)
     - [Adding Project Dependencies](#adding-project-dependencies)
@@ -90,7 +90,7 @@ The procedure is run by the `automarker.py` script, which accepts:
 1. A Python script containing the instructor-defined [question](#questions) and [configuration](#configuration) functions;
 2. An arbitrary list of Python scripts and directories containing students’ [solutions](#solutions).
 
-> For assistance, use `uv run automarker.py -h`.
+> For assistance, use `python automarker.py -h`.
 
 Therefore, to process an individual submission:
 
@@ -142,8 +142,7 @@ To save each student’s result to an individual file instead of printing to sta
 $ python automarker.py tests/ct19/questions.py tests/ct19/submissions --output output_directory
 ```
 
-Marking in parallel is also supported though the `--processes` or `-p` flag;
-this distributes the student solutions evenly across three processes:
+Marking in parallel is also supported though the `--processes` or `-p` flag, which distributes the student solutions evenly across three processes:
 
 ```shell
 $ python automarker.py tests/ct19/questions.py tests/ct19/submissions --processes 3
@@ -151,16 +150,49 @@ $ python automarker.py tests/ct19/questions.py tests/ct19/submissions --processe
 
 ## Assessment Design & Configuration
 
-This section details the definition of questions by an instructor,
-the submission of solutions by students,
-and the configuration necessary to match submissions against the correct marking function.
+This section details the definition of questions by an instructor, the submission of solutions by students, and the configuration necessary to match submissions against the correct marking function.
+
 Both question and submission functions are intended to make heavy use of the [Automata](https://caleb531.github.io/automata/) library.
 
-### Questions
+### Main configuration
+
+A question script should contain a `main` function, like this:
+
+```python
+def main(solutions):
+    return [
+        (
+            "1.a.i",    # id of the question
+            2.0,        # points worth
+            exercise_1_question_a_1,    # question function
+            solutions.exercise_1_question_a_1_solution, # solution function
+        ),
+        (
+            "1.a.ii",
+            4.0,
+            exercise_1_question_a_2,
+            solutions.exercise_1_question_a_2_solution,
+        ),
+    ]
+```
+
+> [!WARNING]
+> This function must be called `main` and define one parameter, used internally to pass an individual student module. This facilitates pairing each student’s submissions against the same respective marking functions.
+
+This function returns a _sequence_ of 4-tuples, each specifying specifying:
+
+1. The label of the question.
+2. Total number of points worth.
+3. Question function.
+4. Solution functions.
+
+The question and solution functions should correspond to those defined by the [questions](#questions) and [solutions](#solutions) scripts, respectively.
+
+### Question functions
 
 Questions are defined using _functions_.
 
-Each question is a single function that accepts a student’s answer to the question and the total allocated points for the question, and then returns the student’s result (points attracted) and any feedback, in that order.
+Each question is a single function that must accept _i)_ a student’s answer to the question; and _ii)_ the total allocated points for the question, and must returns the points attracted and any (textual) feedback, in that order.
 
 ```python
 import automata
@@ -179,37 +211,32 @@ def exercise_1_question_a_1(student_solution, question_value):
 
 #### Using Library Functions
 
-Library functions are provided to handle certain archetypal questions. These functions all return the student result (points achieved) and feedback, just like question functions; the result is always rounded to the nearest integer.
+Library functions provided by `pytomata.lib` are provided to apply template marking scheme to handle certain archetypal questions (e.g., marking of a DFA submission for a language). These functions all return the student result (points achieved) and feedback, just like question functions.
+
+The template usage is as follows:
 
 ```python
 import pytomata.lib
 
 student_result, student_feedback = pytomata.lib.library_function(
-    student_solution, actual_solution, question_value=question_value
-)
-```
-
-The `question_value` is a required keyword argument.
-An `incorrect_penalty` can also be optionally supplied, which denotes the percentage deduction from the `question_value` when the student’s submission is incorrect:
-
-```python
-student_result, student_feedback = pytomata.lib.library_function(
     student_solution,
     actual_solution,
     question_value=question_value,
-    incorrect_penalty=0.8,  # should be between 0 and 1 - defaults to 1
+    incorrect_penalty=0.8,  # should be between 0 and 1 - OPTIONAL: defaults to 1
 )
 ```
 
 > [!WARNING]
-> The `incorrect_penalty` value must fall between 0 and 1, inclusive. The default `incorrect_penalty` is 1, indicating a 100% deduction; the example above specifies an 80% deduction.
+> The `question_value` is a **required** keyword argument.
+>
+
+The `incorrect_penalty` is optional, and denotes the percentage deduction (between 0 and 1, inclusive) from the `question_value` when the student’s submission is incorrect.  The default `incorrect_penalty` is 1, indicating a 100% deduction; the example above specifies an 80% deduction.
 
 Refer to the [library function catalogue](#library-function-catalogue) for an overview of available functions.
 
 #### Defining Additional Test Cases
 
-Certain library functions also accept additional test cases.
-Each test case represents an alternate (usually partially correct or incorrect) solution, containing:
+Certain library functions also accept additional test cases. Each test case represents an alternate (usually partially correct or incorrect) solution, containing:
 
 1. A arbitrary value denoting the test case itself;
 2. A value denoting a percentage of the total `question_value`;
@@ -262,37 +289,6 @@ def exercise_1_question_a_2_solution():
 Each function returns the student’s solution to the corresponding [question](#questions).
 All students should be distributed identical scripts containing pre-defined, empty functions as above.
 
-### Configuration
-
-The [question](#questions) script should contain a `construct_questions_and_solutions` function, like this:
-
-```python
-def construct_questions_and_solutions(solutions):
-    return [
-        (
-            "1.a.i",
-            2,
-            exercise_1_question_a_1,
-            solutions.exercise_1_question_a_1_solution,
-        ),
-        (
-            "1.a.ii",
-            2,
-            exercise_1_question_a_2,
-            solutions.exercise_1_question_a_2_solution,
-        ),
-    ]
-```
-
-> [!WARNING]
-> This function must be called `construct_questions_and_solutions` and define one parameter,
-> used internally to pass an individual student module.
-> This facilitates pairing each student’s submissions against the same respective marking functions.
-
-This function returns a sequence of tuples specifying the label, total value, question and solution functions for each question.
-The functions should correspond to those defined by the [questions](#questions) and [solutions](#solutions) scripts, respectively.
-
-Once this function is defined, refer to the [execution instructions](#usage).
 
 ## Library Function Catalogue
 
