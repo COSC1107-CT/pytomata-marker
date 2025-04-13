@@ -44,18 +44,13 @@ Otherwise, proceed through the next section.
 
 ### Manual Project Configuration
 
-If you would prefer to avoid using uv, project configuration can still be done using [venv](https://docs.python.org/3/library/venv.html).
-If you don’t already have a virtual environment to use, create one like this:
+If you would prefer to avoid using uv, project configuration can still be done using [venv](https://docs.python.org/3/library/venv.html).  To create a virtual environment for pytomata (to be stored in `~/.pyauto`):
 
 ```shell
 $ python3 -m venv ~/.pyauto
 ```
 
-> [!NOTE]
-> You can create your virtual environment under any directory.
-> Here, the location is `~/.pyauto`; an alternative could be `.venv`.
-
-Then, ensure the virtual environment is active; replace `~/.pyauto` with the location of your virtual environment:
+Every time you want to use the environment, you need to activate it:
 
 ```shell
 $ source ~/.pyauto/bin/activate
@@ -65,13 +60,14 @@ $ source ~/.pyauto/bin/activate
 > Use the correct shell-specific `activate` script:
 > `activate.fish` for [fish](https://fishshell.com), `activate.ps1` for PowerShell, etc.
 
-Once activated, install the required dependencies:
+Once activated, install the required dependencies in its first use:
 
 ```shell
 $ pip install -r requirements.txt
 ```
 
-Then, use `python` instead of `uv run` in the [execution instructions](#execution).
+> [!IMPORTANT]
+> Then, use `python` instead of `uv run` in the [execution instructions](#execution).
 
 ## Usage
 
@@ -89,17 +85,17 @@ tests
     └── s0000002.py
 ```
 
-The procedure is run by the `execute.py` script, which accepts:
+The procedure is run by the `automarker.py` script, which accepts:
 
 1. A Python script containing the instructor-defined [question](#questions) and [configuration](#configuration) functions;
 2. An arbitrary list of Python scripts and directories containing students’ [solutions](#solutions).
 
-> For assistance, use `uv run execute.py -h`.
+> For assistance, use `uv run automarker.py -h`.
 
 Therefore, to process an individual submission:
 
 ```shell
-$ uv run execute.py tests/questions.py tests/submissions/s0000000.py
+$ uv run automarker.py tests/ct19/questions.py tests/ct19/submissions/s0000000.py
 Using CPython 3.13.1
 Creating virtual environment at: .venv
 Installed 6 packages in 4ms
@@ -111,13 +107,13 @@ Correct!
 ```
 
 > [!NOTE]
-> Notice that `uv run` identified an already-installed interpreter, identified and downloaded the required dependencies before running the `execute.py` script.
-> Output like this will only occur once, upon first invoking a script; refer to the [uv docs](https://docs.astral.sh/uv/) for details.
+> Notice that `uv run` identified an already-installed interpreter, identified and downloaded the required dependencies before running the `automarker.py` script. Output like this will only occur once, upon first invoking a script; refer to the [uv docs](https://docs.astral.sh/uv/) for details.
 
 When a directory is supplied, all Python scripts inside that directory (non-recursively) are treated as student submissions:
 
 ```shell
-$ uv run execute.py tests/questions.py tests/submissions
+#$ uv run automarker.py tests/ct19/questions.py tests/ct19/submissions
+$ python automarker.py tests/ct19/questions.py tests/ct19/submissions/s0000000.py
 *** s0000002 ***
 
 1.a.i | 100 / 100
@@ -143,14 +139,14 @@ By default, all results are printed to standard output.
 To save each student’s result to an individual file instead of printing to standard output, use the `--output` or `-o` flag:
 
 ```shell
-$ uv run execute.py tests/questions.py tests/submissions --output output_directory
+$ python automarker.py tests/ct19/questions.py tests/ct19/submissions --output output_directory
 ```
 
 Marking in parallel is also supported though the `--processes` or `-p` flag;
 this distributes the student solutions evenly across three processes:
 
 ```shell
-$ uv run execute.py tests/questions.py tests/submissions --processes 3
+$ python automarker.py tests/ct19/questions.py tests/ct19/submissions --processes 3
 ```
 
 ## Assessment Design & Configuration
