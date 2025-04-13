@@ -100,9 +100,7 @@ def calculate_and_output_results_for_student_solution_partition(
         """ """
         return [
             MarkedQuestionResponse(label, value, *question(solution(), value))
-            for label, value, question, solution in questions.construct_questions_and_solutions(
-                solutions
-            )
+            for label, value, question, solution in questions.main(solutions)
         ]
 
     def output_individual_student_results():

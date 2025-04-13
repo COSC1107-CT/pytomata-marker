@@ -2,7 +2,7 @@ import automata.fa.nfa as nfa
 import pytomata.library
 
 
-def construct_questions_and_solutions(solutions):
+def main(solutions):
     return [
         (
             "1.a.i",
