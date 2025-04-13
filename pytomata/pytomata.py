@@ -6,7 +6,7 @@ import importlib.util
 import multiprocessing
 import pathlib
 import sys
-import typing
+from typing import List, Sequence
 
 
 @dataclasses.dataclass(frozen=True)
@@ -19,7 +19,7 @@ class ProcessContext:
 
 @dataclasses.dataclass(frozen=True)
 class MarkedQuestionResponse:
-    """ """
+    """An object representing a question result with feedback."""
 
     question_label: str
     question_value: float
@@ -29,17 +29,17 @@ class MarkedQuestionResponse:
 
 @dataclasses.dataclass(frozen=True)
 class StudentResults:
-    """ """
+    """Store the results for a student as a sequence of marked questions (each with its points and feedback)."""
 
     student_id: str
-    results: typing.Sequence[MarkedQuestionResponse]
+    results: Sequence[MarkedQuestionResponse]
 
 
 # TODO: Use this as the shared entry point for package and CLI invocations.
 def calculate_and_output_student_results(
     questions_script_path: pathlib.Path,
     output_directory_path: pathlib.Path,
-    student_solution_paths: typing.Sequence[pathlib.Path],
+    student_solution_paths: Sequence[pathlib.Path],
     *,
     process_count: int,
 ):
@@ -83,24 +83,29 @@ def initialise_process(lock):
 
 def calculate_and_output_results_for_student_solution_partition(
     process_context,
-    student_solution_partition,
+    submissions_partition,
 ):
     """ """
 
-    def calculate_results_for_solution_partition():
+    def calculate_results_for_solution_partition() -> Sequence[StudentResults]:
         """ """
-        for student_solution_path in student_solution_partition:
-            solutions = load_using_path(student_solution_path)
-            student_id = student_solution_path.stem
+        for submission_path in submissions_partition:
+            # submission_path is of form tests/ct19/submissions/s0000002.py
+            # we can extract student id (s0000002)
+            submission = load_using_path(submission_path)
+            student_id = submission_path.stem
+            # MARK the student submission
             yield StudentResults(
-                student_id, calculate_student_results_and_feedback(solutions)
+                student_id, calculate_student_results_and_feedback(submission)
             )
 
-    def calculate_student_results_and_feedback(solutions):
+    def calculate_student_results_and_feedback(
+        submission,
+    ) -> List[MarkedQuestionResponse]:
         """ """
         return [
             MarkedQuestionResponse(label, value, *question(solution(), value))
-            for label, value, question, solution in questions.main(solutions)
+            for label, value, question, solution in questions.main(submission)
         ]
 
     def output_individual_student_results():
@@ -120,6 +125,7 @@ def calculate_and_output_results_for_student_solution_partition(
             with open(output_path, "w+") as output_file:
                 output_file.write(student_output + "\n")
 
+    # Load the questions script and calculate results for each student solution.
     questions = load_using_path(process_context.questions_script_path)
     for student_results in calculate_results_for_solution_partition():
         output_individual_student_results()
