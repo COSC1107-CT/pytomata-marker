@@ -7,112 +7,112 @@ def main(solutions):
         (
             "1.a.i",
             2.0,
-            exercise_1a_i,
-            solutions.exercise_1a_i_solution,
+            exercise_1_question_a_part_i,
+            solutions.exercise_1_question_a_part_i_solution,
         ),
         (
             "1.a.ii",
             2.0,
-            exercise_1a_ii,
-            solutions.exercise_1a_ii_solution,
+            exercise_1_question_a_part_ii,
+            solutions.exercise_1_question_a_part_ii_solution,
         ),
         (
             "1.a.iii",
             2.0,
-            exercise_1a_iii,
-            solutions.exercise_1a_iii_solution,
+            exercise_1_question_a_part_iii,
+            solutions.exercise_1_question_a_part_iii_solution,
         ),
         (
             "1.a.iv",
             1.0,
-            exercise_1a_iv,
-            solutions.exercise_1a_iv_solution,
+            exercise_1_question_a_part_iv,
+            solutions.exercise_1_question_a_part_iv_solution,
         ),
         (
             "1.a.v",
             1.0,
-            exercise_1a_v,
-            solutions.exercise_1a_v_solution,
+            exercise_1_question_a_part_v,
+            solutions.exercise_1_question_a_part_v_solution,
         ),
         (
             "1.a.vi",
             1.0,
-            exercise_1a_vi,
-            solutions.exercise_1a_vi_solution,
+            exercise_1_question_a_part_vi,
+            solutions.exercise_1_question_a_part_vi_solution,
         ),
         (
             "1.a.vii",
             3.0,
-            exercise_1a_vii,
-            solutions.exercise_1a_vii_solution,
+            exercise_1_question_a_part_vii,
+            solutions.exercise_1_question_a_part_vii_solution,
         ),
         (
             "1.b.i",
             2.0,
-            exercise_1b_i,
-            solutions.exercise_2b_i_solution,
+            exercise_1_question_b_part_i,
+            solutions.exercise_2_question_b_part_i_solution,
         ),
         (
             "1.b.ii",
             2.0,
-            exercise_1b_ii,
-            solutions.exercise_2b_ii_solution,
+            exercise_1_question_b_part_ii,
+            solutions.exercise_2_question_b_part_ii_solution,
         ),
     ]
-# check format accepted https://caleb531.github.io/automata/api/regular-expressions/
-ex_1a_R1 = "1(1*|2*)3*(2*|3)1*2(1|3)*2*"
-ex_1a_R2 = "1*3(2|3)*2*(1|3)*(1|3)*"
-ex_1b_L1_regex = "aaaaa(aaa)*(bb)*bb"
 
-# TODO: why std_inputs is a tuple rather than a list of strings?
-def exercise_1a_i(std_inputs, question_value):
+
+exercise_1_regex_1 = "(a+b*)cc*a*(c+b*)*"
+exercise_1_regex_2 = "(a+b)*c*c(a*+b)*"
+
+exercise_1_language_1_regex = "a(aa)*bbb(bbbb)*"
+
+
+def exercise_1_question_a_part_i(student_inputs, question_value):
     conditions = (
-        len(std_inputs) == 2,
-        all(map(bool, std_inputs)),
+        len(student_inputs) == 2,
+        all(map(bool, student_inputs)),
     )
     if not all(conditions):
         return 0, "Invalid response!"
-    # these are the two regexes for the intersection
-    regexes = [ex_1a_R1, ex_1a_R2]
-    # use the template library to mark regex-intersection questions
-    std_pts, std_feed = pytomata.library.check_regex_intersection_acceptance(
-        regexes, std_inputs, question_value=question_value
+    regexes = [exercise_1_regex_1, exercise_1_regex_2]
+    student_result, _ = pytomata.library.check_regex_intersection_acceptance(
+        regexes, student_inputs, question_value=question_value
     )
-    return std_pts, std_feed
+    return student_result, ""
 
 
-def exercise_1a_ii(student_inputs, question_value):
+def exercise_1_question_a_part_ii(student_inputs, question_value):
     conditions = (
         len(student_inputs) == 2,
         all(map(bool, student_inputs)),
     )
     if not all(conditions):
         return 0.0, "Invalid response!"
-    regexes = [ex_1a_R1, ex_1a_R2]
+    regexes = [exercise_1_regex_1, exercise_1_regex_2]
     student_result, _ = pytomata.library.check_regex_difference_acceptance(
         regexes, student_inputs, question_value=question_value
     )
     return student_result, ""
 
 
-def exercise_1a_iii(student_inputs, question_value):
+def exercise_1_question_a_part_iii(student_inputs, question_value):
     conditions = (
         len(student_inputs) == 2,
         all(map(bool, student_inputs)),
     )
     if not all(conditions):
         return 0.0, "Invalid response!"
-    regexes = [ex_1a_R2, ex_1a_R1]
+    regexes = [exercise_1_regex_2, exercise_1_regex_1]
     student_result, _ = pytomata.library.check_regex_difference_acceptance(
         regexes, student_inputs, question_value=question_value
     )
     return student_result, ""
 
 
-def exercise_1a_iv(student_input, question_value):
+def exercise_1_question_a_part_iv(student_input, question_value):
     if not isinstance(student_input, str) and student_input:
         return 0.0, "Invalid response!"
-    regex_nfa = nfa.NFA.from_regex(ex_1a_R1)
+    regex_nfa = nfa.NFA.from_regex(exercise_1_regex_1)
     input_plus_reverse = student_input + student_input[::-1]
     correct = regex_nfa.accepts_input(student_input)
     correct = correct and regex_nfa.accepts_input(input_plus_reverse)
@@ -121,10 +121,10 @@ def exercise_1a_iv(student_input, question_value):
     return 0.0, ""
 
 
-def exercise_1a_v(student_input, question_value):
+def exercise_1_question_a_part_v(student_input, question_value):
     if not isinstance(student_input, str) and student_input:
         return 0.0, "Invalid response!"
-    regex_nfa = nfa.NFA.from_regex(ex_1a_R1)
+    regex_nfa = nfa.NFA.from_regex(exercise_1_regex_1)
     input_plus = student_input + student_input[::-1]
     correct = regex_nfa.accepts_input(student_input)
     correct = correct and not regex_nfa.accepts_input(input_plus)
@@ -133,9 +133,9 @@ def exercise_1a_v(student_input, question_value):
     return 0.0, ""
 
 
-def exercise_1a_vi(student_regex, question_value):
+def exercise_1_question_a_part_vi(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
-        f"({ex_1a_R1})|({ex_1a_R2})",
+        f"({exercise_1_regex_1})|({exercise_1_regex_2})",
         student_regex,
         accept_set={
             "aaaacaaaacccbccc",
@@ -159,9 +159,9 @@ def exercise_1a_vi(student_regex, question_value):
     )
 
 
-def exercise_1a_vii(student_regex, question_value):
+def exercise_1_question_a_part_vii(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
-        f"({ex_1a_R1})&({ex_1a_R2})",
+        f"({exercise_1_regex_1})&({exercise_1_regex_2})",
         student_regex,
         accept_set={
             "abccccccb",
@@ -185,9 +185,9 @@ def exercise_1a_vii(student_regex, question_value):
     )
 
 
-def exercise_1b_i(student_regex, question_value):
+def exercise_1_question_b_part_i(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
-        ex_1b_L1_regex,
+        exercise_1_language_1_regex,
         student_regex,
         accept_set={
             "aaaaaaaaaaabbbbbbb",
@@ -221,9 +221,9 @@ def exercise_1b_i(student_regex, question_value):
     )
 
 
-def exercise_1b_ii(student_regex, question_value):
+def exercise_1_question_b_part_ii(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
-        ex_1b_L1_regex,
+        exercise_1_language_1_regex,
         student_regex,
         accept_set={
             "bbaabbabbbabbbbbaabbaaa",

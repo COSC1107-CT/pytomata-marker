@@ -1,34 +1,34 @@
-def exercise_1_question_a_part_i_solution():
-    return "aabcccccccccbbb", "aaaaaaaaaabcccc"
+def exercise_1a_i_solution():
+    return "aaaabcccbbbb", "aaaabxccbbbb"
 
 
-def exercise_1_question_a_part_ii_solution():
-    return "aacaacbccb", "abbbbbccbb"
+def exercise_1a_ii_solution():
+    return "abca", "acaa"
 
 
-def exercise_1_question_a_part_iii_solution():
-    return "caaabbab", "ccccaabaaabaabbb"
+def exercise_1a_iii_solution():
+    return "ccc", "ccz"
 
 
-def exercise_1_question_a_part_iv_solution():
-    return "aaaacccccccc"
-
-
-def exercise_1_question_a_part_v_solution():
+def exercise_1a_iv_solution():
     return "aabccbbccbbcbccccb"
 
 
-def exercise_1_question_a_part_vi_solution():
-    return "(a(ba|a)*(b|b))?c*(c?c((ab|b)|(a?|a))*((ab|b)|(ab|b))|c?c)|(aa*b*b?cc*c?a*a?cc*(b?cc*|b)*(b?|b?)|aa*b*b?cc*c?a*a?)"
+def exercise_1a_v_solution():
+    return "aaaaaaaaaacc"
 
 
-def exercise_1_question_a_part_vii_solution():
-    return "()"
+def exercise_1a_vi_solution():
+    return "(z?z((xy|y))((xy|y)|(xy|y))|z?z)|(xx*y*y?zz*z?x*x?zz*(y?zz*|y))"
 
 
-def exercise_2_question_b_part_i_solution():
-    return "a(aa)*(aa)?bbb(bbbb)*(bbbb)?"
+def exercise_1a_vii_solution():
+    return "(xyz)*"
 
 
-def exercise_2_question_b_part_ii_solution():
-    return "(aa)*(ab(bbbb)*((bbba|(b(ba|a)|a))(a|b)*|(bbb|b?))|(b(a|b)*|a?))"
+def exercise_2b_i_solution():
+    return "x(xx)*(xx)?yyy(yyyy)*(yyyy)?"
+
+
+def exercise_2b_ii_solution():
+    return "(xx)*(xy(yyyy)*((yyyx|(y(yx|x)|x))(x|y)*|(yyy|y?))|(y(x|y)*|x?))"
