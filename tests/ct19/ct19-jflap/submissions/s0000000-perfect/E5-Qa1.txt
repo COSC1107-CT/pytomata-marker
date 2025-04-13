@@ -1,0 +1,1 @@
+aab(ca+ab)*+ca(ca)*ab*(λ+ab(ca+ab)*)+(ac+ca(ca)*ab*c)(c+bb*c)*(λ+a(λ+(b+ca+ab)(ca+ab)*)+bb*(λ+ab(ca+ab)*))

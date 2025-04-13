@@ -1,0 +1,9 @@
+The easiest and most readable:
+
+bb*c(((ba+ca)*b)+((ba+ca)*aa*b))
+
+Others:
+
+bb*(c(ba)*b+c(ba)*aa*b)+bb*c(ba)*c(a(ba)*c)*(a(ba)*b+a(ba)*aa*b)
+
+bb*c(ca)*aa*b+bb*c(ca)*b(a(ca)*b)*(λ+a(ca)*aa*b)

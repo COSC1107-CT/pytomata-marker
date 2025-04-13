@@ -1,0 +1,10 @@
+babbabbabbababa
+aba
+ca
+babbabbabbabca
+babbabbabbabbababa
+babbabbabca
+bababa
+babca
+babbabbabbabbabbabbabbabbabbabbabbabca
+babbabbabbabbabbabbabbabbabbabbabbababa
