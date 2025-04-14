@@ -228,7 +228,7 @@ def exercise_1b_i(student_regex, question_value):
     )
 
 
-# TODO: needs to be updated with the correct strings from CT19
+# This have been fixed and they are now aligned with CT19!
 def exercise_1b_ii(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
         ex_1b_L1_regex,
