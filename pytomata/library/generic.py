@@ -1,13 +1,15 @@
 """ """
 
+import automata.fa.fa as fa
+
 
 def check_against_acceptance_and_rejection_sets(
-    student_auto,
+    student_auto: fa.FA,
     *,
     accept_set: set[str],
     reject_set: set[str],
     question_value: int,
-):
+) -> tuple[float, str]:
     """
     Checks that the supplied `student_auto` accepts and rejects input as intended.
     The `accept_set` contains strings that should be accepted, and the `reject_set` those that should not be.
