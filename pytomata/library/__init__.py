@@ -1,5 +1,5 @@
-from .fsa import (
-    generic_fsa_procedure as generic_fsa_procedure,
+from .dfa import (
+    generic_dfa_procedure as generic_dfa_procedure,
 )
 from .generic import (
     check_against_acceptance_and_rejection_sets as check_against_acceptance_and_rejection_sets,
