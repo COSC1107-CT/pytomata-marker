@@ -1,3 +1,4 @@
+import automata.fa.dfa as dfa
 import automata.fa.nfa as nfa
 import pytomata.library
 
@@ -260,10 +261,12 @@ def exercise_1b_i(student_regex, question_value):
     )
 
 
-def exercise_1b_ii(student_regex, question_value):
-    return pytomata.library.generic_regex_procedure(
-        ex_1b_L1_regex,
-        student_regex,
+def exercise_1b_ii(student_regex: str, question_value: float):
+    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(student_regex))
+    correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(ex_1b_L1_regex)).complement()
+    return pytomata.library.generic_dfa_procedure(
+        correct_dfa,
+        student_dfa,
         accept_set={
             "()",
             "bbbbbbb",
