@@ -10,14 +10,14 @@ import pytomata.library.generic as generic
 
 
 def generic_regex_procedure(
-    correct_regex,
-    student_regex,
+    correct_regex: str,
+    student_regex: str,
     *,
-    accept_set,
-    reject_set,
-    question_value,
-    non_equivalence_deduction=0.35,
-):
+    accept_set: set[str],
+    reject_set: set[str],
+    question_value: int,
+    non_equivalence_deduction: float = 0.35,
+) -> tuple[float, str]:
     """ """
     if re.isequal(correct_regex, student_regex):
         return question_value, ""
@@ -30,14 +30,14 @@ def generic_regex_procedure(
     )
 
 
-def check_regex_acceptance(regex, student_inputs, *, question_value):
+def check_regex_acceptance(regex: str, student_inputs: list[str], *, question_value: float) -> tuple[float, str]:
     """ """
     regex_nfa = nfa.from_regex(regex)
     accepted = len(list(filter(regex_nfa.accepts_input, student_inputs)))
     return question_value * (accepted / len(student_inputs)), ""
 
 
-def check_regex_intersection_acceptance(regexes: List[str], student_inputs: List[str], *, question_value: float) -> tuple[float, str]:
+def check_regex_intersection_acceptance(regexes: list[str], student_inputs: list[str], *, question_value: float) -> tuple[float, str]:
     """Check if the intersection of regexes accepts the student inputs strings.
 
     Args:
@@ -61,7 +61,7 @@ def check_regex_intersection_acceptance(regexes: List[str], student_inputs: List
     return question_value * rate, feedback
 
 
-def check_regex_difference_acceptance(regexes, student_inputs, *, question_value):
+def check_regex_difference_acceptance(regexes: list[str], student_inputs: list[str], *, question_value: float) -> tuple[float, str]:
     """ """
 
     def convert_regex_into_dfa(regex):
