@@ -137,7 +137,6 @@ def exercise_1a_v(student_input, question_value):
     return 0.0, ""
 
 
-# TODO: needs to be updated with the correct strings from CT19
 def exercise_1a_vi(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
         f"({ex_1a_R1})|({ex_1a_R2})",
@@ -190,7 +189,6 @@ def exercise_1a_vi(student_regex, question_value):
     )
 
 
-# TODO: needs to be updated with the correct strings from CT19
 def exercise_1a_vii(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
         f"({ex_1a_R1})&({ex_1a_R2})",
@@ -227,44 +225,41 @@ def exercise_1a_vii(student_regex, question_value):
     )
 
 
-# TODO: needs to be updated with the correct strings from CT19
 def exercise_1b_i(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
         ex_1b_L1_regex,
         student_regex,
         accept_set={
-            "aaaaaaaaaaabbbbbbb",
-            "aaabbbbbbbbbbbbbbb",
-            "aaaaaaaaaaabbbbbbb",
-            "aaaaaaaaaaaaaaabbb",
-            "aaaaaaaaaaabbbbbbb",
-            "aaaaaaaaaaabbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaaaaaabbbbbbb",
-            "aaaaaaaaaaabbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaaaaaaaaaabbb",
-            "aaaaaaaaaaabbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaaaaaabbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
-            "aaaaaaaaaaaaaaabbb",
-            "aaabbbbbbbbbbbbbbb",
-            "aaabbbbbbbbbbbbbbb",
-            "aaaaaaabbbbbbbbbbb",
+            "aaaaabb",
+            "aaaaaaaabb",
+            "aaaaaaaabbbb",
+            "aaaaaaaaaaabb",
+            "aaaaaaaaaaabbbbbb",
+            "aaaaaaaaaaaaaabbbbbb",
+            "aaaaaaaaaaaaaaaaabbbbbbbb",
+            "aaaaabbbbbbbbbbbb",
+            "aaaaaaaabbbbbbbbbbbb",
         },
-        reject_set=set(),
+        reject_set={
+            "()",
+            "bbbbbbb",
+            "abbbbbbb",
+            "aabbbbbbb",
+            "aaaabbbbbbbb",
+            "aaaaaabbbbbbbbb",
+            "aaaaab",
+            "aaaaabbb",
+            "aaaaabbbbb",
+            "aaaaaaaab",
+            "aaaaaaaabbb",
+            "aaaaaaaabbbbb",
+            "aaaaabba",
+            "baaaaabb",
+        },
         question_value=question_value,
     )
 
 
-# TODO: needs to be updated with the correct strings from CT19
 def exercise_1b_ii(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
         ex_1b_L1_regex,
