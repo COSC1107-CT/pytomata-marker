@@ -398,7 +398,6 @@ def another_library_function(*args, question_value, incorrect_penalty, additiona
         student_result = base.penalise_score(question_value, incorrect_penalty)
 ```
 
-
 If you are not using the [test case auxiliaries](#handling-additional-test-cases), use:
 
 1. The `update_score` function to alter the student’s score based on the test case, and;
