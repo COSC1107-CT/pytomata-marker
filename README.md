@@ -1,12 +1,13 @@
 # Pytomata Marker
 
-This is an automarker developed to support assignments in theory of computation courses @ RMIT University. It is a re-development of the [JFLAP Automarker](https://github.com/COSC1107-CT/jflap-ct-automarker) system, but done in Python.
+This is an automarker developed to support assignments in theory of computation courses @ RMIT University.
+
+It is a re-development of the [JFLAP Automarker](https://github.com/COSC1107-CT/jflap-ct-automarker) system, but done in Python and heavily relying on [Automata](https://caleb531.github.io/automata/) library, which provides regular expression and automata APIs.
 
 Official GitHub repo: https://github.com/COSC1107-CT/pytomata-marker
 
 - [Pytomata Marker](#pytomata-marker)
-  - [Installation \& Setup](#installation--setup)
-    - [Manual Project Configuration](#manual-project-configuration)
+  - [Install](#install)
   - [Usage](#usage)
     - [Execution Options](#execution-options)
   - [Assessment Design \& Configuration](#assessment-design--configuration)
@@ -28,46 +29,49 @@ Official GitHub repo: https://github.com/COSC1107-CT/pytomata-marker
       - [Library Function Auxiliaries](#library-function-auxiliaries)
   - [Contributors](#contributors)
 
-## Installation & Setup
+## Install
 
-<!-- TODO: Add Graphviz? -->
-
-| Technology                                       | Usage                                          |
-|:------------------------------------------------:|:-----------------------------------------------|
-| [Automata](https://caleb531.github.io/automata/) | Provides regular expression and automata APIs  |
-| [uv](https://docs.astral.sh/uv/)                 | Manages project dependencies and configuration |
-| [Ruff](https://docs.astral.sh/ruff/)             | Source code linting and formatting             |
-
-This project has been configured using uv to handle dependencies, etc.
-To use uv, ensure it is [installed](https://docs.astral.sh/uv/getting-started/installation/), clone this repository, and proceed through the [usage instructions](#usage).
-Otherwise, proceed through the next section.
-
-### Manual Project Configuration
-
-If you would prefer to avoid using uv, project configuration can still be done using [venv](https://docs.python.org/3/library/venv.html).  To create a virtual environment for pytomata (to be stored in `~/.pyauto`):
+The automarker system is distributed as a package (`pytomata-marker`) and can then be installed via pip from the repo as follows:
 
 ```shell
-$ python3 -m venv ~/.pyauto
+$ pip install git+https://github.com/COSC1107-CT/pytomata-marker/
 ```
 
-Every time you want to use the environment, you need to activate it:
+Alternatively, one can clone first and install the planner:
 
 ```shell
-$ source ~/.pyauto/bin/activate
+$ git clone https://github.com/COSC1107-CT/pytomata-marker/
+$ cd cfond-asp
+$ pip install .
 ```
 
-> [!WARNING]
-> Use the correct shell-specific `activate` script:
-> `activate.fish` for [fish](https://fishshell.com), `activate.ps1` for PowerShell, etc.
+> [!TIP]
+> If you plan to develop on Pytomata Marker it can be useful to install the cloned repo as [editable project](https://setuptools.pypa.io/en/latest/userguide/development_mode.html) via `pip install -e .`
 
-Once activated, install the required dependencies in its first use:
+Once installed, the planner is available via its CLI interface:
 
 ```shell
-$ pip install -r requirements.txt
+ $ pytomata-marker -h
+usage: pytomata-marker [-h] [-o OUTPUT] [-p PROCESSES] [-q] QUESTIONS SOLUTIONS [SOLUTIONS ...]
+
+Pytomata automarking system for Automata Theory and Formal Languages courses - Version 0.1.0
+
+positional arguments:
+  QUESTIONS             path to script containing instructor-defined question functions
+  SOLUTIONS             paths to scripts and directories containing student solutions
+
+options:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        directory for saving results and feedback
+  -p PROCESSES, --processes PROCESSES
+                        specify processes to distribute solutions across
+  -q, --quiet           suppress all output
+
+standard output is used for results and feedback by default
 ```
 
-> [!IMPORTANT]
-> Then, use `python` instead of `uv run` in the [execution instructions](#execution).
+You can achieve the same usign `python -m pytomata -h`
 
 ## Usage
 
@@ -85,7 +89,7 @@ tests
     └── s0000002.py
 ```
 
-The procedure is run by the `automarker.py` script, which accepts:
+The system requires the following as inputs:
 
 1. A Python script containing the instructor-defined [question](#questions) and [configuration](#configuration) functions;
 2. An arbitrary list of Python scripts and directories containing students’ [solutions](#solutions).
@@ -95,7 +99,7 @@ The procedure is run by the `automarker.py` script, which accepts:
 Therefore, to process an individual submission:
 
 ```shell
-$ uv run automarker.py tests/ct19/questions.py tests/ct19/submissions/s0000000.py
+$ pytomata-marker tests/ct19/questions.py tests/ct19/submissions/s0000000.py
 Using CPython 3.13.1
 Creating virtual environment at: .venv
 Installed 6 packages in 4ms
@@ -106,14 +110,10 @@ Installed 6 packages in 4ms
 Correct!
 ```
 
-> [!NOTE]
-> Notice that `uv run` identified an already-installed interpreter, identified and downloaded the required dependencies before running the `automarker.py` script. Output like this will only occur once, upon first invoking a script; refer to the [uv docs](https://docs.astral.sh/uv/) for details.
-
 When a directory is supplied, all Python scripts inside that directory (non-recursively) are treated as student submissions:
 
 ```shell
-#$ uv run automarker.py tests/ct19/questions.py tests/ct19/submissions
-$ python automarker.py tests/ct19/questions.py tests/ct19/submissions/s0000000.py
+$ python -m pytomata tests/ct19/questions.py tests/ct19/submissions/s0000000.py
 *** s0000002 ***
 
 1.a.i | 100 / 100
@@ -139,13 +139,13 @@ By default, all results are printed to standard output.
 To save each student’s result to an individual file instead of printing to standard output, use the `--output` or `-o` flag:
 
 ```shell
-$ python automarker.py tests/ct19/questions.py tests/ct19/submissions --output output_directory
+$ pytomata-marker tests/ct19/questions.py tests/ct19/submissions --output output_directory
 ```
 
 Marking in parallel is also supported though the `--processes` or `-p` flag, which distributes the student solutions evenly across three processes:
 
 ```shell
-$ python automarker.py tests/ct19/questions.py tests/ct19/submissions --processes 3
+$ pytomata-marker tests/ct19/questions.py tests/ct19/submissions --processes 3
 ```
 
 ## Assessment Design & Configuration
