@@ -1,5 +1,11 @@
-""" """
+"""An automarking system for Automata Theory and Formal Languages courses.
 
+In some sense,it is a re-made in Python of the Java-based [JFLAP Automarker](https://github.com/COSC1107-CT/jflap-ct-automarker)
+
+"""
+__authors__ = "Harry Porter and Sebastian Sardina"
+__version__ = "0.1.0"
+__license__ = "MIT License"
 import argparse
 import pathlib
 

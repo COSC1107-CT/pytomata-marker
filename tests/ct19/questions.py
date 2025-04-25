@@ -6,9 +6,9 @@ import pytomata.library
 def main(solutions):
     return [
         (
-            "1.a.i",
-            2.0,
-            exercise_1a_i,
+            "1.a.i",    # id
+            2.0,        # total points
+            exercise_1a_i,  # function checker
             solutions.exercise_1a_i_solution,
         ),
         (
