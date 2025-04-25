@@ -7,12 +7,13 @@ import pathlib
 import sys
 from typing import List, Sequence
 
+from proto import module
+
 from .elements import (
     MarkedQuestionResponse,
     ProcessContext,
     StudentResults,
 )
-
 
 # TODO: Use this as the shared entry point for package and CLI invocations.
 def calculate_and_output_student_results(
@@ -70,7 +71,7 @@ def calculate_and_output_student_results(
     with multiprocessing.Pool(process_count, initialise_process, (lock,)) as pool:
         pool.map(
             functools.partial(
-                calculate_and_output_results_for_student_solution_partition,
+                perform_marking,
                 marking_context,
             ),
             partition_submissions(), # list of lists of submission paths
@@ -83,20 +84,25 @@ def initialise_process(lock):
     shared_exclusion_lock = lock
 
 
-def calculate_and_output_results_for_student_solution_partition(
-    process_context,
-    submissions_partition,
+def perform_marking(
+    process_context : ProcessContext,
+    submissions_paths : Sequence[pathlib.Path],
 ):
-    """ """
+    """Performs marking of a set of submission files within a context
 
-    def calculate_results_for_solution_partition() -> Sequence[StudentResults]:
-        """ """
-        for submission_path in submissions_partition:
+    Args:
+        process_context (ProcessContext): a context object containing the path to the questions script and output directory
+        submissions_partition (Sequence[pathlib.Path]): a list of paths to student solution files
+    """
+    def assess_submissions() -> Sequence[StudentResults]:
+        """This function assess a list of submission paths, yielding the results for each submission."""
+        for submission_path in submissions_paths:
             # submission_path is of form tests/ct19/submissions/s0000002.py
-            # we can extract student id (s0000002)
-            submission = load_using_path(submission_path)
+            # from it we extract student id (s0000002)
+            submission = get_module_from_path(submission_path)
             student_id = submission_path.stem
-            # MARK the student submission
+
+            # MARK the student submission and yield the result
             yield StudentResults(
                 student_id, calculate_student_results_and_feedback(submission)
             )
@@ -110,10 +116,17 @@ def calculate_and_output_results_for_student_solution_partition(
             for label, value, question, solution in questions.main(submission)
         ]
 
-    def output_individual_student_results():
-        """ """
+    def output_submission_results(student_results: StudentResults):
+        """Generate the output for a submission result
+
+        if not output folder in contrext, then report to stdout
+        otherwise, write to file in output folder
+        Args:
+            student_results (StudentResults): the results for a student submission
+        """
         student_output = generate_student_output(student_results)
         if process_context.output_directory_path is None:
+            # print in stdout atomically
             shared_exclusion_lock.acquire()
             try:
                 print(student_output, "\n")
@@ -127,15 +140,22 @@ def calculate_and_output_results_for_student_solution_partition(
             with open(output_path, "w+") as output_file:
                 output_file.write(student_output + "\n")
 
-    # Load the questions script and calculate results for each student solution.
-    questions = load_using_path(process_context.questions_script_path)
-    for student_results in calculate_results_for_solution_partition():
-        output_individual_student_results()
+    # Load the questions script
+    #  questions is a module containing the instructor-defined question functions
+    questions = get_module_from_path(process_context.questions_script_path)
+
+    # Mark every  results for each student solution.
+    for student_results in assess_submissions():
+        output_submission_results(student_results)
 
 
-def generate_student_output(student_results):
-    """ """
-
+def generate_student_output(student_results: StudentResults) -> str:
+    """Generate a string output for a student result
+    Args:
+        student_results (StudentResults): the results for a student submission
+    Returns:
+        str: the output string for the student result
+    """
     def generate_question_output(result):
         """ """
         feedback = result.student_feedback
@@ -150,10 +170,17 @@ def generate_student_output(student_results):
     return "\n".join([f"{student_results.student_id}", *question_output])
 
 
-def load_using_path(path, identifier=""):
-    """ """
+def get_module_from_path(path: pathlib.Path, identifier="") -> module:
+    """Given a path to a python file, return the module object
+    Args:
+        path (pathlib.Path): the path to the python file
+        identifier (str): the name of the module to be used in sys.modules
+    Returns:
+        module: the module object
+    """
     specification = importlib.util.spec_from_file_location(identifier, path)
     module = importlib.util.module_from_spec(specification)
     sys.modules[identifier] = module
     specification.loader.exec_module(module)
+
     return module
