@@ -1,6 +1,5 @@
 """ """
 
-import dataclasses
 import functools
 import importlib.util
 import multiprocessing
@@ -8,48 +7,46 @@ import pathlib
 import sys
 from typing import List, Sequence
 
-
-@dataclasses.dataclass(frozen=True)
-class ProcessContext:
-    """ """
-
-    questions_script_path: pathlib.Path
-    output_directory_path: pathlib.Path
-
-
-@dataclasses.dataclass(frozen=True)
-class MarkedQuestionResponse:
-    """An object representing a question result with feedback."""
-
-    question_label: str
-    question_value: float
-    student_result: float
-    student_feedback: str
-
-
-@dataclasses.dataclass(frozen=True)
-class StudentResults:
-    """Store the results for a student as a sequence of marked questions (each with its points and feedback)."""
-
-    student_id: str
-    results: Sequence[MarkedQuestionResponse]
+from .elements import (
+    MarkedQuestionResponse,
+    ProcessContext,
+    StudentResults,
+)
 
 
 # TODO: Use this as the shared entry point for package and CLI invocations.
 def calculate_and_output_student_results(
-    questions_script_path: pathlib.Path,
-    output_directory_path: pathlib.Path,
-    student_solution_paths: Sequence[pathlib.Path],
+    questions_path: pathlib.Path,
+    output_path: pathlib.Path,
+    submissions_paths: Sequence[pathlib.Path],
     *,
-    process_count: int,
+    process_count: int = 1,
 ):
-    """ """
+    """Main automarking system with the arguments from CLI.
+    This function is the main entry point for the automarking system.
 
-    def derive_and_partition_student_solution_files():
-        """ """
+    It can use multiprocessing to distribute the workload across multiple processes.
+
+    Args:
+        questions_path (pathlib.Path): a path to a script containing instructor-defined question functions
+        output_path (pathlib.Path): a path to a directory for saving results and feedback
+        submissions_paths (Sequence[pathlib.Path]): a list of paths to scripts and directories containing student solutions
+        process_count (int): number of processes to distribute solutions across
+    """
+
+    def partition_submissions():
+        """Partition the student solution files into groups for each process.
+        This is done to distribute the workload across multiple processes.
+        Each process will receive a list of student solution files to process.
+
+        Submissions are in list list-Sequence submissions_paths
+        Each submission is either a submission file or a directory with many submission files.
+
+        The function returns a list of lists, where the i-th list contains the paths to the student solution files for the i-th process
+        """
         student_solution_partitions = [[] for _ in range(process_count)]
         partition_index = 0
-        for path in student_solution_paths:
+        for path in submissions_paths:
             if path.is_file() and path.suffix == ".py":
                 student_solution_partitions[partition_index].append(path)
                 partition_index = (partition_index + 1) % process_count
@@ -59,19 +56,24 @@ def calculate_and_output_student_results(
                     partition_index = (partition_index + 1) % process_count
         return student_solution_partitions
 
-    if output_directory_path is not None:
-        output_directory_path.mkdir(parents=True, exist_ok=True)
+    if output_path is not None:
+        output_path.mkdir(parents=True, exist_ok=True)
     else:
         print()  # Spacing for CLI results output.
-    process_context = ProcessContext(questions_script_path, output_directory_path)
+
+    # create a process context object to pass to each process
+    #   this is a static object, so it can be shared across processes
+    #   contains: path to questions and path to output directory
+    # then run the marking process in parallel across multiple processes
+    marking_context = ProcessContext(questions_path, output_path)
     lock = multiprocessing.Lock()
     with multiprocessing.Pool(process_count, initialise_process, (lock,)) as pool:
         pool.map(
             functools.partial(
                 calculate_and_output_results_for_student_solution_partition,
-                process_context,
+                marking_context,
             ),
-            derive_and_partition_student_solution_files(),
+            partition_submissions(), # list of lists of submission paths
         )
 
 
