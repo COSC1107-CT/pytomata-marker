@@ -51,13 +51,13 @@ def main(solutions):
             "1.b.i",
             2.0,
             exercise_1b_i,
-            solutions.exercise_2b_i_solution,
+            solutions.exercise_1b_i_solution,
         ),
         (
             "1.b.ii",
             2.0,
             exercise_1b_ii,
-            solutions.exercise_2b_ii_solution,
+            solutions.exercise_1b_ii_solution,
         ),
     ]
 
@@ -66,7 +66,6 @@ def main(solutions):
 # https://caleb531.github.io/automata/api/regular-expressions/
 ex_1a_R1 = "1(1*|2*)3*(2*|3)1*2(1|3)*2*"
 ex_1a_R2 = "1*3(2|3)*2*(1|3)*(1|3)*"
-ex_1b_L1_regex = "aaaaa(aaa)*(bb)*bb"
 
 
 # TODO: why std_inputs is a tuple rather than a list of strings?
@@ -225,6 +224,8 @@ def exercise_1a_vii(student_regex, question_value):
         question_value=question_value,
     )
 
+
+ex_1b_L1_regex = "aaaaa(aaa)*(bb)*bb"
 
 def exercise_1b_i(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(

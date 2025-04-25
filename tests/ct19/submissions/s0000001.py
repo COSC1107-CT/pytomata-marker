@@ -26,9 +26,9 @@ def exercise_1a_vii_solution():
     return "(xyz)*"
 
 
-def exercise_2b_i_solution():
+def exercise_1b_i_solution():
     return "x(xx)*(xx)?yyy(yyyy)*(yyyy)?"
 
 
-def exercise_2b_ii_solution():
+def exercise_1b_ii_solution():
     return "(xx)*(xy(yyyy)*((yyyx|(y(yx|x)|x))(x|y)*|(yyy|y?))|(y(x|y)*|x?))"
