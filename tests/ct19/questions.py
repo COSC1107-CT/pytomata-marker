@@ -70,11 +70,23 @@ def main(submission: module) -> list:
                 else None
             ),
         ),
+        (
+            "1.b.iv",
+            2.0,
+            exercise_1b_iv,
+            (
+                submission.exercise_1b_iv_solution
+                if has_function(submission, "exercise_1b_iv_solution")
+                else None
+            ),
+        ),
     ]
+
 
 def has_function(module: module, func: str):
     """Check if a module has a function with the given name."""
     return hasattr(module, func) and callable(getattr(module, func))
+
 
 # check format accepted by library (not the same as JFLAP!):
 # https://caleb531.github.io/automata/api/regular-expressions/
@@ -348,6 +360,66 @@ def exercise_1b_iii(student_regex: str, question_value: float):
             "bbabaaabbbb",
             "bbbbbaaaaaa",
             "bbbbbbbbbbb",
+        },
+        reject_set={
+            "()",
+            "a",
+            "b",
+            "aaa",
+            "aba",
+            "bbb",
+            "bab",
+            "abb",
+            "baa",
+            "aaaa",
+            "bbbb",
+            "abab",
+            "baba",
+            "abba",
+            "baab",
+            "aaaaaa",
+            "ababab",
+            "bababa",
+            "baabab",
+            "bbbbbb",
+            "ababab",
+            "bbbbbb",
+            "aaaaaaa",
+            "abababa",
+            "bababab",
+            "bbbabab",
+            "aababba",
+            "bababaa",
+            "bbbbbbb",
+            "aaaaaaaaa",
+            "bbbbbbbbb",
+            "ababababa",
+            "bababaabb",
+            "abababbab",
+        },
+        question_value=question_value,
+    )
+
+
+def exercise_1b_iv(student_regex: str, question_value: float):
+    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(student_regex))
+
+    sol_regex = "bbb*(a|c)*(a|c)c"
+    correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(sol_regex))
+    return pytomata.library.generic_dfa_procedure(
+        correct_dfa,
+        student_dfa,
+        accept_set={
+            "bbac",
+            "bbbbbbbbac",
+            "bbbbacacacacac",
+            "bbcc",
+            "bbbbbccccc",
+            "bbbbbbbbbacacacacacac",
+            "bbbbaaaaaac",
+            "bbbbcaccacacacacacacacc",
+            "bbbbbccccacaccacac",
+            "bbbbbbbbbcacacacacacacccccacacccc",
         },
         reject_set={
             "()",

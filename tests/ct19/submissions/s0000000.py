@@ -43,3 +43,5 @@ def exercise_1b_ii_solution():
 def exercise_1b_iii_solution():
     return "(a|b)(a|b)((a|b)(a|b)(a|b))*"
 
+def exercise_1b_iv_solution():
+    return "bbb*(a|c)*(a|c)c"

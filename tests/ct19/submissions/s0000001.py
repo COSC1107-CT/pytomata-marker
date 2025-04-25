@@ -32,3 +32,11 @@ def exercise_1b_i_solution():
 
 def exercise_1b_ii_solution():
     return "(xx)*(xy(yyyy)*((yyyx|(y(yx|x)|x))(x|y)*|(yyy|y?))|(y(x|y)*|x?))"
+
+
+def exercise_1b_iii_solution():
+    return "(a|b)(a|b)((a)(a|b)(a|b))*"
+
+
+def exercise_1b_iv_solution():
+    return "bbb*(a|c)*(a|c)c"
