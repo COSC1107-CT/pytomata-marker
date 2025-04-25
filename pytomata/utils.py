@@ -1,5 +1,7 @@
 import os
 
+from proto import module
+
 def rmdir(sftp, path):
     files = sftp.listdir(path)
 
@@ -13,10 +15,9 @@ def rmdir(sftp, path):
     sftp.rmdir(path)
 
 
-def report_progress_bytes_transfered(xfer, to_be_xfer, job_id, logger):
-    remains_per = 0.000
-    remains_per = (xfer / to_be_xfer) * 100
-    logger.debug(
-        f"Complete percent for job {job_id}: {remains_per:.2f}% - ({xfer} bytes transfered out of {to_be_xfer})"
-    )
-
+def get_student_func(module: module, func: str):
+    """Get a function from a module by name."""
+    if hasattr(module, func) and callable(getattr(module, func)):
+       return getattr(module, func)
+    else:
+        return None

@@ -2,6 +2,7 @@ import automata.fa.dfa as dfa
 import automata.fa.nfa as nfa
 from proto import module
 import pytomata.library
+from pytomata.utils import get_student_func
 
 
 def main(submission: module) -> list:
@@ -74,18 +75,9 @@ def main(submission: module) -> list:
             "1.b.iv",
             2.0,
             exercise_1b_iv,
-            (
-                submission.exercise_1b_iv_solution
-                if has_function(submission, "exercise_1b_iv_solution")
-                else None
-            ),
+            get_student_func(submission, "exercise_1b_iv_solution")
         ),
     ]
-
-
-def has_function(module: module, func: str):
-    """Check if a module has a function with the given name."""
-    return hasattr(module, func) and callable(getattr(module, func))
 
 
 # check format accepted by library (not the same as JFLAP!):
