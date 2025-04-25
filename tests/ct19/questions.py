@@ -11,71 +11,69 @@ def main(submission: module) -> list:
             "1.a.i",  # id
             2.0,  # total points
             exercise_1a_i,  # function checker
-            submission.exercise_1a_i_solution,  # function in submission
+            get_student_func(
+                submission, "exercise_1a_i_solution"
+            ),  # function in submission
         ),
         (
             "1.a.ii",
             2.0,
             exercise_1a_ii,
-            submission.exercise_1a_ii_solution,
+            get_student_func(submission, "exercise_1a_ii_solution"),
         ),
         (
             "1.a.iii",
             2.0,
             exercise_1a_iii,
-            submission.exercise_1a_iii_solution,
+            get_student_func(submission, "exercise_1a_iii_solution"),
         ),
         (
             "1.a.iv",
             1.0,
             exercise_1a_iv,
-            submission.exercise_1a_iv_solution,
+            get_student_func(submission, "exercise_1a_iv_solution"),
         ),
         (
             "1.a.v",
             1.0,
             exercise_1a_v,
-            submission.exercise_1a_v_solution,
+            get_student_func(submission, "exercise_1a_v_solution"),
         ),
         (
             "1.a.vi",
             1.0,
             exercise_1a_vi,
-            submission.exercise_1a_vi_solution,
+            get_student_func(submission, "exercise_1a_vi_solution"),
         ),
         (
             "1.a.vii",
             3.0,
             exercise_1a_vii,
-            submission.exercise_1a_vii_solution,
+            get_student_func(submission, "exercise_1a_vii_solution"),
         ),
         (
             "1.b.i",
             2.0,
             exercise_1b_i,
-            submission.exercise_1b_i_solution,
+            get_student_func(submission, "exercise_1b_i_solution"),
         ),
         (
             "1.b.ii",
             2.0,
             exercise_1b_ii,
-            submission.exercise_1b_ii_solution,
+            get_student_func(submission, "exercise_1b_ii_solution"),
         ),
         (
             "1.b.iii",
             2.0,
             exercise_1b_iii,
-            (
-                submission.exercise_1b_iii_solution
-                if has_function(submission, "exercise_1b_iii_solution")
-                else None
-            ),
+            get_student_func(submission, "exercise_1b_iii_solution"),
         ),
         (
             "1.b.iv",
             2.0,
             exercise_1b_iv,
-            get_student_func(submission, "exercise_1b_iv_solution")
+            get_student_func(submission, "exercise_1b_iv_solution"),
         ),
     ]
 
