@@ -91,3 +91,5 @@ venv
 __pycache__
 
 .DS_Store
+out/s0000000.out
+out/s0000001.out
