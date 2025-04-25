@@ -31,9 +31,15 @@ def exercise_1a_vi_solution():
 def exercise_1a_vii_solution():
     return "11*33*22*(()|1(1|3)*|33*(()|22*|1(1|3)*))"
 
+
 def exercise_1b_i_solution():
     return "aaaaa(aaa)*bb(bb)*"
 
+
 def exercise_1b_ii_solution():
     return "((aa|((()|a)(aaa)*))b*)|(a*(()|b(bb)*))|((a|b)*b(a|b)*a(a|b)*)"
+
+
+def exercise_1b_iii_solution():
+    return "(a|b)(a|b)((a|b)(a|b)(a|b))*"
 

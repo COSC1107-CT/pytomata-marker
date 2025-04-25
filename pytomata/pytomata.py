@@ -15,6 +15,7 @@ from .elements import (
     StudentResults,
 )
 
+
 # TODO: Use this as the shared entry point for package and CLI invocations.
 def calculate_and_output_student_results(
     questions_path: pathlib.Path,
@@ -74,7 +75,7 @@ def calculate_and_output_student_results(
                 perform_marking,
                 marking_context,
             ),
-            partition_submissions(), # list of lists of submission paths
+            partition_submissions(),  # list of lists of submission paths
         )
 
 
@@ -85,8 +86,8 @@ def initialise_process(lock):
 
 
 def perform_marking(
-    process_context : ProcessContext,
-    submissions_paths : Sequence[pathlib.Path],
+    process_context: ProcessContext,
+    submissions_paths: Sequence[pathlib.Path],
 ):
     """Performs marking of a set of submission files within a context
 
@@ -94,6 +95,7 @@ def perform_marking(
         process_context (ProcessContext): a context object containing the path to the questions script and output directory
         submissions_partition (Sequence[pathlib.Path]): a list of paths to student solution files
     """
+
     def assess_submissions() -> Sequence[StudentResults]:
         """This function assess a list of submission paths, yielding the results for each submission."""
         for submission_path in submissions_paths:
@@ -103,17 +105,19 @@ def perform_marking(
             submission = get_module_from_path(submission_path)
 
             # MARK the student submission and yield the result
-            yield StudentResults(
-                student_id, calculate_student_results_and_feedback(submission)
-            )
+            yield StudentResults(student_id, assess_submission(submission))
 
-    def calculate_student_results_and_feedback(
-        submission : module,
-    ) -> List[MarkedQuestionResponse]:
-        """ """
+    def assess_submission(submission: module) -> List[MarkedQuestionResponse]:
+        """Assess the submission and return the results for each question"""
+
         return [
-            MarkedQuestionResponse(label, value, *question(question_submission(), value))
-            for label, value, question, question_submission in questions.main(submission)
+            MarkedQuestionResponse(
+                label, value,
+                *question(question_submission(), value) if question_submission else (0, "Missing question!")
+            )
+            for label, value, question, question_submission in questions.main(
+                submission
+            )
         ]
 
     def output_submission_results(student_results: StudentResults):
@@ -156,6 +160,7 @@ def generate_student_output(student_results: StudentResults) -> str:
     Returns:
         str: the output string for the student result
     """
+
     def generate_question_output(result):
         """ """
         feedback = result.student_feedback

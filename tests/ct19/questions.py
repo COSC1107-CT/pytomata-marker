@@ -1,66 +1,80 @@
 import automata.fa.dfa as dfa
 import automata.fa.nfa as nfa
+from proto import module
 import pytomata.library
 
 
-def main(solutions):
+def main(submission: module) -> list:
     return [
         (
-            "1.a.i",    # id
-            2.0,        # total points
+            "1.a.i",  # id
+            2.0,  # total points
             exercise_1a_i,  # function checker
-            solutions.exercise_1a_i_solution,
+            submission.exercise_1a_i_solution,  # function in submission
         ),
         (
             "1.a.ii",
             2.0,
             exercise_1a_ii,
-            solutions.exercise_1a_ii_solution,
+            submission.exercise_1a_ii_solution,
         ),
         (
             "1.a.iii",
             2.0,
             exercise_1a_iii,
-            solutions.exercise_1a_iii_solution,
+            submission.exercise_1a_iii_solution,
         ),
         (
             "1.a.iv",
             1.0,
             exercise_1a_iv,
-            solutions.exercise_1a_iv_solution,
+            submission.exercise_1a_iv_solution,
         ),
         (
             "1.a.v",
             1.0,
             exercise_1a_v,
-            solutions.exercise_1a_v_solution,
+            submission.exercise_1a_v_solution,
         ),
         (
             "1.a.vi",
             1.0,
             exercise_1a_vi,
-            solutions.exercise_1a_vi_solution,
+            submission.exercise_1a_vi_solution,
         ),
         (
             "1.a.vii",
             3.0,
             exercise_1a_vii,
-            solutions.exercise_1a_vii_solution,
+            submission.exercise_1a_vii_solution,
         ),
         (
             "1.b.i",
             2.0,
             exercise_1b_i,
-            solutions.exercise_1b_i_solution,
+            submission.exercise_1b_i_solution,
         ),
         (
             "1.b.ii",
             2.0,
             exercise_1b_ii,
-            solutions.exercise_1b_ii_solution,
+            submission.exercise_1b_ii_solution,
+        ),
+        (
+            "1.b.iii",
+            2.0,
+            exercise_1b_iii,
+            (
+                submission.exercise_1b_iii_solution
+                if has_function(submission, "exercise_1b_iii_solution")
+                else None
+            ),
         ),
     ]
 
+def has_function(module: module, func: str):
+    """Check if a module has a function with the given name."""
+    return hasattr(module, func) and callable(getattr(module, func))
 
 # check format accepted by library (not the same as JFLAP!):
 # https://caleb531.github.io/automata/api/regular-expressions/
@@ -227,6 +241,7 @@ def exercise_1a_vii(student_regex, question_value):
 
 ex_1b_L1_regex = "aaaaa(aaa)*(bb)*bb"
 
+
 def exercise_1b_i(student_regex, question_value):
     return pytomata.library.generic_regex_procedure(
         ex_1b_L1_regex,
@@ -294,6 +309,81 @@ def exercise_1b_ii(student_regex: str, question_value: float):
             "aaaaaaaaaaaaaaaaabbbbbbbb",
             "aaaaabbbbbbbbbbbb",
             "aaaaaaaabbbbbbbbbbbb",
+        },
+        question_value=question_value,
+    )
+
+
+def exercise_1b_iii(student_regex: str, question_value: float):
+    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(student_regex))
+
+    sol_regex = "(a|b)(a|b)((a|b)(a|b)(a|b))*"
+    correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(sol_regex))
+    return pytomata.library.generic_dfa_procedure(
+        correct_dfa,
+        student_dfa,
+        accept_set={
+            "aa",
+            "ba",
+            "ab",
+            "bb",
+            "aaaaa",
+            "ababa",
+            "babab",
+            "baaba",
+            "aabab",
+            "bbbbb",
+            "aaaaaaaa",
+            "abababab",
+            "babbaabb",
+            "babababa",
+            "abbaabab",
+            "bbbabaab",
+            "baaaaabb",
+            "bbbbbbbb",
+            "aaaaaaaaaaa",
+            "abababababb",
+            "bbababababb",
+            "aaababababa",
+            "bbabaaabbbb",
+            "bbbbbaaaaaa",
+            "bbbbbbbbbbb",
+        },
+        reject_set={
+            "()",
+            "a",
+            "b",
+            "aaa",
+            "aba",
+            "bbb",
+            "bab",
+            "abb",
+            "baa",
+            "aaaa",
+            "bbbb",
+            "abab",
+            "baba",
+            "abba",
+            "baab",
+            "aaaaaa",
+            "ababab",
+            "bababa",
+            "baabab",
+            "bbbbbb",
+            "ababab",
+            "bbbbbb",
+            "aaaaaaa",
+            "abababa",
+            "bababab",
+            "bbbabab",
+            "aababba",
+            "bababaa",
+            "bbbbbbb",
+            "aaaaaaaaa",
+            "bbbbbbbbb",
+            "ababababa",
+            "bababaabb",
+            "abababbab",
         },
         question_value=question_value,
     )
