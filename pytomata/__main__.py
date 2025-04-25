@@ -9,12 +9,15 @@ __license__ = "MIT License"
 import argparse
 import pathlib
 
-import pytomata
+from .pytomata import calculate_and_output_student_results
+from . import VERSION
 
-
-def main(args: argparse.Namespace) -> None:
+def main():
     """Main automarking system with the arguments from CLI """
-    return pytomata.calculate_and_output_student_results(
+
+    args = construct_and_parse_args()
+
+    return calculate_and_output_student_results(
         args.questions_script_path,
         args.output_directory_path,
         args.student_solution_paths,
@@ -25,7 +28,7 @@ def main(args: argparse.Namespace) -> None:
 def construct_and_parse_args():
     """CLI Command line interface"""
     parser = argparse.ArgumentParser(
-        description="Pytomata automarking system for Automata Theory and Formal Languages courses",
+        description=f"Pytomata automarking system for Automata Theory and Formal Languages courses - Version {VERSION}",
         epilog="standard output is used for results and feedback by default",
     )
     parser.add_argument(
@@ -65,5 +68,4 @@ def construct_and_parse_args():
 
 
 if __name__ == "__main__":
-    args = construct_and_parse_args()
-    main(args)
+    main()
