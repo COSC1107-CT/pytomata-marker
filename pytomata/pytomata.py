@@ -99,8 +99,8 @@ def perform_marking(
         for submission_path in submissions_paths:
             # submission_path is of form tests/ct19/submissions/s0000002.py
             # from it we extract student id (s0000002)
-            submission = get_module_from_path(submission_path)
             student_id = submission_path.stem
+            submission = get_module_from_path(submission_path)
 
             # MARK the student submission and yield the result
             yield StudentResults(
@@ -108,12 +108,12 @@ def perform_marking(
             )
 
     def calculate_student_results_and_feedback(
-        submission,
+        submission : module,
     ) -> List[MarkedQuestionResponse]:
         """ """
         return [
-            MarkedQuestionResponse(label, value, *question(solution(), value))
-            for label, value, question, solution in questions.main(submission)
+            MarkedQuestionResponse(label, value, *question(question_submission(), value))
+            for label, value, question, question_submission in questions.main(submission)
         ]
 
     def output_submission_results(student_results: StudentResults):
@@ -170,7 +170,7 @@ def generate_student_output(student_results: StudentResults) -> str:
     return "\n".join([f"{student_results.student_id}", *question_output])
 
 
-def get_module_from_path(path: pathlib.Path, identifier="") -> module:
+def get_module_from_path(path: pathlib.Path, identifier=None) -> module:
     """Given a path to a python file, return the module object
     Args:
         path (pathlib.Path): the path to the python file
@@ -178,6 +178,10 @@ def get_module_from_path(path: pathlib.Path, identifier="") -> module:
     Returns:
         module: the module object
     """
+    if identifier is None:
+        # use the file name as the module name
+        identifier = path.stem
+
     specification = importlib.util.spec_from_file_location(identifier, path)
     module = importlib.util.module_from_spec(specification)
     sys.modules[identifier] = module
