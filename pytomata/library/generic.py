@@ -16,8 +16,6 @@ def check_against_acceptance_and_rejection_sets(
     If less than 50% of strings are correctly accepted and rejected, zero is returned.
     Above 50% the product of the proportion and `question_value` is returned.
 
-    ```python
-    ```
     """
     assert len(accept_set) + len(reject_set) > 0
     accepted = set(filter(student_auto.accepts_input, accept_set))

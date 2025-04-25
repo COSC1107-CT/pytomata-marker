@@ -1,4 +1,11 @@
-""" """
+"""This file provides functions to check questions regarding regular
+expressions, such as:
+
+- Is the regex equivalent to the correct one?
+- Is a string accepted by the regex?
+- Is a string accepted by the intersection of two regexes?
+- Is a string accepted by the difference of two regexes?
+"""
 
 import functools
 from typing import List
@@ -9,7 +16,7 @@ import automata.regex.regex as re
 import pytomata.library.generic as generic
 
 
-def generic_regex_procedure(
+def check_regex_correctness(
     correct_regex: str,
     student_regex: str,
     *,
@@ -30,14 +37,18 @@ def generic_regex_procedure(
     )
 
 
-def check_regex_acceptance(regex: str, student_inputs: list[str], *, question_value: float) -> tuple[float, str]:
+def check_regex_acceptance(
+    regex: str, student_inputs: list[str], *, question_value: float
+) -> tuple[float, str]:
     """ """
     regex_nfa = nfa.from_regex(regex)
     accepted = len(list(filter(regex_nfa.accepts_input, student_inputs)))
     return question_value * (accepted / len(student_inputs)), ""
 
 
-def check_regex_intersection_acceptance(regexes: list[str], student_inputs: list[str], *, question_value: float) -> tuple[float, str]:
+def check_regex_intersection_acceptance(
+    regexes: list[str], student_inputs: list[str], *, question_value: float
+) -> tuple[float, str]:
     """Check if the intersection of regexes accepts the student inputs strings.
 
     Args:
@@ -52,7 +63,7 @@ def check_regex_intersection_acceptance(regexes: list[str], student_inputs: list
     accepted = list(filter(intersection_nfa.accepts_input, student_inputs))
     no_accepted = len(accepted)
 
-    rate = (no_accepted / len(student_inputs))
+    rate = no_accepted / len(student_inputs)
     if rate == 1:
         feedback = f"All accepted!"
     else:
@@ -61,7 +72,9 @@ def check_regex_intersection_acceptance(regexes: list[str], student_inputs: list
     return question_value * rate, feedback
 
 
-def check_regex_difference_acceptance(regexes: list[str], student_inputs: list[str], *, question_value: float) -> tuple[float, str]:
+def check_regex_difference_acceptance(
+    regexes: list[str], student_inputs: list[str], *, question_value: float
+) -> tuple[float, str]:
     """ """
 
     def convert_regex_into_dfa(regex):

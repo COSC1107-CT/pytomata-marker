@@ -93,3 +93,9 @@ __pycache__
 .DS_Store
 out/s0000000.out
 out/s0000001.out
+tests/ct17.bak/questions.py
+tests/ct17.bak/ct17-jflap/Assignment1-COSC1107-1105-CT17-SOLUTION.pdf
+tests/ct17.bak/ct17-jflap/Assignment1-COSC1107-1105-CT17.pdf
+tests/ct17.bak/submissions/s0000001.py
+tests/ct17.bak/submissions/s0000002.py
+*.bak

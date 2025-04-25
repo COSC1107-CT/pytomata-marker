@@ -134,7 +134,7 @@ def exercise_1_question_a_part_v(student_input, question_value):
 
 
 def exercise_1_question_a_part_vi(student_regex, question_value):
-    return pytomata.library.generic_regex_procedure(
+    return pytomata.library.check_regex_correctness(
         f"({exercise_1_regex_1})|({exercise_1_regex_2})",
         student_regex,
         accept_set={
@@ -160,7 +160,7 @@ def exercise_1_question_a_part_vi(student_regex, question_value):
 
 
 def exercise_1_question_a_part_vii(student_regex, question_value):
-    return pytomata.library.generic_regex_procedure(
+    return pytomata.library.check_regex_correctness(
         f"({exercise_1_regex_1})&({exercise_1_regex_2})",
         student_regex,
         accept_set={
@@ -186,7 +186,7 @@ def exercise_1_question_a_part_vii(student_regex, question_value):
 
 
 def exercise_1_question_b_part_i(student_regex, question_value):
-    return pytomata.library.generic_regex_procedure(
+    return pytomata.library.check_regex_correctness(
         exercise_1_language_1_regex,
         student_regex,
         accept_set={
@@ -222,7 +222,7 @@ def exercise_1_question_b_part_i(student_regex, question_value):
 
 
 def exercise_1_question_b_part_ii(student_regex, question_value):
-    return pytomata.library.generic_regex_procedure(
+    return pytomata.library.check_regex_correctness(
         exercise_1_language_1_regex,
         student_regex,
         accept_set={

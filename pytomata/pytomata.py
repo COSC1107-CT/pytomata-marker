@@ -166,13 +166,16 @@ def generate_student_output(student_results: StudentResults) -> str:
         feedback = result.student_feedback
         if isinstance(feedback, list):
             feedback = "\n".join(feedback)
-        display_text = f"{result.question_label:10} [{result.student_result:.2f}/{result.question_value:.2f}]"
+        display_text = (
+            f"{result.question_label:10} "
+            f"[{result.student_result:.2f}/{result.question_value:.2f}]"
+        )
         if feedback:
             display_text += f"\n{feedback}"
         return display_text
 
     question_output = map(generate_question_output, student_results.results)
-    return "\n".join([f"{student_results.student_id}", *question_output])
+    return "\n".join([f"Submission: {student_results.student_id}", *question_output])
 
 
 def get_module_from_path(path: pathlib.Path, identifier=None) -> module:

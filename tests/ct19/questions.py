@@ -164,7 +164,7 @@ def exercise_1a_v(student_input, question_value):
 
 
 def exercise_1a_vi(student_regex, question_value):
-    return pytomata.library.generic_regex_procedure(
+    return pytomata.library.check_regex_correctness(
         f"({ex_1a_R1})|({ex_1a_R2})",
         student_regex,
         accept_set={
@@ -216,7 +216,7 @@ def exercise_1a_vi(student_regex, question_value):
 
 
 def exercise_1a_vii(student_regex, question_value):
-    return pytomata.library.generic_regex_procedure(
+    return pytomata.library.check_regex_correctness(
         f"({ex_1a_R1})&({ex_1a_R2})",
         student_regex,
         accept_set={
@@ -255,7 +255,7 @@ ex_1b_L1_regex = "aaaaa(aaa)*(bb)*bb"
 
 
 def exercise_1b_i(student_regex, question_value):
-    return pytomata.library.generic_regex_procedure(
+    return pytomata.library.check_regex_correctness(
         ex_1b_L1_regex,
         student_regex,
         accept_set={
@@ -292,7 +292,7 @@ def exercise_1b_i(student_regex, question_value):
 def exercise_1b_ii(student_regex: str, question_value: float):
     student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(student_regex))
     correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(ex_1b_L1_regex)).complement()
-    return pytomata.library.generic_dfa_procedure(
+    return pytomata.library.check_dfa_correctness(
         correct_dfa,
         student_dfa,
         accept_set={
@@ -331,7 +331,7 @@ def exercise_1b_iii(student_regex: str, question_value: float):
 
     sol_regex = "(a|b)(a|b)((a|b)(a|b)(a|b))*"
     correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(sol_regex))
-    return pytomata.library.generic_dfa_procedure(
+    return pytomata.library.check_dfa_correctness(
         correct_dfa,
         student_dfa,
         accept_set={
@@ -406,7 +406,7 @@ def exercise_1b_iv(student_regex: str, question_value: float):
 
     sol_regex = "bbb*(a|c)*(a|c)c"
     correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(sol_regex))
-    return pytomata.library.generic_dfa_procedure(
+    return pytomata.library.check_dfa_correctness(
         correct_dfa,
         student_dfa,
         accept_set={

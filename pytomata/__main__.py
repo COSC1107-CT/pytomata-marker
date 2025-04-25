@@ -13,7 +13,7 @@ from .pytomata import calculate_and_output_student_results
 from . import VERSION
 
 def main():
-    """Main automarking system with the arguments from CLI """
+    """Main entry point for console app via the CLI """
 
     args = construct_and_parse_args()
 

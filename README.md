@@ -100,9 +100,6 @@ Therefore, to process an individual submission:
 
 ```shell
 $ pytomata-marker tests/ct19/questions.py tests/ct19/submissions/s0000000.py
-Using CPython 3.13.1
-Creating virtual environment at: .venv
-Installed 6 packages in 4ms
 
 *** s0000000 ***
 
