@@ -75,6 +75,12 @@ def main(submission: module) -> list:
             exercise_1b_iv,
             get_student_func(submission, "exercise_1b_iv_solution"),
         ),
+        (
+            "3.a.v",
+            4.0,
+            exercise_3a_v,
+            get_student_func(submission, "exercise_3a_v_solution"),
+        ),
     ]
 
 
@@ -456,6 +462,81 @@ def exercise_1b_iv(regex: str, question_value: float):
             "ababababa",
             "bababaabb",
             "abababbab",
+        },
+        question_value=question_value,
+    )
+
+
+DFA_3av = dfa.DFA(
+    states={"q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "e"},
+    input_symbols={"a", "b", "c"},
+    transitions={
+        "q0": {"a": "q5", "b": "q1", "c": "q3"},
+        "q1": {"a": "q2", "b": "e", "c": "e"},
+        "q2": {"a": "e", "b": "q0", "c": "e"},
+        "q3": {"a": "q4", "b": "e", "c": "e"},
+        "q4": {"a": "e", "b": "e", "c": "e"},
+        "q5": {"a": "e", "b": "q6", "c": "e"},
+        "q6": {"a": "q7", "b": "e", "c": "e"},
+        "q7": {"a": "e", "b": "e", "c": "e"},
+        "e": {"a": "e", "b": "e", "c": "e"},
+    },
+    initial_state="q0",
+    final_states={"q4", "q7"},
+)
+
+
+def exercise_3a_v(dfa: dfa.DFA, question_value: float):
+    student_dfa = dfa
+    correct_dfa = DFA_3av
+    return pytomata.library.check_dfa_correctness(
+        correct_dfa,
+        student_dfa,
+        accept_set={
+            "babbabbabbababa",
+            "aba",
+            "ca",
+            "babbabbabbabca",
+            "babbabbabbabbababa",
+            "babbabbabca",
+            "bababa",
+            "babca",
+            "babbabbabbabbabbabbabbabbabbabbabbabca",
+            "babbabbabbabbabbabbabbabbabbabbabbababa",
+            "babbabbabbababbabbabbabca",
+            "babbabbabbababbabbabbab",
+        },
+        reject_set={
+            "()",
+            "a",
+            "b",
+            "c",
+            "bb",
+            "cc",
+            "ab",
+            "cb",
+            "baba",
+            "abaa",
+            "abac",
+            "babbbb",
+            "aaaaaaa",
+            "ccccccc",
+            "babbabbabc",
+            "babbabbabbabab",
+            "babbabbabbabac",
+            "babbabbabbabcac",
+            "babbabbabbabcaa",
+            "babbabbabbabcab",
+            "abaaba",
+            "abaabaaba",
+            "cacacaca",
+            "babbabcacaca",
+            "abaca",
+            "babbababaca",
+            "babbabcaaba",
+            "ababbb",
+            "babaaaa",
+            "aababaabbaababbb",
         },
         question_value=question_value,
     )

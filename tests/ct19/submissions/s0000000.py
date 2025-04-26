@@ -1,9 +1,14 @@
+import automata.fa.dfa as dfa
+import automata.fa.nfa as nfa
+
 # This should be a PERFECT submission: 0000000
 
 
 ##################
 # Exercise 1
 ##################
+
+
 def exercise_1a_i_solution():
     return "132", "11332213"
 
@@ -43,5 +48,33 @@ def exercise_1b_ii_solution():
 def exercise_1b_iii_solution():
     return "(a|b)(a|b)((a|b)(a|b)(a|b))*"
 
+
 def exercise_1b_iv_solution():
     return "bbb*(a|c)*(a|c)c"
+
+
+##################
+# Exercise 3
+##################
+
+
+def exercise_3a_v_solution():
+    DFA = dfa.DFA(
+        states={"q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "e"},
+        input_symbols={"a", "b", "c"},
+        transitions={
+            "q0": {"a": "q5", "b": "q1", "c": "q3"},
+            "q1": {"a": "q2", "b": "e", "c": "e"},
+            "q2": {"a": "e", "b": "q0", "c": "e"},
+            "q3": {"a": "q4", "b": "e", "c": "e"},
+            "q4": {"a": "e", "b": "e", "c": "e"},
+            "q5": {"a": "e", "b": "q6", "c": "e"},
+            "q6": {"a": "q7", "b": "e", "c": "e"},
+            "q7": {"a": "e", "b": "e", "c": "e"},
+            "e": {"a": "e", "b": "e", "c": "e"},
+        },
+        initial_state="q0",
+        final_states={"q4", "q7"},
+    )
+
+    return DFA
