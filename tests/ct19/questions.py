@@ -2,7 +2,7 @@ import automata.fa.dfa as dfa
 import automata.fa.nfa as nfa
 from proto import module
 import pytomata.library
-from pytomata.utils import get_student_func
+from pytomata.utils import get_module_func
 
 
 def main(submission: module) -> list:
@@ -11,7 +11,7 @@ def main(submission: module) -> list:
             "1.a.i",  # id
             2.0,  # total points
             exercise_1a_i,  # function checker
-            get_student_func(
+            get_module_func(
                 submission, "exercise_1a_i_solution"
             ),  # function in submission
         ),
@@ -19,67 +19,67 @@ def main(submission: module) -> list:
             "1.a.ii",
             2.0,
             exercise_1a_ii,
-            get_student_func(submission, "exercise_1a_ii_solution"),
+            get_module_func(submission, "exercise_1a_ii_solution"),
         ),
         (
             "1.a.iii",
             2.0,
             exercise_1a_iii,
-            get_student_func(submission, "exercise_1a_iii_solution"),
+            get_module_func(submission, "exercise_1a_iii_solution"),
         ),
         (
             "1.a.iv",
             1.0,
             exercise_1a_iv,
-            get_student_func(submission, "exercise_1a_iv_solution"),
+            get_module_func(submission, "exercise_1a_iv_solution"),
         ),
         (
             "1.a.v",
             1.0,
             exercise_1a_v,
-            get_student_func(submission, "exercise_1a_v_solution"),
+            get_module_func(submission, "exercise_1a_v_solution"),
         ),
         (
             "1.a.vi",
             1.0,
             exercise_1a_vi,
-            get_student_func(submission, "exercise_1a_vi_solution"),
+            get_module_func(submission, "exercise_1a_vi_solution"),
         ),
         (
             "1.a.vii",
             3.0,
             exercise_1a_vii,
-            get_student_func(submission, "exercise_1a_vii_solution"),
+            get_module_func(submission, "exercise_1a_vii_solution"),
         ),
         (
             "1.b.i",
             2.0,
             exercise_1b_i,
-            get_student_func(submission, "exercise_1b_i_solution"),
+            get_module_func(submission, "exercise_1b_i_solution"),
         ),
         (
             "1.b.ii",
             2.0,
             exercise_1b_ii,
-            get_student_func(submission, "exercise_1b_ii_solution"),
+            get_module_func(submission, "exercise_1b_ii_solution"),
         ),
         (
             "1.b.iii",
             2.0,
             exercise_1b_iii,
-            get_student_func(submission, "exercise_1b_iii_solution"),
+            get_module_func(submission, "exercise_1b_iii_solution"),
         ),
         (
             "1.b.iv",
             2.0,
             exercise_1b_iv,
-            get_student_func(submission, "exercise_1b_iv_solution"),
+            get_module_func(submission, "exercise_1b_iv_solution"),
         ),
         (
             "3.a.v",
             4.0,
             exercise_3a_v,
-            get_student_func(submission, "exercise_3a_v_solution"),
+            get_module_func(submission, "exercise_3a_v_solution"),
         ),
     ]
 

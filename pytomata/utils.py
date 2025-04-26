@@ -15,7 +15,7 @@ def rmdir(sftp, path):
     sftp.rmdir(path)
 
 
-def get_student_func(module: module, func: str):
+def get_module_func(module: module, func: str):
     """Get a function from a module by name."""
     if hasattr(module, func) and callable(getattr(module, func)):
        return getattr(module, func)
