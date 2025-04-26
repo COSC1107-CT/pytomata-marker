@@ -102,8 +102,17 @@ def perform_marking(
             # submission_path is of form tests/ct19/submissions/s0000002.py
             # from it we extract student id (s0000002)
             student_id = submission_path.stem
-            submission = get_module_from_path(submission_path)
-
+            try:
+                submission = get_module_from_path(submission_path)
+            except Exception as e:
+                yield StudentResults(
+                    student_id,
+                    [MarkedQuestionResponse(
+                        "submission",
+                        0,
+                        *((0, f"Error loading Python code: {e}!")))]
+                )
+                continue
             # MARK the student submission and yield the result
             yield StudentResults(student_id, assess_submission(submission))
 
@@ -214,6 +223,12 @@ def get_module_from_path(path: pathlib.Path, identifier=None) -> module:
     specification = importlib.util.spec_from_file_location(identifier, path)
     module = importlib.util.module_from_spec(specification)
     sys.modules[identifier] = module
-    specification.loader.exec_module(module)
+    try:
+        # load the module
+        specification.loader.exec_module(module)
+    except Exception as e:
+        # if there is an error, remove the module from sys.modules
+        del sys.modules[identifier]
+        raise e
 
     return module
