@@ -1,4 +1,4 @@
-# Pytomata Marker
+[# Pytomata Marker
 
 This is an automarker developed to support assignments in theory of computation courses @ RMIT University.
 
@@ -6,28 +6,27 @@ It is a re-development of the [JFLAP Automarker](https://github.com/COSC1107-CT/
 
 Official GitHub repo: https://github.com/COSC1107-CT/pytomata-marker
 
-- [Pytomata Marker](#pytomata-marker)
-  - [Install](#install)
-  - [Usage](#usage)
-    - [Execution Options](#execution-options)
-  - [Assessment Design \& Configuration](#assessment-design--configuration)
-    - [Main configuration](#main-configuration)
-    - [Question functions](#question-functions)
-      - [Using Library Functions](#using-library-functions)
-      - [Defining Additional Test Cases](#defining-additional-test-cases)
-    - [Solutions](#solutions)
-  - [Library Function Catalogue](#library-function-catalogue)
-  - [Development](#development)
-    - [Adding Project Dependencies](#adding-project-dependencies)
-    - [Writing Library Functions](#writing-library-functions)
-      - [Configuring Default Penalties](#configuring-default-penalties)
-      - [Penalising \& Updating Scores](#penalising--updating-scores)
-      - [Handling Additional Test Cases](#handling-additional-test-cases)
-      - [Documenting Library Functions](#documenting-library-functions)
-    - [Style Considerations](#style-considerations)
-      - [Linting \& Formatting](#linting--formatting)
-      - [Library Function Auxiliaries](#library-function-auxiliaries)
-  - [Contributors](#contributors)
+- [Install](#install)
+- [Usage](#usage)
+  - [Execution Options](#execution-options)
+- [Assessment Design \& Configuration](#assessment-design--configuration)
+  - [Questions Script](#questions-script)
+  - [Question functions](#question-functions)
+    - [Using Library Functions](#using-library-functions)
+    - [Defining Additional Test Cases](#defining-additional-test-cases)
+  - [Submissions](#submissions)
+- [Library Function Catalogue](#library-function-catalogue)
+- [Development](#development)
+  - [Adding Project Dependencies](#adding-project-dependencies)
+  - [Writing Library Functions](#writing-library-functions)
+    - [Configuring Default Penalties](#configuring-default-penalties)
+    - [Penalising \& Updating Scores](#penalising--updating-scores)
+    - [Handling Additional Test Cases](#handling-additional-test-cases)
+    - [Documenting Library Functions](#documenting-library-functions)
+  - [Style Considerations](#style-considerations)
+    - [Linting \& Formatting](#linting--formatting)
+    - [Library Function Auxiliaries](#library-function-auxiliaries)
+- [Contributors](#contributors)
 
 ## Install
 
@@ -101,32 +100,57 @@ Therefore, to process an individual submission:
 ```shell
 $ pytomata-marker tests/ct19/questions.py tests/ct19/submissions/s0000000.py
 
-*** s0000000 ***
-
-1.a.i | 100 / 100
-Correct!
+Submission: s0000000
+1.a.i      [2.00/2.00]
+All accepted!
+1.a.ii     [2.00/2.00]
+1.a.iii    [2.00/2.00]
+1.a.iv     [1.00/1.00]
+1.a.v      [1.00/1.00]
+1.a.vi     [1.00/1.00]
+1.a.vii    [3.00/3.00]
+1.b.i      [2.00/2.00]
+1.b.ii     [2.00/2.00]
+1.b.iii    [2.00/2.00]
+1.b.iv     [2.00/2.00]
 ```
 
 When a directory is supplied, all Python scripts inside that directory (non-recursively) are treated as student submissions:
 
 ```shell
 $ python -m pytomata tests/ct19/questions.py tests/ct19/submissions/s0000000.py
-*** s0000002 ***
+Submission: s0000000
+1.a.i      [2.00/2.00]
+All accepted!
+1.a.ii     [2.00/2.00]
+1.a.iii    [2.00/2.00]
+1.a.iv     [1.00/1.00]
+1.a.v      [1.00/1.00]
+1.a.vi     [1.00/1.00]
+1.a.vii    [3.00/3.00]
+1.b.i      [2.00/2.00]
+1.b.ii     [2.00/2.00]
+1.b.iii    [2.00/2.00]
+1.b.iv     [2.00/2.00]
 
-1.a.i | 100 / 100
-Correct!
-
-
-*** s0000001 ***
-
-1.a.i | 0 / 100
-Rejected: cba
-
-
-*** s0000000 ***
-
-1.a.i | 100 / 100
-Correct!
+Submission: s0000001
+1.a.i      [0.00/2.00]
+Rejected 100%: aaaabcccbbbb,aaaabxccbbbb
+1.a.ii     [0.00/2.00]
+1.a.iii    [0.00/2.00]
+1.a.iv     [0.00/1.00]
+1.a.v      [0.00/1.00]
+1.a.vi     [0.00/1.00]
+Incorrect!
+1.a.vii    [0.74/3.00]
+Incorrectly rejected: 111111333332222222, 111111132, 133333333332, 132222222, 1111322222, 132, 13333322222222
+1.b.i      [0.43/2.00]
+Incorrectly rejected: aaaaaaaabb, aaaaabb, aaaaaaaaaaaaaabbbbbb, aaaaaaaabbbbbbbbbbbb, aaaaaaaaaaaaaaaaabbbbbbbb, aaaaaaaabbbb, aaaaaaaaaaabbbbbb, aaaaaaaaaaabb, aaaaabbbbbbbbbbbb
+1.b.ii     [0.00/2.00]
+The input symbols between the two given DFAs do not match
+1.b.iii    [0.52/2.00]
+Incorrectly rejected: bbbabaab, bbbbbbbbbbb, aabab, abababab, bbbbbaaaaaa, abababababb, abbaabab, bbabaaabbbb, bbbbb, babbaabb, bbbbbbbb, bbababababb, aaababababa, babababa, babab
+1.b.iv     [2.00/2.00]
 ```
 
 By default, all results are printed to standard output.
@@ -147,29 +171,44 @@ $ pytomata-marker tests/ct19/questions.py tests/ct19/submissions --processes 3
 
 ## Assessment Design & Configuration
 
-This section details the definition of questions by an instructor, the submission of solutions by students, and the configuration necessary to match submissions against the correct marking function.
+Probably the best way to understand the automarking system is to check the example of Exercise 1 in [tests/ct19](tests/ct19).
 
-Both question and submission functions are intended to make heavy use of the [Automata](https://caleb531.github.io/automata/) library.
+An assessment will have two main components:
 
-### Main configuration
+1. The _questions script_ by the instructor.
+2. The _submission of solutions_ by students.
 
-A question script should contain a `main` function, like this:
+Both question and submission are basically Python functions which are intended to make heavy use of the [Automata](https://caleb531.github.io/automata/) library.
+
+### Questions Script
+
+A questions script basically specify the assessment. It should contain a `main` function that takes as an argument a student submission as a Python module and specifies each question by providing:
+
+1. Id of the question as a string.
+2. Number of points the question is worth.
+3. Function name that marks the question.
+4. Function in the submission module that encodes the student submission for the question.
+
+The `main` function looks as follows:
 
 ```python
-def main(solutions):
+def main(submission: module) -> list:
     return [
         (
-            "1.a.i",    # id of the question
-            2.0,        # points worth
-            exercise_1_question_a_1,    # question function
-            solutions.exercise_1_question_a_1_solution, # solution function
+            "1.a.i",  # id
+            2.0,  # total points
+            exercise_1a_i,  # function checker
+            get_student_func(
+                submission, "exercise_1a_i_solution"
+            ),  # function in submission
         ),
         (
             "1.a.ii",
-            4.0,
-            exercise_1_question_a_2,
-            solutions.exercise_1_question_a_2_solution,
+            2.0,
+            exercise_1a_ii,
+            get_student_func(submission, "exercise_1a_ii_solution"),
         ),
+        ...
     ]
 ```
 
@@ -181,92 +220,100 @@ This function returns a _sequence_ of 4-tuples, each specifying specifying:
 1. The label of the question.
 2. Total number of points worth.
 3. Question function.
-4. Solution functions.
+4. Submission solution functions. Use provided tool `get_student_func` that will deal submissions that may miss some question.
 
-The question and solution functions should correspond to those defined by the [questions](#questions) and [solutions](#solutions) scripts, respectively.
+The question and solution functions should correspond to those defined by the [questions](#questions) and [submissions](#submissions) scripts, respectively.
 
 ### Question functions
 
 Questions are defined using _functions_.
 
-Each question is a single function that must accept _i)_ a student’s answer to the question; and _ii)_ the total allocated points for the question, and must returns the points attracted and any (textual) feedback, in that order.
+Each question is a single function that mark the corresponding question and must accept:
+
+1. a student's submission answer to the question; and
+2. the total allocated points for the question.
+
+Thq question function must returns a tuple with the points attracted as a float _and_ any (textual) feedback as a string, in that order.
+
+This is an example:
 
 ```python
-import automata
+EX_1a_R1 = "1(1*|2*)3*(2*|3)1*2(1|3)*2*"
 
-def exercise_1_question_a_1(student_solution, question_value):
-    """Check student answer for the question; calculate points attracted and feedback
+def exercise_1a_iv(word: str, question_value: float):
+    """Check that both word and word + word^reverse are in L(R1)"""
+    if not isinstance(word, str) and word:
+        return 0.0, "Invalid response!"
 
-        student_solution: the student's submission answer for this question
-        question_value: how many points this question is worth
-    """
+    # convert R1 into a NFA
+    regex_nfa = nfa.NFA.from_regex(EX_1a_R1)
 
-    # Invoke automarker library function here to check student solution.
+    # get string word + word^reverse
+    input_plus_reverse = word + word[::-1]
 
-    return student_result, student_feedback
+    # check word is accepted by R1 using Autoamta library
+    correct = regex_nfa.accepts_input(word)
+    # check word + word^reverse is accepted by R1 using Automata library
+    correct = correct and regex_nfa.accepts_input(input_plus_reverse)
+
+    # full points if both are accepted, otherwise 0
+    if correct:
+        return question_value, ""
+    return 0.0, "Incorrect word provided!"
 ```
 
 #### Using Library Functions
 
-Library functions provided by `pytomata.lib` are provided to apply template marking scheme to handle certain archetypal questions (e.g., marking of a DFA submission for a language). These functions all return the student result (points achieved) and feedback, just like question functions.
+The above example question only relies on the Automata library.
 
-The template usage is as follows:
+Library functions provided by `pytomata.library` are provided also to apply _template marking scheme_ to handle certain _archetypal questions_ (e.g., marking of a DFA submission for a language). These functions all return the student result (points achieved) and feedback, just like question functions.
+
+For example, consider an exercise that asks to provide a set of words that is in the language of the intersection of two regular expressions (Ex 1.a.i in CT19 test example). We make use of library template `pytomata.library.regex.check_regex_intersection_acceptance`:
 
 ```python
-import pytomata.lib
-
-student_result, student_feedback = pytomata.lib.library_function(
-    student_solution,
-    actual_solution,
-    question_value=question_value,
-    incorrect_penalty=0.8,  # should be between 0 and 1 - OPTIONAL: defaults to 1
-)
+def check_regex_intersection_acceptance(
+    regexes: list[str],
+    student_inputs: list[str], *,
+    question_value: float
+) -> tuple[float, str]:
 ```
 
-> [!WARNING]
-> The `question_value` is a **required** keyword argument.
->
+This function will take a list of regular expressions to intersect and a set of strings submitted and check how many of those strings are in the intersection language. The points awarded is proportional to the proportion of strings that pass the check.
 
-The `incorrect_penalty` is optional, and denotes the percentage deduction (between 0 and 1, inclusive) from the `question_value` when the student’s submission is incorrect.  The default `incorrect_penalty` is 1, indicating a 100% deduction; the example above specifies an 80% deduction.
+> [!WARNING]
+> The `question_value` is a **required** keyword argument, as it is needed to calculate the final points awarded.
+>
 
 Refer to the [library function catalogue](#library-function-catalogue) for an overview of available functions.
 
 #### Defining Additional Test Cases
 
-Certain library functions also accept additional test cases. Each test case represents an alternate (usually partially correct or incorrect) solution, containing:
+Certain library functions also accept additional unit test cases. These unit test cases are often used when the submitted question cannot be shown to be perfect via analytical ways (e.g., DFA equivalence check) in order to award partial points/marks.
 
-1. A arbitrary value denoting the test case itself;
-2. A value denoting a percentage of the total `question_value`;
-3. Optional feedback for the test case.
+For example, library function `pytomata.library.regex.check_regex_correctness` checks whether a regular expression is correct for the exercise:
 
 ```python
-def exercise_1_question_a_1(student_solution, question_value):
-    actual_solution = "abcd"
-    additional_test_cases = [
-        ("abc", 0.2, "Nearly there!"),
-        ("abcde", 0.2, None),
-    ]
-    student_result, student_feedback = pytomata.lib.library_function(
-        student_solution,
-        actual_solution,
-        question_value=question_value,
-        additional_test_cases=additional_test_cases,
-    )
-    return student_result, student_feedback
+def check_regex_correctness(
+    correct_regex: str,
+    student_regex: str,
+    *,
+    accept_set: set[str],
+    reject_set: set[str],
+    question_value: int,
+    non_equivalence_deduction: float = 0.35,
+) -> tuple[float, str]:
 ```
 
-After the student’s submission is marked against the actual solution, it is checked against each test case.
-If passed, the percentage allocated to that test case is added to the student’s result.
-For example, in a question worth 5 marks, a successful test case worth `0.2` will allocate 1 mark.
-The test case value can also be negative, so that passing the test case deducts marks.
+Inputs  `accept_set` and `reject_set` are sets of strings that are meant to be accepted/rejected by a good answer.
 
-> [!NOTE]
-> The feedback is returned when the test case is failed if the value is positive,
-> and when passed if negative.
+The function will first check full equivalence between the submitted answer `student_regex` and the true correct solution `correct_regex`. If equivalent, full marks are given. Otherwie, the function will deduct `non_equivalence_deduction` of the question value and pro-rata the points based on the number of unit tests pased. This means that if all unit tests do pass, the points awarded will be `question_value * non_equivalence_deduction`, the most partial marks a submission can attract when found not fully correct via equivalence checking.
 
-### Solutions
+> [!IMPORTANT]
+> The test case value can also be negative, so that passing the test case deducts marks. The feedback string is returned when the test case is failed if the value is positive, and when passed if negative.
 
-Student solutions are also represented using functions:
+### Submissions
+
+Student submission solutions are also represented using functions:
 
 ```python
 import automata
@@ -283,9 +330,7 @@ def exercise_1_question_a_2_solution():
 > [!WARNING]
 > Students **should not alter** the function signature.
 
-Each function returns the student’s solution to the corresponding [question](#questions).
-All students should be distributed identical scripts containing pre-defined, empty functions as above.
-
+Each function returns the student’s solution to the corresponding [question](#questions). All students should be distributed identical scripts containing pre-defined, empty functions as above.
 
 ## Library Function Catalogue
 
@@ -369,7 +414,7 @@ Instructor-defined question functions can override these defaults if necessary:
 ```python
 def exercise_1_question_a_1():
     # …
-    student_result, student_feedback = pytomata.lib.another_library_function(
+    student_result, student_feedback = pytomata.library.another_library_function(
         question_value=5, incorrect_penalty=0.6
     )
 ```
@@ -576,4 +621,4 @@ def _auxiliary_library_function():
 
 The pytomata automarker was developed by Harry Porter and Sebastian Sardina in 2025, based on the [JFLAP Automarker](https://github.com/COSC1107-CT/jflap-ct-automarker) system.
 
-**Contact:** Prof. Sebastian Sardina (ssardina@gmail.com)
+**Contact:** Prof. Sebastian Sardina (ssardina@gmail.com)]()

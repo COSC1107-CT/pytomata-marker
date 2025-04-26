@@ -80,83 +80,93 @@ def main(submission: module) -> list:
 
 # check format accepted by library (not the same as JFLAP!):
 # https://caleb531.github.io/automata/api/regular-expressions/
-ex_1a_R1 = "1(1*|2*)3*(2*|3)1*2(1|3)*2*"
-ex_1a_R2 = "1*3(2|3)*2*(1|3)*(1|3)*"
+EX_1a_R1 = "1(1*|2*)3*(2*|3)1*2(1|3)*2*"
+EX_1a_R2 = "1*3(2|3)*2*(1|3)*(1|3)*"
 
 
 # TODO: why std_inputs is a tuple rather than a list of strings?
-def exercise_1a_i(std_inputs, question_value):
+def exercise_1a_i(words, question_value):
     conditions = (
-        len(std_inputs) == 2,
-        all(map(bool, std_inputs)),
+        len(words) == 2,
+        all(map(bool, words)),
     )
     if not all(conditions):
         return 0, "Invalid response!"
     # these are the two regexes for the intersection
-    regexes = [ex_1a_R1, ex_1a_R2]
+    regexes = [EX_1a_R1, EX_1a_R2]
     # use the template library to mark regex-intersection questions
     std_pts, std_feed = pytomata.library.check_regex_intersection_acceptance(
-        regexes, std_inputs, question_value=question_value
+        regexes, words, question_value=question_value
     )
     return std_pts, std_feed
 
 
-def exercise_1a_ii(student_inputs, question_value):
+def exercise_1a_ii(words, question_value):
     conditions = (
-        len(student_inputs) == 2,
-        all(map(bool, student_inputs)),
+        len(words) == 2,
+        all(map(bool, words)),
     )
     if not all(conditions):
         return 0.0, "Invalid response!"
-    regexes = [ex_1a_R1, ex_1a_R2]
+    regexes = [EX_1a_R1, EX_1a_R2]
     student_result, _ = pytomata.library.check_regex_difference_acceptance(
-        regexes, student_inputs, question_value=question_value
+        regexes, words, question_value=question_value
     )
     return student_result, ""
 
 
-def exercise_1a_iii(student_inputs, question_value):
+def exercise_1a_iii(words, question_value):
     conditions = (
-        len(student_inputs) == 2,
-        all(map(bool, student_inputs)),
+        len(words) == 2,
+        all(map(bool, words)),
     )
     if not all(conditions):
         return 0.0, "Invalid response!"
-    regexes = [ex_1a_R2, ex_1a_R1]
+    regexes = [EX_1a_R2, EX_1a_R1]
     student_result, _ = pytomata.library.check_regex_difference_acceptance(
-        regexes, student_inputs, question_value=question_value
+        regexes, words, question_value=question_value
     )
     return student_result, ""
 
 
-def exercise_1a_iv(student_input, question_value):
-    if not isinstance(student_input, str) and student_input:
+def exercise_1a_iv(word: str, question_value: float):
+    """Check that both word and word + word^reverse are in L(R1)"""
+    if not isinstance(word, str) and word:
         return 0.0, "Invalid response!"
-    regex_nfa = nfa.NFA.from_regex(ex_1a_R1)
-    input_plus_reverse = student_input + student_input[::-1]
-    correct = regex_nfa.accepts_input(student_input)
+
+    # convert R1 into a NFA
+    regex_nfa = nfa.NFA.from_regex(EX_1a_R1)
+
+    # get string word + word^reverse
+    input_plus_reverse = word + word[::-1]
+
+    # check word is accepted by R1 using Pytomata library
+    correct = regex_nfa.accepts_input(word)
+    # check word + word^reverse is accepted by R1 using Pytomata library
     correct = correct and regex_nfa.accepts_input(input_plus_reverse)
+
+    # full points if both are accepted, otherwise 0
     if correct:
         return question_value, ""
-    return 0.0, ""
+    return 0.0, "Incorrect word provided!"
 
 
-def exercise_1a_v(student_input, question_value):
-    if not isinstance(student_input, str) and student_input:
+def exercise_1a_v(word: str, question_value):
+    if not isinstance(word, str) and word:
         return 0.0, "Invalid response!"
-    regex_nfa = nfa.NFA.from_regex(ex_1a_R1)
-    input_plus = student_input + student_input[::-1]
-    correct = regex_nfa.accepts_input(student_input)
+    regex_nfa = nfa.NFA.from_regex(EX_1a_R1)
+    input_plus = word + word[::-1]
+    correct = regex_nfa.accepts_input(word)
     correct = correct and not regex_nfa.accepts_input(input_plus)
     if correct:
         return question_value, ""
     return 0.0, ""
 
 
-def exercise_1a_vi(student_regex, question_value):
+def exercise_1a_vi(regex, question_value):
     return pytomata.library.check_regex_correctness(
-        f"({ex_1a_R1})|({ex_1a_R2})",
-        student_regex,
+        f"({EX_1a_R1})|({EX_1a_R2})",
+        regex,
         accept_set={
             "12",
             "11111112",
@@ -205,10 +215,10 @@ def exercise_1a_vi(student_regex, question_value):
     )
 
 
-def exercise_1a_vii(student_regex, question_value):
+def exercise_1a_vii(regex, question_value):
     return pytomata.library.check_regex_correctness(
-        f"({ex_1a_R1})&({ex_1a_R2})",
-        student_regex,
+        f"({EX_1a_R1})&({EX_1a_R2})",
+        regex,
         accept_set={
             "132",
             "111111132",
@@ -244,10 +254,10 @@ def exercise_1a_vii(student_regex, question_value):
 ex_1b_L1_regex = "aaaaa(aaa)*(bb)*bb"
 
 
-def exercise_1b_i(student_regex, question_value):
+def exercise_1b_i(regex, question_value):
     return pytomata.library.check_regex_correctness(
         ex_1b_L1_regex,
-        student_regex,
+        regex,
         accept_set={
             "aaaaabb",
             "aaaaaaaabb",
@@ -279,8 +289,8 @@ def exercise_1b_i(student_regex, question_value):
     )
 
 
-def exercise_1b_ii(student_regex: str, question_value: float):
-    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(student_regex))
+def exercise_1b_ii(regex: str, question_value: float):
+    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(regex))
     correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(ex_1b_L1_regex)).complement()
     return pytomata.library.check_dfa_correctness(
         correct_dfa,
@@ -316,8 +326,8 @@ def exercise_1b_ii(student_regex: str, question_value: float):
     )
 
 
-def exercise_1b_iii(student_regex: str, question_value: float):
-    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(student_regex))
+def exercise_1b_iii(regex: str, question_value: float):
+    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(regex))
 
     sol_regex = "(a|b)(a|b)((a|b)(a|b)(a|b))*"
     correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(sol_regex))
@@ -391,8 +401,8 @@ def exercise_1b_iii(student_regex: str, question_value: float):
     )
 
 
-def exercise_1b_iv(student_regex: str, question_value: float):
-    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(student_regex))
+def exercise_1b_iv(regex: str, question_value: float):
+    student_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(regex))
 
     sol_regex = "bbb*(a|c)*(a|c)c"
     correct_dfa = dfa.DFA.from_nfa(nfa.NFA.from_regex(sol_regex))
