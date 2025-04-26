@@ -25,8 +25,8 @@ def exercise_1a_iv_solution():
     return "12"
 
 
-def exercise_1a_v_solution():
-    return "12122"
+# def exercise_1a_v_solution():
+#     return "12122"
 
 
 def exercise_1a_vi_solution():
