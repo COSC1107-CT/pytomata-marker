@@ -12,6 +12,7 @@ import pathlib
 from .pytomata import calculate_and_output_student_results
 from . import VERSION
 
+
 def main():
     """Main entry point for console app via the CLI """
 

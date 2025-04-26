@@ -110,15 +110,36 @@ def perform_marking(
     def assess_submission(submission: module) -> List[MarkedQuestionResponse]:
         """Assess the submission and return the results for each question"""
 
-        return [
-            MarkedQuestionResponse(
-                label, value,
-                *question(question_submission(), value) if question_submission else (0, "Missing question!")
-            )
-            for label, value, question, question_submission in questions.main(
-                submission
-            )
-        ]
+        responses = []
+        for label, value, question, question_submission in questions.main(submission):
+            try:
+                response = MarkedQuestionResponse(
+                            label,
+                            value,
+                            *(
+                                question(question_submission(), value)
+                                if question_submission
+                                else (0, "Missing question!")
+                            ),
+                        )
+            except Exception as e:
+                response = MarkedQuestionResponse(
+                    label, value, *(0, f"Exception loading/processing question answer: {e}")
+                )
+
+            responses.append(response)
+
+        return responses
+        # old more compact way, but cannot handle exceptions when running the question
+        # return [
+        #     MarkedQuestionResponse(
+        #         label, value,
+        #         *question(question_submission(), value) if question_submission else (0, "Missing question!")
+        #     )
+        #     for label, value, question, question_submission in questions.main(
+        #         submission
+        #     )
+        # ]
 
     def output_submission_results(student_results: StudentResults):
         """Generate the output for a submission result
