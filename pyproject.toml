@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61", "wheel", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pytomata-marker"
+description = "An automarking system for Automata Theory and Formal Languages courses"  # ✏️ Replace 
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Sebastian Sardina", email = "ssardina@gmail.com" },
+  { name = "Harry Porter", email = "harry.porter@gmail.com" }
+]
+urls = {  "Homepage" = "https://github.com/COSC1107-CT/pytomata-marker/"  }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux"
+]
+dependencies = [
+    "automata-lib>=9.0.0",
+    "cached-method",
+    "frozendict",
+    "networkx",
+    "ruff>=0.9.3",
+    "setuptools",
+    "coloredlogs",
+    "colorlog"
+]
+dynamic = ["version"]
+# enable this if you want to generate the version from a file
+# [tool.setuptools_scm]
+# version_file = "fondutils/__version__.py"
+[tool.setuptools_scm]
+tag_regex = "^v(?P<version>.*)$"  # version tag regex v1.0.0 (with a v in front
+
+[project.scripts]
+pytomata-marker = "pytomata.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["pytomata*"]
+
+[tool.ruff]
+line-length = 89
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 89
+
+[tool.ruff.lint]
+extend-select = ["I"]

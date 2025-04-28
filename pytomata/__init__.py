@@ -1,15 +1,6 @@
 import os
 from pathlib import Path
-from .__version__ import (
-    __author__,
-    __author_email__,
-    __copyright__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-)
+from importlib.metadata import version
 from .pytomata import (
     calculate_and_output_student_results as calculate_and_output_student_results,
 )
@@ -33,4 +24,4 @@ def get_pkg_root() -> Path:
 
 
 ROOT_PATH = get_pkg_root()
-VERSION = __version__
+VERSION = version("pytomata-marker")
